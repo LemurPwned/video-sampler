@@ -29,17 +29,25 @@ repos:
     rev: v2.5.1
     hooks:
       - id: prettier
-        files: \.(html|json|markdown|md|yaml|yml)$
+        files: \.(html|json|markdown|md|yml)$
         exclude: (^docs/api/.*)
+
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
       - id: isort
         name: isort (python)
 
-  - repo: https://github.com/pre-commit/mirrors-yapf
-    rev: v0.32.0
+  - repo: https://github.com/ambv/black
+    rev: stable
     hooks:
-      - id: yapf
-        files: "^cmtj"
-        args: [--in-place, --recursive]
+      - id: black
+        language_version: python3.9
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.0.0
+    hooks:
+      - id: flake8
+        name: flake8 (python)
+        additional_dependencies: [flake8-bugbear]
+        args: ["--max-line-length", "120", "--ignore", "B006,B008"]

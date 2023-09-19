@@ -29,19 +29,21 @@ app = typer.Typer(
 console = Console()
 
 
-def version_callback(print_version: bool) -> None:
+@app.command(name="version")
+def version_callback(print_version: bool = True) -> None:
     """Print the version of the package."""
     if print_version:
         console.print(f"[yellow]video-sampler[/] version: [bold blue]{version}[/]")
         raise typer.Exit()
 
 
-
 @app.command(name="")
 def main(
     video_path: str = typer.Argument(..., help="Path to the video file or a folder."),
     output_path: str = typer.Argument(..., help="Path to the output folder."),
-    min_frame_interval_sec: int = typer.Option(1, help="Minimum frame interval in seconds."),
+    min_frame_interval_sec: int = typer.Option(
+        1, help="Minimum frame interval in seconds."
+    ),
     keyframes_only: bool = typer.Option(True, help="Only sample keyframes."),
     buffer_size: int = typer.Option(10, help="Size of the buffer."),
     hash_size: int = typer.Option(8, help="Size of the hash."),
@@ -73,6 +75,7 @@ def main(
             video_path=video,
             output_path=video_subpath,
         )
+
 
 if __name__ == "__main__":
     app()
