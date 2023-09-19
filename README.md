@@ -11,10 +11,13 @@
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
 
 Video sampler allows you to efficiently sample video frames.
+Currently it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
+
+**Use case:** for sampling videos for later annotations used in machine learning.
 
 </div>
 
-## Installation
+## Installation and Usage
 
 ```bash
 pip install -U video-sampler
@@ -23,13 +26,13 @@ pip install -U video-sampler
 then you can run
 
 ```bash
-video-sampler --help
+python3 -m video-sampler --help
 ```
 
-## Quickstart
+### Basic usage
 
 ```bash
-video-sampler --help
+python3 -m  video-sampler FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
 
 ## Benchmarks
