@@ -2,34 +2,21 @@
 
 import glob
 import os
-from enum import Enum
 
 import typer
-from rich.console import Console
 from tqdm import tqdm
 
 from video_sampler import version
+from video_sampler.logging import Color, console
 from video_sampler.sampler import SamplerConfig, Worker
-
-
-class Color(str, Enum):
-    white = "white"
-    red = "red"
-    cyan = "cyan"
-    magenta = "magenta"
-    yellow = "yellow"
-    green = "green"
-
 
 app = typer.Typer(
     name="video-sampler",
     help="Video sampler allows you to efficiently sample video frames",
     add_completion=False,
 )
-console = Console()
 
 
-@app.command(name="version")
 def version_callback(print_version: bool = True) -> None:
     """Print the version of the package."""
     if print_version:
@@ -39,15 +26,18 @@ def version_callback(print_version: bool = True) -> None:
 
 @app.command(name="")
 def main(
-    video_path: str = typer.Argument(..., help="Path to the video file or a folder."),
+    video_path: str = typer.Argument(
+        ..., help="Path to the video file or a glob pattern."
+    ),
     output_path: str = typer.Argument(..., help="Path to the output folder."),
-    min_frame_interval_sec: int = typer.Option(
-        1, help="Minimum frame interval in seconds."
+    min_frame_interval_sec: float = typer.Option(
+        1.0, help="Minimum frame interval in seconds."
     ),
     keyframes_only: bool = typer.Option(True, help="Only sample keyframes."),
     buffer_size: int = typer.Option(10, help="Size of the buffer."),
-    hash_size: int = typer.Option(8, help="Size of the hash."),
+    hash_size: int = typer.Option(4, help="Size of the hash."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
+    debug: bool = typer.Option(False, help="Enable debug mode."),
 ) -> None:
     """Print a greeting with a giving name."""
 
@@ -57,7 +47,9 @@ def main(
         buffer_size=buffer_size,
         hash_size=hash_size,
         queue_wait=queue_wait,
+        debug=debug,
     )
+    console.print(cfg, style=f"bold {Color.yellow.value}")
 
     videos = [video_path]
     msg = "Detected input as a file"

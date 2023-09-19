@@ -32,6 +32,23 @@ video-sampler --help
 video-sampler --help
 ```
 
+## Benchmarks
+
+Configuration for this benchmark:
+
+```bash
+SamplerConfig(min_frame_interval_sec=1.0, keyframes_only=True, buffer_size=10, hash_size=X, queue_wait=0.1, debug=True)
+```
+
+|                                    Video                                    | Hash size | Decoded | Saved |
+| :-------------------------------------------------------------------------: | :-------: | :-----: | :---: |
+| [Fat Cat Video](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |     8     |   297   |  278  |
+| [Fat Cat Video](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |     4     |   297   |  173  |
+|           [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)            |     8     |   118   |  106  |
+|           [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)            |     4     |   118   |  62   |
+|          [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)          |     8     |   458   |  441  |
+|          [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)          |     4     |   458   |  309  |
+
 ## Flit commands
 
 #### Build

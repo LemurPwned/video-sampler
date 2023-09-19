@@ -1,5 +1,6 @@
 import os
 import time
+from collections import Counter, OrderedDict
 from dataclasses import dataclass
 from queue import Queue
 from threading import Thread
@@ -9,39 +10,54 @@ import av
 from imagehash import phash
 from PIL import Image
 
+from .logging import Color, console
+
 
 @dataclass
 class SamplerConfig:
-    min_frame_interval_sec: int = 1
+    min_frame_interval_sec: float = 1
     keyframes_only: bool = True
     buffer_size: int = 10
-    hash_size: int = 8
+    hash_size: int = 4
     queue_wait: float = 0.1
+    debug: bool = False
 
 
 class HashBuffer:
-    def __init__(self, size: int) -> None:
-        self.buffer = [None] * size
+    def __init__(self, size: int, debug_flag: bool = False) -> None:
+        self.ordered_buffer = OrderedDict()
+        self.max_size = size
+        self.debug_flag = debug_flag
 
     def add(self, item, hash_, metadata={}):
         if not self.__check_duplicate(hash_):
-            return self.__add(item, metadata)
+            return self.__add(item, hash_, metadata)
         return None
 
-    def __add(self, item, metadata={}):
-        self.buffer.append((item, metadata))
-        return self.buffer.pop(0)
+    def __add(self, item, hash_, metadata={}):
+        self.ordered_buffer[hash_] = (item, metadata)
+        if len(self.ordered_buffer) >= self.max_size:
+            return self.ordered_buffer.popitem(last=False)[1]
+        return None
 
     def __check_duplicate(self, hash_) -> bool:
-        if hash_ in self.buffer:
+        if hash_ in self.ordered_buffer:
+            # renew the hash validity
+            if self.debug_flag:
+                console.print(
+                    f"Renewing {hash_}",
+                    style=f"bold {Color.red.value}",
+                )
+            self.ordered_buffer.move_to_end(hash_)
             return True
         return False
 
 
 class VideoSampler:
     def __init__(self, cfg: SamplerConfig) -> None:
-        self.cfg = SamplerConfig
+        self.cfg = cfg
         self.hash_buf = HashBuffer(cfg.buffer_size)
+        self.stats = Counter()
 
     def compute_hash(self, frame_img: Image) -> str:
         return str(phash(frame_img, hash_size=self.cfg.hash_size))
@@ -58,23 +74,33 @@ class VideoSampler:
             for frame_indx, frame in enumerate(container.decode(stream)):
                 # skip frames if keyframes_only is True
                 time_diff = frame.time - prev_time
+                self.stats["total"] += 1
                 if time_diff < self.cfg.min_frame_interval_sec:
                     continue
                 prev_time = frame.time
 
-                frame_npy: Image = frame.to_image()
-                frame_hash = self.compute_hash(frame_npy)
+                frame_pil: Image = frame.to_image()
+                frame_hash = self.compute_hash(frame_pil)
+                if self.cfg.debug:
+                    console.print(
+                        f"Frame {frame_indx}\ttime: {frame.time}\thash: {frame_hash}",
+                        f"\t Buffer: {list(self.hash_buf.ordered_buffer.keys())}",
+                        style=f"bold {Color.green.value}",
+                    )
                 res = self.hash_buf.add(
-                    frame_npy,
+                    frame_pil,
                     frame_hash,
                     metadata={"frame_time": frame.time, "frame_indx": frame_indx},
                 )
+                self.stats["decoded"] += 1
                 if res:
+                    self.stats["produced"] += 1
                     yield res
 
         # flush buffer
-        for item in self.hash_buf.buffer:
+        for _, item in self.hash_buf.ordered_buffer.items():
             if item:
+                self.stats["produced"] += 1
                 yield item
         yield None, {"end": True}
 
@@ -97,6 +123,14 @@ class Worker:
         proc_thread.start()
         self.queue_reader(output_path, read_interval=self.cfg.queue_wait)
         proc_thread.join()
+        if self.cfg.debug:
+            console.print(
+                f"Stats for: {os.path.basename(video_path)}",
+                f"\n\tTotal frames: {self.processor.stats['total']}",
+                f"\n\tDecoded frames: {self.processor.stats['decoded']}",
+                f"\n\tProduced frames: {self.processor.stats['produced']}",
+                style=f"bold {Color.magenta.value}",
+            )
 
     def queue_reader(self, output_path, read_interval=0.1) -> None:
         while True:
