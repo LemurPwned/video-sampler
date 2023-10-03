@@ -51,3 +51,9 @@ repos:
         name: flake8 (python)
         additional_dependencies: [flake8-bugbear]
         args: ["--max-line-length", "120", "--ignore", "B006,B008"]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+      - id: pyupgrade
+        args: [--py311-plus]

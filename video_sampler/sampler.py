@@ -1,15 +1,17 @@
 import os
 import time
-from collections import Counter, OrderedDict
-from dataclasses import dataclass
+from collections import Counter
+from collections.abc import Iterable
+from dataclasses import dataclass, field
 from queue import Queue
 from threading import Thread
-from typing import Dict, Iterable, Tuple, Union
+from typing import Any
 
 import av
 from imagehash import phash
 from PIL import Image
 
+from .buffer import create_buffer
 from .logging import Color, console
 
 
@@ -21,50 +23,25 @@ class SamplerConfig:
     hash_size: int = 4
     queue_wait: float = 0.1
     debug: bool = False
-
-
-class HashBuffer:
-    def __init__(self, size: int, debug_flag: bool = False) -> None:
-        self.ordered_buffer = OrderedDict()
-        self.max_size = size
-        self.debug_flag = debug_flag
-
-    def add(self, item, hash_, metadata={}):
-        if not self.__check_duplicate(hash_):
-            return self.__add(item, hash_, metadata)
-        return None
-
-    def __add(self, item, hash_, metadata={}):
-        self.ordered_buffer[hash_] = (item, metadata)
-        if len(self.ordered_buffer) >= self.max_size:
-            return self.ordered_buffer.popitem(last=False)[1]
-        return None
-
-    def __check_duplicate(self, hash_) -> bool:
-        if hash_ in self.ordered_buffer:
-            # renew the hash validity
-            if self.debug_flag:
-                console.print(
-                    f"Renewing {hash_}",
-                    style=f"bold {Color.red.value}",
-                )
-            self.ordered_buffer.move_to_end(hash_)
-            return True
-        return False
+    buffer_config: dict[str, Any] = field(
+        default_factory=lambda: {
+            "type": "gzip",
+            "size": 15,
+            "debug": False,
+        }
+    )
 
 
 class VideoSampler:
     def __init__(self, cfg: SamplerConfig) -> None:
         self.cfg = cfg
-        self.hash_buf = HashBuffer(cfg.buffer_size)
+        self.frame_buffer = create_buffer(self.cfg.buffer_config)
         self.stats = Counter()
 
     def compute_hash(self, frame_img: Image) -> str:
         return str(phash(frame_img, hash_size=self.cfg.hash_size))
 
-    def sample(
-        self, video_path: str
-    ) -> Iterable[Tuple[Union[Image.Image, None], Dict]]:
+    def sample(self, video_path: str) -> Iterable[tuple[Image.Image | None, dict]]:
         """Generate sample frames from a video"""
         with av.open(video_path) as container:
             stream = container.streams.video[0]
@@ -80,17 +57,17 @@ class VideoSampler:
                 prev_time = frame.time
 
                 frame_pil: Image = frame.to_image()
-                frame_hash = self.compute_hash(frame_pil)
                 if self.cfg.debug:
+                    buf = self.frame_buffer.get_buffer_state()
                     console.print(
-                        f"Frame {frame_indx}\ttime: {frame.time}\thash: {frame_hash}",
-                        f"\t Buffer: {list(self.hash_buf.ordered_buffer.keys())}",
+                        f"Frame {frame_indx}\ttime: {frame.time}",
+                        f"\t Buffer ({len(buf)}): {buf}",
                         style=f"bold {Color.green.value}",
                     )
-                res = self.hash_buf.add(
+                frame_meta = {"frame_time": frame.time, "frame_indx": frame_indx}
+                res = self.frame_buffer.add(
                     frame_pil,
-                    frame_hash,
-                    metadata={"frame_time": frame.time, "frame_indx": frame_indx},
+                    metadata=frame_meta,
                 )
                 self.stats["decoded"] += 1
                 if res:
@@ -98,15 +75,23 @@ class VideoSampler:
                     yield res
 
         # flush buffer
-        for _, item in self.hash_buf.ordered_buffer.items():
+        for item in self.frame_buffer.final_flush():
             if item:
                 self.stats["produced"] += 1
                 yield item
         yield None, {"end": True}
 
     def write_queue(self, video_path: str, q: Queue):
-        for item in self.sample(video_path=video_path):
-            q.put(item)
+        try:
+            for item in self.sample(video_path=video_path):
+                q.put(item)
+        except av.error as e:
+            console.print(
+                f"Error while processing {video_path}",
+                f"\n\t{e}",
+                style=f"bold {Color.red.value}",
+            )
+            q.put(None, {"end": True})
 
 
 class Worker:
