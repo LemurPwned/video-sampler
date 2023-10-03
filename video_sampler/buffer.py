@@ -135,6 +135,8 @@ class SlidingTopKBuffer(FrameBuffer):
 
 
 class GzipBuffer(FrameBuffer):
+    """Measure compression size as a function of the image usability"""
+
     def __init__(self, size: int, debug_flag: bool = False) -> None:
         self.sliding_top_k_buffer = SlidingTopKBuffer(size=size, debug_flag=debug_flag)
 
@@ -144,6 +146,23 @@ class GzipBuffer(FrameBuffer):
     def add(self, item: Image.Image, metadata: dict[str, Any]):
         compressed_l = len(gzip.compress(item.tobytes()))
         return self.sliding_top_k_buffer.add(item, {**metadata, "index": -compressed_l})
+
+    def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
+        return self.sliding_top_k_buffer.final_flush()
+
+
+class EntropyByffer(FrameBuffer):
+    """Measure image entropy as a function of the image usability"""
+
+    def __init__(self, size: int, debug_flag: bool = False) -> None:
+        self.sliding_top_k_buffer = SlidingTopKBuffer(size=size, debug_flag=debug_flag)
+
+    def get_buffer_state(self) -> list[str]:
+        return self.sliding_top_k_buffer.get_buffer_state()
+
+    def add(self, item: Image.Image, metadata: dict[str, Any]):
+        entropy = item.entropy()
+        return self.sliding_top_k_buffer.add(item, {**metadata, "index": -entropy})
 
     def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
         return self.sliding_top_k_buffer.final_flush()
@@ -166,5 +185,7 @@ def create_buffer(buffer_config):
         return PassThroughBuffer()
     elif buffer_config["type"] == "gzip":
         return GzipBuffer(buffer_config["size"], buffer_config["debug"])
+    elif buffer_config["type"] == "entropy":
+        return EntropyByffer(buffer_config["size"], buffer_config["debug"])
     else:
         raise ValueError(f"Unknown buffer type {buffer_config['type']}")

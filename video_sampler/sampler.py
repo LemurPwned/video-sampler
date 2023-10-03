@@ -25,9 +25,9 @@ class SamplerConfig:
     debug: bool = False
     buffer_config: dict[str, Any] = field(
         default_factory=lambda: {
-            "type": "gzip",
+            "type": "entropy",
             "size": 15,
-            "debug": False,
+            "debug": True,
         }
     )
 
