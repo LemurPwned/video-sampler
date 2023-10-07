@@ -21,6 +21,7 @@ class VideoSampler:
     def sample(self, video_path: str) -> Iterable[tuple[Image.Image | None, dict]]:
         """Generate sample frames from a video"""
         self.stats.clear()
+        self.frame_buffer.clear()
         with av.open(video_path) as container:
             stream = container.streams.video[0]
             if self.cfg.keyframes_only:
@@ -53,10 +54,11 @@ class VideoSampler:
                     yield res
 
         # flush buffer
-        for item in self.frame_buffer.final_flush():
-            if item:
+        for res in self.frame_buffer.final_flush():
+            if res:
                 self.stats["produced"] += 1
-                yield item
+                yield res
+
         yield None, {"end": True}
 
     def write_queue(self, video_path: str, q: Queue):

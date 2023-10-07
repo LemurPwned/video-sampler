@@ -41,6 +41,16 @@ class FrameBuffer(ABC):
         """Flush the buffer and return the remaining items"""
         pass
 
+    @abstractmethod
+    def get_buffer_state(self) -> list[str]:
+        """Return the current state of the buffer"""
+        pass
+
+    @abstractmethod
+    def clear(self):
+        """Clear the buffer"""
+        pass
+
 
 class PassThroughBuffer(FrameBuffer):
     def __init__(self) -> None:
@@ -54,6 +64,9 @@ class PassThroughBuffer(FrameBuffer):
 
     def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
         yield None
+
+    def clear(self):
+        pass
 
 
 class HashBuffer(FrameBuffer):
@@ -91,8 +104,10 @@ class HashBuffer(FrameBuffer):
         return False
 
     def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
-        for _, item in self.ordered_buffer.values():
-            yield item
+        yield from self.ordered_buffer.values()
+
+    def clear(self):
+        self.ordered_buffer.clear()
 
 
 class SlidingTopKBuffer(FrameBuffer):
@@ -153,6 +168,9 @@ class SlidingTopKBuffer(FrameBuffer):
             yield heapq.heappop(self.sliding_buffer)[-2:]
         yield None, {}
 
+    def clear(self):
+        self.sliding_buffer.clear()
+
 
 class GzipBuffer(FrameBuffer):
     """Measure compression size as a function of the image usability"""
@@ -170,6 +188,9 @@ class GzipBuffer(FrameBuffer):
     def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
         return self.sliding_top_k_buffer.final_flush()
 
+    def clear(self):
+        self.sliding_top_k_buffer.clear()
+
 
 class EntropyByffer(FrameBuffer):
     """Measure image entropy as a function of the image usability"""
@@ -186,6 +207,9 @@ class EntropyByffer(FrameBuffer):
 
     def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
         return self.sliding_top_k_buffer.final_flush()
+
+    def clear(self):
+        self.sliding_top_k_buffer.clear()
 
 
 def check_args_validity(cfg: SamplerConfig):

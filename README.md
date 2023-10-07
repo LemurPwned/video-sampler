@@ -29,10 +29,16 @@ then you can run
 python3 -m video-sampler --help
 ```
 
+or simply
+
+```bash
+video-sampler --help
+```
+
 ### Basic usage
 
 ```bash
-python3 -m  video-sampler FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
+python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
 
 ## Benchmarks
@@ -40,17 +46,17 @@ python3 -m  video-sampler FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-si
 Configuration for this benchmark:
 
 ```bash
-SamplerConfig(min_frame_interval_sec=1.0, keyframes_only=True, buffer_size=10, hash_size=X, queue_wait=0.1, debug=True)
+SamplerConfig(min_frame_interval_sec=1.0, keyframes_only=True, buffer_size=30, hash_size=X, queue_wait=0.1, debug=True)
 ```
 
-|                                    Video                                    | Hash size | Decoded | Saved |
-| :-------------------------------------------------------------------------: | :-------: | :-----: | :---: |
-| [Fat Cat Video](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |     8     |   297   |  278  |
-| [Fat Cat Video](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |     4     |   297   |  173  |
-|           [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)            |     8     |   118   |  106  |
-|           [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)            |     4     |   118   |  62   |
-|          [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)          |     8     |   458   |  441  |
-|          [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)          |     4     |   458   |  309  |
+|                                 Video                                 | Total frames | Hash size | Decoded | Saved |
+| :-------------------------------------------------------------------: | :----------: | :-------: | :-----: | :---: |
+|        [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)         |     2936     |     8     |   118   |  106  |
+|        [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)         |      -       |     4     |    -    |  61   |
+| [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |     4462     |     8     |   179   |  163  |
+| [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |      -       |     4     |    -    |  101  |
+|       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |     4020     |     8     |   161   |  154  |
+|       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |      -       |     4     |    -    |  126  |
 
 ## Flit commands
 

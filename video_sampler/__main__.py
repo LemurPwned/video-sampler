@@ -37,7 +37,10 @@ def version_callback(print_version: bool = True) -> None:
 def delegate_workers(video_path: str, output_path: str, cfg: SamplerConfig):
     msg = "Detected input as a file"
     if not os.path.isfile(video_path):
-        videos = glob.glob(video_path)
+        if "*" not in video_path:
+            videos = glob.glob(os.path.join(video_path, "*"))
+        else:
+            videos = glob.glob(video_path)
         msg = f"Detected input as a folder with {len(videos)} files"
     else:
         videos = [video_path]
@@ -54,7 +57,7 @@ def delegate_workers(video_path: str, output_path: str, cfg: SamplerConfig):
         )
 
 
-@app.command(name="")
+@app.command(name="hash")
 def main(
     video_path: str = typer.Argument(
         ..., help="Path to the video file or a glob pattern."
@@ -89,7 +92,7 @@ def main(
     delegate_workers(video_path=video_path, output_path=output_path, cfg=cfg)
 
 
-@app.command()
+@app.command(name="buffer")
 def buffer(
     buffer_type: Annotated[BufferType, typer.Argument(case_sensitive=False)],
     video_path: str = typer.Argument(
