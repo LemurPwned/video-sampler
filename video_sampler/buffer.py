@@ -111,12 +111,15 @@ class HashBuffer(FrameBuffer):
 
 
 class SlidingTopKBuffer(FrameBuffer):
-    def __init__(self, size: int, debug_flag: bool = False, expiry: int = 30) -> None:
+    def __init__(
+        self, size: int, debug_flag: bool = False, expiry: int = 30, hash_size: int = 8
+    ) -> None:
         # it's a min heap with fixed size
         self.sliding_buffer = []
         self.max_size = size
         self.debug_flag = debug_flag
         self.expiry_count = expiry
+        self.hash_size = hash_size
         assert (
             self.expiry_count > self.max_size
         ), "expiry count must be greater than max size"
@@ -130,7 +133,7 @@ class SlidingTopKBuffer(FrameBuffer):
 
     def add(self, item: Image.Image, metadata: dict[str, Any]):
         assert "index" in metadata, "metadata must have index key for sliding buffer"
-        average_hash_ = str(average_hash(item))
+        average_hash_ = str(average_hash(item, hash_size=self.hash_size))
         to_return = None
         if not self.__check_duplicate(average_hash_):
             heapq.heappush(
@@ -175,8 +178,12 @@ class SlidingTopKBuffer(FrameBuffer):
 class GzipBuffer(FrameBuffer):
     """Measure compression size as a function of the image usability"""
 
-    def __init__(self, size: int, debug_flag: bool = False) -> None:
-        self.sliding_top_k_buffer = SlidingTopKBuffer(size=size, debug_flag=debug_flag)
+    def __init__(
+        self, size: int, expiry: int, debug_flag: bool = False, hash_size: int = 8
+    ) -> None:
+        self.sliding_top_k_buffer = SlidingTopKBuffer(
+            size=size, expiry=expiry, debug_flag=debug_flag, hash_size=hash_size
+        )
 
     def get_buffer_state(self) -> list[str]:
         return self.sliding_top_k_buffer.get_buffer_state()
@@ -195,8 +202,12 @@ class GzipBuffer(FrameBuffer):
 class EntropyByffer(FrameBuffer):
     """Measure image entropy as a function of the image usability"""
 
-    def __init__(self, size: int, debug_flag: bool = False) -> None:
-        self.sliding_top_k_buffer = SlidingTopKBuffer(size=size, debug_flag=debug_flag)
+    def __init__(
+        self, size: int, expiry: int, debug_flag: bool = False, hash_size: int = 8
+    ) -> None:
+        self.sliding_top_k_buffer = SlidingTopKBuffer(
+            size=size, expiry=expiry, debug_flag=debug_flag, hash_size=hash_size
+        )
 
     def get_buffer_state(self) -> list[str]:
         return self.sliding_top_k_buffer.get_buffer_state()
@@ -217,7 +228,11 @@ def check_args_validity(cfg: SamplerConfig):
         cfg.min_frame_interval_sec > 0
     ), "min_frame_interval_sec must be greater than 0"
     assert cfg.buffer_config["size"] > 0, "buffer size must be greater than 0"
-    arg_check = {"hash": ("hash_size", "size"), "gzip": ("size",), "entropy": ("size",)}
+    arg_check = {
+        "hash": ("hash_size", "size"),
+        "gzip": ("hash_size", "size", "expiry"),
+        "entropy": ("hash_size", "size", "expiry"),
+    }
     for arg in arg_check[cfg.buffer_config["type"]]:
         assert arg in cfg.buffer_config, f"{arg} must be present in buffer config"
         assert (
@@ -233,17 +248,31 @@ def create_buffer(buffer_config: dict[str, Any]):
     )
     if buffer_config["type"] == "hash":
         return HashBuffer(
-            buffer_config["size"], buffer_config["debug"], buffer_config["hash_size"]
+            size=buffer_config["size"],
+            debug_flag=buffer_config["debug"],
+            hash_size=buffer_config["hash_size"],
         )
     elif buffer_config["type"] == "sliding_top_k":
         return SlidingTopKBuffer(
-            buffer_config["size"], buffer_config["debug"], buffer_config["expiry"]
+            size=buffer_config["size"],
+            debug_flag=buffer_config["debug"],
+            expiry=buffer_config["expiry"],
         )
     elif buffer_config["type"] == "passthrough":
         return PassThroughBuffer()
     elif buffer_config["type"] == "gzip":
-        return GzipBuffer(buffer_config["size"], buffer_config["debug"])
+        return GzipBuffer(
+            size=buffer_config["size"],
+            debug_flag=buffer_config["debug"],
+            hash_size=buffer_config["hash_size"],
+            expiry=buffer_config["expiry"],
+        )
     elif buffer_config["type"] == "entropy":
-        return EntropyByffer(buffer_config["size"], buffer_config["debug"])
+        return EntropyByffer(
+            size=buffer_config["size"],
+            debug_flag=buffer_config["debug"],
+            hash_size=buffer_config["hash_size"],
+            expiry=buffer_config["expiry"],
+        )
     else:
         raise ValueError(f"Unknown buffer type {buffer_config['type']}")

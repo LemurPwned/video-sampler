@@ -106,6 +106,7 @@ def buffer(
     keyframes_only: bool = typer.Option(True, help="Only sample keyframes."),
     buffer_size: int = typer.Option(10, help="Size of the buffer."),
     hash_size: int = typer.Option(4, help="Size of the hash."),
+    expiry: int = typer.Option(4, help="Expiry time for the buffer."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
     debug: bool = typer.Option(False, help="Enable debug mode."),
 ):
@@ -121,6 +122,7 @@ def buffer(
             "size": buffer_size,
             "debug": debug,
             "hash_size": hash_size,
+            "expiry": expiry,
         },
     )
     # create a test buffer

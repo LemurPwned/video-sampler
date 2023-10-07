@@ -41,6 +41,28 @@ video-sampler --help
 python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
 
+### Advanced usage
+
+There are currently 3 sampling methods:
+
+- `hash` - uses perceptual hashing to reduce duplicated samples
+- `entropy` - uses entropy to reduce duplicated samples
+- `gzip` - uses gzip compressed size to reduce duplicated samples
+
+To launch either you can run
+
+```bash
+video_sampler buffer `method-name` ...other options
+```
+
+e.g.
+
+```bash
+video_sampler buffer entropy --buffer-size 20 ...
+```
+
+where `buffer-size` for `entropy` and `gzip` mean the top-k sliding buffer size. Sliding buffer also uses hashing to reduce duplicated samples.
+
 ## Benchmarks
 
 Configuration for this benchmark:
@@ -57,6 +79,28 @@ SamplerConfig(min_frame_interval_sec=1.0, keyframes_only=True, buffer_size=30, h
 | [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |      -       |     4     |    -    |  101  |
 |       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |     4020     |     8     |   161   |  154  |
 |       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |      -       |     4     |    -    |  126  |
+
+---
+
+```bash
+SamplerConfig(
+    min_frame_interval_sec=1.0,
+    keyframes_only=True,
+    queue_wait=0.1,
+    debug=False,
+    print_stats=True,
+    buffer_config={'type': 'entropy'/'gzip', 'size': 30, 'debug': False, 'hash_size': 8, 'expiry': 50}
+)
+```
+
+|                                 Video                                 | Total frames |  Type   | Decoded | Saved |
+| :-------------------------------------------------------------------: | :----------: | :-----: | :-----: | :---: |
+|        [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)         |     2936     | entropy |   118   |  39   |
+|        [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)         |      -       |  gzip   |    -    |  39   |
+| [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |     4462     | entropy |   179   |  64   |
+| [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |      -       |  gzip   |    -    |  73   |
+|       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |     4020     | entropy |   161   |  59   |
+|       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |      -       |  gzip   |    -    |  63   |
 
 ## Flit commands
 
