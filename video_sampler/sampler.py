@@ -2,34 +2,14 @@ import os
 import time
 from collections import Counter
 from collections.abc import Iterable
-from dataclasses import dataclass, field
 from queue import Queue
 from threading import Thread
-from typing import Any
 
 import av
-from imagehash import phash
 from PIL import Image
 
-from .buffer import create_buffer
+from .buffer import SamplerConfig, create_buffer
 from .logging import Color, console
-
-
-@dataclass
-class SamplerConfig:
-    min_frame_interval_sec: float = 1
-    keyframes_only: bool = True
-    buffer_size: int = 10
-    hash_size: int = 4
-    queue_wait: float = 0.1
-    debug: bool = False
-    buffer_config: dict[str, Any] = field(
-        default_factory=lambda: {
-            "type": "entropy",
-            "size": 15,
-            "debug": True,
-        }
-    )
 
 
 class VideoSampler:
@@ -38,11 +18,9 @@ class VideoSampler:
         self.frame_buffer = create_buffer(self.cfg.buffer_config)
         self.stats = Counter()
 
-    def compute_hash(self, frame_img: Image) -> str:
-        return str(phash(frame_img, hash_size=self.cfg.hash_size))
-
     def sample(self, video_path: str) -> Iterable[tuple[Image.Image | None, dict]]:
         """Generate sample frames from a video"""
+        self.stats.clear()
         with av.open(video_path) as container:
             stream = container.streams.video[0]
             if self.cfg.keyframes_only:
@@ -85,7 +63,7 @@ class VideoSampler:
         try:
             for item in self.sample(video_path=video_path):
                 q.put(item)
-        except av.error as e:
+        except (av.IsADirectoryError, av.InvalidDataError) as e:
             console.print(
                 f"Error while processing {video_path}",
                 f"\n\t{e}",
@@ -95,10 +73,11 @@ class VideoSampler:
 
 
 class Worker:
-    def __init__(self, cfg: SamplerConfig) -> None:
+    def __init__(self, cfg: SamplerConfig, devnull: bool = False) -> None:
         self.cfg = cfg
         self.processor = VideoSampler(cfg=cfg)
         self.q = Queue()
+        self.devnull = devnull
 
     def launch(self, video_path: str, output_path: str) -> None:
         os.makedirs(output_path, exist_ok=True)
@@ -108,7 +87,7 @@ class Worker:
         proc_thread.start()
         self.queue_reader(output_path, read_interval=self.cfg.queue_wait)
         proc_thread.join()
-        if self.cfg.debug:
+        if self.cfg.print_stats:
             console.print(
                 f"Stats for: {os.path.basename(video_path)}",
                 f"\n\tTotal frames: {self.processor.stats['total']}",
@@ -123,7 +102,7 @@ class Worker:
                 item = self.q.get()
                 frame, metadata = item
                 if frame is not None:
-                    if isinstance(frame, Image.Image):
+                    if not self.devnull and isinstance(frame, Image.Image):
                         frame.save(
                             os.path.join(output_path, f"{metadata['frame_time']}.jpg")
                         )

@@ -3,12 +3,32 @@ import heapq
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from collections.abc import Iterable
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 from imagehash import average_hash, phash
 from PIL import Image
 
 from .logging import Color, console
+
+
+@dataclass
+class SamplerConfig:
+    min_frame_interval_sec: float = 1
+    keyframes_only: bool = True
+    queue_wait: float = 0.1
+    debug: bool = False
+    print_stats: bool = False
+    buffer_config: dict[str, Any] = field(
+        default_factory=lambda: {
+            "type": "entropy",
+            "size": 15,
+            "debug": True,
+        }
+    )
+
+    def __str__(self) -> str:
+        return str(asdict(self))
 
 
 class FrameBuffer(ABC):
@@ -168,7 +188,21 @@ class EntropyByffer(FrameBuffer):
         return self.sliding_top_k_buffer.final_flush()
 
 
-def create_buffer(buffer_config):
+def check_args_validity(cfg: SamplerConfig):
+    assert (
+        cfg.min_frame_interval_sec > 0
+    ), "min_frame_interval_sec must be greater than 0"
+    assert cfg.buffer_config["size"] > 0, "buffer size must be greater than 0"
+    arg_check = {"hash": ("hash_size", "size"), "gzip": ("size",), "entropy": ("size",)}
+    for arg in arg_check[cfg.buffer_config["type"]]:
+        assert arg in cfg.buffer_config, f"{arg} must be present in buffer config"
+        assert (
+            cfg.buffer_config[arg] is not None and cfg.buffer_config[arg] > 0
+        ), f"{arg} must be greater than 0 and must not be None"
+
+
+def create_buffer(buffer_config: dict[str, Any]):
+    """Create a buffer based on the config"""
     console.print(
         f"Creating buffer of type {buffer_config['type']}",
         style=f"bold {Color.red.value}",

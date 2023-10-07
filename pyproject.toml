@@ -36,7 +36,7 @@ dependencies = [
 Source = "https://github.com/LemurPwned/video-sampler"
 
 [project.scripts]
-video_sampler = "video_sampler:main"
+video_sampler = "video_sampler.__main__:main_loop"
 
 [project.optional-dependencies]
 dev = [
