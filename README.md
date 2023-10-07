@@ -46,8 +46,8 @@ python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffe
 There are currently 3 sampling methods:
 
 - `hash` - uses perceptual hashing to reduce duplicated samples
-- `entropy` - uses entropy to reduce duplicated samples
-- `gzip` - uses gzip compressed size to reduce duplicated samples
+- `entropy` - uses entropy to reduce duplicated samples (work in progress)
+- `gzip` - uses gzip compressed size to reduce duplicated samples (work in progress)
 
 To launch either you can run
 
