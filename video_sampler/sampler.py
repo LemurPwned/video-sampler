@@ -103,11 +103,12 @@ class Worker:
             if not self.q.empty():
                 item = self.q.get()
                 frame, metadata = item
-                if frame is not None:
-                    if not self.devnull and isinstance(frame, Image.Image):
-                        frame.save(
-                            os.path.join(output_path, f"{metadata['frame_time']}.jpg")
-                        )
+                if frame is not None and (
+                    not self.devnull and isinstance(frame, Image.Image)
+                ):
+                    frame.save(
+                        os.path.join(output_path, f"{metadata['frame_time']}.jpg")
+                    )
                 if metadata.get("end", False):
                     break
             time.sleep(read_interval)

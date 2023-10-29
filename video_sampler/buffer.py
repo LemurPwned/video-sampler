@@ -232,6 +232,7 @@ def check_args_validity(cfg: SamplerConfig):
         "hash": ("hash_size", "size"),
         "gzip": ("hash_size", "size", "expiry"),
         "entropy": ("hash_size", "size", "expiry"),
+        "passthrough": (),
     }
     for arg in arg_check[cfg.buffer_config["type"]]:
         assert arg in cfg.buffer_config, f"{arg} must be present in buffer config"
