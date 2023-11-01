@@ -40,6 +40,10 @@ Source = "https://github.com/LemurPwned/video-sampler"
 video_sampler = "video_sampler.__main__:main_loop"
 
 [project.optional-dependencies]
+clip = [
+  "open_clip_torch >= 2.23.0",
+  "torch >= 2.1.0"
+]
 dev = [
     "pre-commit",
     "bump2version",
