@@ -42,10 +42,8 @@ video_sampler = "video_sampler.__main__:main_loop"
 [project.optional-dependencies]
 dev = [
     "pre-commit",
-    "bump2version"
-]
-utils = [
-    "images2gif"
+    "bump2version",
+    "tabulate",
 ]
 
 [build-system]

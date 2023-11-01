@@ -2,6 +2,7 @@ import os
 import time
 from collections import Counter
 from collections.abc import Iterable
+from copy import deepcopy
 from queue import Queue
 from threading import Thread
 
@@ -15,7 +16,7 @@ from .logging import Color, console
 
 class VideoSampler:
     def __init__(self, cfg: SamplerConfig) -> None:
-        self.cfg = cfg
+        self.cfg = deepcopy(cfg)
         self.frame_buffer = create_buffer(self.cfg.buffer_config)
         self.gate = create_gate(self.cfg.gate_config)
         self.stats = Counter()
@@ -125,5 +126,4 @@ class Worker:
                         frame.save(
                             os.path.join(output_path, f"{metadata['frame_time']}.jpg")
                         )
-
             time.sleep(read_interval)

@@ -63,6 +63,56 @@ video_sampler buffer entropy --buffer-size 20 ...
 
 where `buffer-size` for `entropy` and `gzip` mean the top-k sliding buffer size. Sliding buffer also uses hashing to reduce duplicated samples.
 
+## Gating
+
+Aside from basic sampling rules, you can also apply gating rules to the sampled frames, further reducing the number of frames.
+Right now, there is only one gating rule available, which is based on CLIP model.
+
+Here's a quick example of how to use it:
+
+```bash
+python3 -m video_sampler clip ./videos ./scratch/clip --pos-samples "a cat" --neg-samples "empty background, a lemur"  --hash-size 4
+```
+
+### CLIP-based gating comparison
+
+Here's a brief comparison of the frames sampled with and without CLIP-based gating with the following config:
+
+```python
+  gate_def = dict(
+      type="clip",
+      pos_samples=["a cat"],
+      neg_samples=[
+          "an empty background",
+          "text on screen",
+          "a forest with no animals",
+      ],
+      model_name="ViT-B-32",
+      batch_size=32,
+      pos_margin=0.2,
+      neg_margin=0.3,
+  )
+```
+
+Evidently, CLIP-based gating is able to filter out frames that do not contain a cat and in consequence, reduce the number of frames with plain background. It also thinks that a lemur is a cat, which is not entirely wrong as fluffy creatures go.
+
+|                      Pass gate (no gating)                      |                            CLIP gate                            |
+| :-------------------------------------------------------------: | :-------------------------------------------------------------: |
+|   <img width="256" src="./assets/FatCat.mp4_hash_4_pass.gif">   |   <img width="256" src="./assets/FatCat.mp4_hash_4_clip.gif">   |
+|  <img width="256" src="./assets/SmolCat.mp4_hash_4_pass.gif">   |  <img width="256" src="./assets/SmolCat.mp4_hash_4_clip.gif">   |
+| <img width="256" src="./assets/HighLemurs.mp4_hash_4_pass.gif"> | <img width="256" src="./assets/HighLemurs.mp4_hash_4_clip.gif"> |
+
+The effects of gating in numbers, for this particular set of examples (see `produced` vs `gated` columns). `produced` represents the number of frames sampled without gating, here after the perceptual hashing, while `gated` represents the number of frames sampled after gating.
+
+|     video      | buffer | gate | decoded | produced | gated |
+| :------------: | :----: | :--: | :-----: | :------: | :---: |
+|   FatCat.mp4   |  hash  | pass |   179   |   101    |  101  |
+|   FatCat.mp4   |  hash  | clip |   179   |   101    |  71   |
+|  SmolCat.mp4   |  hash  | pass |   118   |    61    |  61   |
+|  SmolCat.mp4   |  hash  | clip |   118   |    61    |  32   |
+| HighLemurs.mp4 |  hash  | pass |   161   |   126    |  126  |
+| HighLemurs.mp4 |  hash  | clip |   161   |   126    |  65   |
+
 ## Benchmarks
 
 Configuration for this benchmark:
