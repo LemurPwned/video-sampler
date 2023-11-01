@@ -14,6 +14,30 @@ from .logging import Color, console
 
 @dataclass
 class SamplerConfig:
+    """
+    Configuration options for the video sampler.
+
+    Args:
+        min_frame_interval_sec (float, optional): The minimum time interval
+            between sampled frames in seconds. Defaults to 1.
+        keyframes_only (bool, optional): Flag indicating whether to
+            sample only keyframes. Defaults to True.
+        queue_wait (float, optional): The time to wait between checking
+            the frame queue in seconds. Defaults to 0.1.
+        debug (bool, optional): Flag indicating whether to enable debug mode.
+            Defaults to False.
+        print_stats (bool, optional): Flag indicating whether to print
+            sampling statistics. Defaults to False.
+        buffer_config (dict[str, Any], optional): Configuration options for
+                the frame buffer. Defaults to {"type": "entropy", "size": 15,
+                "debug": True}.
+
+    Methods:
+        __str__() -> str:
+            Returns a string representation of the configuration.
+
+    """
+
     min_frame_interval_sec: float = 1
     keyframes_only: bool = True
     queue_wait: float = 0.1
@@ -21,9 +45,15 @@ class SamplerConfig:
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
         default_factory=lambda: {
-            "type": "entropy",
+            "type": "hash",
+            "hash_size": 8,
             "size": 15,
             "debug": True,
+        }
+    )
+    gate_config: dict[str, Any] = field(
+        default_factory=lambda: {
+            "type": "pass",
         }
     )
 
@@ -70,6 +100,36 @@ class PassThroughBuffer(FrameBuffer):
 
 
 class HashBuffer(FrameBuffer):
+    """
+    A buffer that stores frames with their corresponding metadata and
+    checks for duplicates based on image hashes.
+    Args:
+        size (int): The maximum size of the buffer.
+        debug_flag (bool, optional): Flag indicating whether to enable debug mode. Defaults to False.
+        hash_size (int, optional): The size of the image hash. Defaults to 4.
+
+    Methods:
+        get_buffer_state() -> list[str]:
+            Returns the current state of the buffer as a list of image hashes.
+
+        add(item: Image.Image, metadata: dict[str, Any])
+            Adds an item to the buffer along with its metadata.
+
+        final_flush() -> Iterable[tuple[Image.Image | None, dict]]:
+            Yields the stored items and their metadata in the buffer.
+
+        clear()
+            Clears the buffer.
+
+    Private Methods:
+        __add(item: Image.Image, hash_: str, metadata: dict)
+            Adds an item to the buffer with the given hash and metadata.
+
+        __check_duplicate(hash_: str) -> bool:
+            Checks if the given hash already exists in the buffer and renews its validity if found.
+
+    """
+
     def __init__(self, size: int, debug_flag: bool = False, hash_size: int = 4) -> None:
         self.ordered_buffer = OrderedDict()
         self.max_size = size
@@ -114,7 +174,7 @@ class SlidingTopKBuffer(FrameBuffer):
     def __init__(
         self, size: int, debug_flag: bool = False, expiry: int = 30, hash_size: int = 8
     ) -> None:
-        # it's a min heap with fixed size
+        # it's a min heap with a fixed size
         self.sliding_buffer = []
         self.max_size = size
         self.debug_flag = debug_flag
@@ -232,6 +292,7 @@ def check_args_validity(cfg: SamplerConfig):
         "hash": ("hash_size", "size"),
         "gzip": ("hash_size", "size", "expiry"),
         "entropy": ("hash_size", "size", "expiry"),
+        "gating": ("hash_size", "size"),
         "passthrough": (),
     }
     for arg in arg_check[cfg.buffer_config["type"]]:

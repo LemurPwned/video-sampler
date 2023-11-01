@@ -44,6 +44,9 @@ dev = [
     "pre-commit",
     "bump2version"
 ]
+utils = [
+    "images2gif"
+]
 
 [build-system]
 build-backend = "flit_core.buildapi"

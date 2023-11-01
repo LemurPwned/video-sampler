@@ -9,6 +9,7 @@ import av
 from PIL import Image
 
 from .buffer import SamplerConfig, create_buffer
+from .gating import create_gate
 from .logging import Color, console
 
 
@@ -16,6 +17,7 @@ class VideoSampler:
     def __init__(self, cfg: SamplerConfig) -> None:
         self.cfg = cfg
         self.frame_buffer = create_buffer(self.cfg.buffer_config)
+        self.gate = create_gate(self.cfg.gate_config)
         self.stats = Counter()
 
     def sample(self, video_path: str) -> Iterable[tuple[Image.Image | None, dict]]:
@@ -51,15 +53,24 @@ class VideoSampler:
                 self.stats["decoded"] += 1
                 if res:
                     self.stats["produced"] += 1
-                    yield res
+                    gated, N = self.gate(*res)
+                    self.stats["gated"] += N
+                    if gated:
+                        yield gated
 
         # flush buffer
         for res in self.frame_buffer.final_flush():
             if res:
                 self.stats["produced"] += 1
-                yield res
-
-        yield None, {"end": True}
+                gated, N = self.gate(*res)
+                self.stats["gated"] += N
+                if gated:
+                    yield gated
+        gated, N = self.gate.flush()
+        self.stats["gated"] += N
+        if gated:
+            yield gated
+        yield ((None, {"end": True}),)
 
     def write_queue(self, video_path: str, q: Queue):
         try:
@@ -71,7 +82,7 @@ class VideoSampler:
                 f"\n\t{e}",
                 style=f"bold {Color.red.value}",
             )
-            q.put(None, {"end": True})
+            q.put(((None, {"end": True}),))
 
 
 class Worker:
@@ -81,8 +92,11 @@ class Worker:
         self.q = Queue()
         self.devnull = devnull
 
-    def launch(self, video_path: str, output_path: str) -> None:
-        os.makedirs(output_path, exist_ok=True)
+    def launch(self, video_path: str, output_path: str = "") -> None:
+        if output_path and self.devnull:
+            raise ValueError("Cannot write to disk when devnull is True")
+        if output_path:
+            os.makedirs(output_path, exist_ok=True)
         proc_thread = Thread(
             target=self.processor.write_queue, args=(video_path, self.q)
         )
@@ -95,20 +109,21 @@ class Worker:
                 f"\n\tTotal frames: {self.processor.stats['total']}",
                 f"\n\tDecoded frames: {self.processor.stats['decoded']}",
                 f"\n\tProduced frames: {self.processor.stats['produced']}",
+                f"\n\tGated frames: {self.processor.stats['gated']}",
                 style=f"bold {Color.magenta.value}",
             )
 
     def queue_reader(self, output_path, read_interval=0.1) -> None:
         while True:
             if not self.q.empty():
-                item = self.q.get()
-                frame, metadata = item
-                if frame is not None and (
-                    not self.devnull and isinstance(frame, Image.Image)
-                ):
-                    frame.save(
-                        os.path.join(output_path, f"{metadata['frame_time']}.jpg")
-                    )
-                if metadata.get("end", False):
-                    break
+                for frame, metadata in self.q.get():
+                    if metadata.get("end", False):
+                        return
+                    if frame is not None and (
+                        not self.devnull and isinstance(frame, Image.Image)
+                    ):
+                        frame.save(
+                            os.path.join(output_path, f"{metadata['frame_time']}.jpg")
+                        )
+
             time.sleep(read_interval)
