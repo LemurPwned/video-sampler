@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
 
 Video sampler allows you to efficiently sample video frames.
-Currently it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
+Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
 **Use case:** for sampling videos for later annotations used in machine learning.
 
@@ -43,13 +43,13 @@ python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffe
 
 ### Advanced usage
 
-There are currently 3 sampling methods:
+There are 3 sampling methods available:
 
 - `hash` - uses perceptual hashing to reduce duplicated samples
 - `entropy` - uses entropy to reduce duplicated samples (work in progress)
 - `gzip` - uses gzip compressed size to reduce duplicated samples (work in progress)
 
-To launch either you can run
+To launch any of them you can run and substitute `method-name` with one of the above:
 
 ```bash
 video_sampler buffer `method-name` ...other options
