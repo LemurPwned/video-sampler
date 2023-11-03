@@ -9,6 +9,8 @@
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/LemurPwned/video-sampler/blob/main/.pre-commit-config.yaml)
 
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/pypi/dm/video-sampler.svg)](https://img.shields.io/pypi/dm/video-sampler.svg)
+
 
 Video sampler allows you to efficiently sample video frames.
 Currently it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
