@@ -15,8 +15,10 @@ jobs:
         registry: ghcr.io
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
-    - name: Build and push
-      run: |
-        docker build . --tag ghcr.io/lemurpwned/video-sampler:latest
-        docker push ghcr.io/lemurpwned/video-sampler:latest
-          
+
+    - name: Build and push image
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: |
+          ghcr.io/lemurpwned/video-sampler:latest

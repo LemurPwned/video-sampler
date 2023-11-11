@@ -31,10 +31,11 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flit
         flit install --deps production    
-    - name: Configure test pypi
-      run: |
-        flit publish --repository testpypi
+
     - name: Build 
       run: |
         flit build 
         flit publish
+      env:
+        FLIT_USERNAME: __token__
+        FLIT_PASSWORD: ${{ secrets.PYPI_KEY }}
