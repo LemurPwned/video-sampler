@@ -2,6 +2,9 @@
 """Video sampler allows you to efficiently sample video frames"""
 from importlib import metadata as importlib_metadata
 
+from .buffer import SamplerConfig
+from .sampler import VideoSampler, Worker
+
 
 def get_version() -> str:
     try:
@@ -11,3 +14,5 @@ def get_version() -> str:
 
 
 version: str = get_version()
+
+__all__ = ["SamplerConfig", "VideoSampler", "Worker", "version"]

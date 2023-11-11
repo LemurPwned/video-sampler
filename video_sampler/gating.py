@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from typing import Any
 
 import numpy as np
@@ -6,6 +5,7 @@ import open_clip
 import torch
 from PIL import Image
 
+from .schemas import EMPTY_GATED_OBJECT, FrameObject, GatedObject
 from .utils import batched
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -22,11 +22,13 @@ def create_model(model_name: str):
 
 
 class PassGate:
-    def __call__(self, frame: Image.Image, meta: dict, last=False) -> Any:
-        return (None, 0) if last else (((frame, meta),), 1)
+    def __call__(self, frame: Image.Image, meta: dict, last=False) -> GatedObject:
+        return (
+            EMPTY_GATED_OBJECT if last else GatedObject([FrameObject(frame, meta)], 1)
+        )
 
     def flush(self):
-        return (None, 0)
+        return EMPTY_GATED_OBJECT
 
 
 class ClipGate:
@@ -92,27 +94,27 @@ class ClipGate:
         )
         return org_indx[incl_samples].ravel()
 
-    def add_frame(self, frame: Image.Image, metadata: dict):
+    def add_frame(self, frame: Image.Image, metadata: dict) -> GatedObject:
         self.frame_accumulator.append(frame)
         self.metadata_accumulator.append(metadata)
         if len(self.frame_accumulator) == self.batch_size:
             return self.__process_metadata()
-        return None, 0
+        return EMPTY_GATED_OBJECT
 
     def flush(self):
         return self.__process_metadata()
 
-    def __process_metadata(self) -> Iterable[tuple[Image.Image | None, dict]]:
+    def __process_metadata(self) -> GatedObject:
         frame_embeds = self._embed_frames(self.frame_accumulator)
         selected_frames = self._get_margins(frame_embeds)
         to_return = [
-            (self.frame_accumulator[i], self.metadata_accumulator[i])
+            FrameObject(self.frame_accumulator[i], self.metadata_accumulator[i])
             for i in range(len(self.frame_accumulator))
             if i in selected_frames
         ]
         self.frame_accumulator.clear()
         self.metadata_accumulator.clear()
-        return to_return, len(selected_frames)
+        return GatedObject(to_return, len(selected_frames))
 
 
 def create_gate(gate_config: dict):

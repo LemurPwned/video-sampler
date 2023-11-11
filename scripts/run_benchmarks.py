@@ -10,7 +10,7 @@ from video_sampler.sampler import SamplerConfig, VideoSampler
 def run_benchmarks(target_size: int = 256, debug: bool = False):
     gate_def = dict(
         type="clip",
-        pos_samples=["a cat", "a cat in the centre of an image", "a feline"],
+        pos_samples=["a cat"],
         neg_samples=[
             "an empty background",
             "text on screen",
@@ -53,11 +53,11 @@ def run_benchmarks(target_size: int = 256, debug: bool = False):
             frames = []
             timestamps = []
             for res in sampler.sample(video_path=video_fn):
-                for frame, meta in res:
-                    if frame is None:
+                for frame_obj in res:
+                    if frame_obj.frame is None:
                         continue
-                    frames.append(frame)
-                    timestamps.append(float(meta["frame_time"]))
+                    frames.append(frame_obj.frame)
+                    timestamps.append(float(frame_obj.metadata["frame_time"]))
 
             # sort by the timestamps
             frames = [

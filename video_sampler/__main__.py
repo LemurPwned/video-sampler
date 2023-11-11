@@ -2,7 +2,6 @@
 
 import glob
 import os
-from enum import Enum
 from typing import Annotated
 
 import typer
@@ -12,20 +11,13 @@ from video_sampler import version
 from video_sampler.buffer import SamplerConfig, check_args_validity
 from video_sampler.logging import Color, console
 from video_sampler.sampler import Worker
+from video_sampler.schemas import BufferType
 
 app = typer.Typer(
     name="video-sampler",
     help="Video sampler allows you to efficiently sample video frames",
     add_completion=True,
 )
-
-
-class BufferType(str, Enum):
-    entropy = "entropy"
-    gzip = "gzip"
-    hash = "hash"
-    passthrough = "passthrough"
-    grid = "grid"
 
 
 def _create_from_config(cfg: SamplerConfig, video_path: str, output_path: str):

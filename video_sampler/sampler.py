@@ -12,6 +12,7 @@ from PIL import Image
 from .buffer import SamplerConfig, create_buffer
 from .gating import create_gate
 from .logging import Color, console
+from .schemas import PROCESSING_DONE_ITERABLE, FrameObject
 
 
 class VideoSampler:
@@ -21,7 +22,7 @@ class VideoSampler:
         self.gate = create_gate(self.cfg.gate_config)
         self.stats = Counter()
 
-    def sample(self, video_path: str) -> Iterable[tuple[Image.Image | None, dict]]:
+    def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video"""
         self.stats.clear()
         self.frame_buffer.clear()
@@ -54,27 +55,28 @@ class VideoSampler:
                 self.stats["decoded"] += 1
                 if res:
                     self.stats["produced"] += 1
-                    gated, N = self.gate(*res)
-                    self.stats["gated"] += N
-                    if gated:
-                        yield gated
+                    gated_obj = self.gate(*res)
+                    self.stats["gated"] += gated_obj.N
+                    if gated_obj.frames:
+                        yield gated_obj.frames
 
         # flush buffer
         for res in self.frame_buffer.final_flush():
             if res:
                 self.stats["produced"] += 1
-                gated, N = self.gate(*res)
-                self.stats["gated"] += N
-                if gated:
-                    yield gated
-        gated, N = self.gate.flush()
-        self.stats["gated"] += N
-        if gated:
-            yield gated
-        yield ((None, {"end": True}),)
+                gated_obj = self.gate(*res)
+                self.stats["gated"] += gated_obj.N
+                if gated_obj.frames:
+                    yield gated_obj.frames
+        gated_obj = self.gate.flush()
+        self.stats["gated"] += gated_obj.N
+        if gated_obj.frames:
+            yield gated_obj.frames
+        yield PROCESSING_DONE_ITERABLE
 
     def write_queue(self, video_path: str, q: Queue):
         try:
+            item: tuple[FrameObject, int]
             for item in self.sample(video_path=video_path):
                 q.put(item)
         except (av.IsADirectoryError, av.InvalidDataError) as e:
@@ -83,7 +85,7 @@ class VideoSampler:
                 f"\n\t{e}",
                 style=f"bold {Color.red.value}",
             )
-            q.put(((None, {"end": True}),))
+            q.put(PROCESSING_DONE_ITERABLE)
 
 
 class Worker:
@@ -117,13 +119,17 @@ class Worker:
     def queue_reader(self, output_path, read_interval=0.1) -> None:
         while True:
             if not self.q.empty():
-                for frame, metadata in self.q.get():
-                    if metadata.get("end", False):
+                frame_object: FrameObject
+                for frame_object in self.q.get():
+                    if frame_object.metadata.get("end", False):
                         return
-                    if frame is not None and (
-                        not self.devnull and isinstance(frame, Image.Image)
+                    if frame_object.frame is not None and (
+                        not self.devnull and isinstance(frame_object.frame, Image.Image)
                     ):
-                        frame.save(
-                            os.path.join(output_path, f"{metadata['frame_time']}.jpg")
+                        frame_object.frame.save(
+                            os.path.join(
+                                output_path,
+                                f"{frame_object.metadata['frame_time']}.jpg",
+                            )
                         )
             time.sleep(read_interval)
