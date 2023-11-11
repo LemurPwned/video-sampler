@@ -25,6 +25,7 @@ class BufferType(str, Enum):
     gzip = "gzip"
     hash = "hash"
     passthrough = "passthrough"
+    grid = "grid"
 
 
 def _create_from_config(cfg: SamplerConfig, video_path: str, output_path: str):
@@ -125,6 +126,8 @@ def buffer(
     expiry: int = typer.Option(4, help="Expiry time for the buffer."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
     debug: bool = typer.Option(False, help="Enable debug mode."),
+    grid_size: int = typer.Option(4, help="Grid size for the grid buffer."),
+    max_hits: int = typer.Option(2, help="Max hits for the grid buffer."),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
     cfg = SamplerConfig(
@@ -139,6 +142,9 @@ def buffer(
             "debug": debug,
             "hash_size": hash_size,
             "expiry": expiry,
+            "grid_x": grid_size,
+            "grid_y": grid_size,
+            "max_hits": max_hits,
         },
     )
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)

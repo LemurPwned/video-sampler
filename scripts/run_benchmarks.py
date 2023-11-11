@@ -10,10 +10,11 @@ from video_sampler.sampler import SamplerConfig, VideoSampler
 def run_benchmarks(target_size: int = 256, debug: bool = False):
     gate_def = dict(
         type="clip",
-        pos_samples=["a cat"],
+        pos_samples=["a cat", "a cat in the centre of an image", "a feline"],
         neg_samples=[
             "an empty background",
             "text on screen",
+            "blurry image",
             "a forest with no animals",
         ],
         model_name="ViT-B-32",
@@ -22,6 +23,17 @@ def run_benchmarks(target_size: int = 256, debug: bool = False):
         neg_margin=0.3,
     )
     configs = [
+        SamplerConfig(
+            buffer_config=dict(
+                type="grid",
+                hash_size=4,
+                size=30,
+                debug=debug,
+                grid_x=4,
+                grid_y=4,
+                max_hits=1,
+            ),
+        ),
         SamplerConfig(
             buffer_config=dict(type="hash", hash_size=4, size=30, debug=debug)
         ),
@@ -52,7 +64,6 @@ def run_benchmarks(target_size: int = 256, debug: bool = False):
                 x.resize((target_size, target_size))
                 for _, x in sorted(zip(timestamps, frames))
             ]
-            duration = 0.05 * len(frames)
             first_frame = frames[0]
             bsn = os.path.basename(video_fn)
 
@@ -62,7 +73,7 @@ def run_benchmarks(target_size: int = 256, debug: bool = False):
                 format="GIF",
                 append_images=frames,
                 save_all=True,
-                duration=duration,
+                duration=250,
                 loop=0,
             )
             stats = sampler.stats
@@ -86,4 +97,4 @@ def run_benchmarks(target_size: int = 256, debug: bool = False):
 
 
 if __name__ == "__main__":
-    run_benchmarks()
+    run_benchmarks(debug=False)

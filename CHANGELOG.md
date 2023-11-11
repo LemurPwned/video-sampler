@@ -13,6 +13,7 @@ Changelog for the `video-sampler`.
 - added a notebook in `notebooks` to show the distribution shift of the sampled frames
 - added some basic tests (really basic)
 - added a short explanation and usage of guided sampling in README.md.
+- added grid hash sampling
 
 ### 0.5.0
 
