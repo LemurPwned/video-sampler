@@ -13,7 +13,7 @@
 
 
 Video sampler allows you to efficiently sample video frames.
-Currently it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
+Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
 **Use case:** for sampling videos for later annotations used in machine learning.
 
@@ -45,13 +45,13 @@ python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffe
 
 ### Advanced usage
 
-There are currently 3 sampling methods:
+There are 3 sampling methods available:
 
 - `hash` - uses perceptual hashing to reduce duplicated samples
 - `entropy` - uses entropy to reduce duplicated samples (work in progress)
 - `gzip` - uses gzip compressed size to reduce duplicated samples (work in progress)
 
-To launch either you can run
+To launch any of them you can run and substitute `method-name` with one of the above:
 
 ```bash
 video_sampler buffer `method-name` ...other options
@@ -64,6 +64,59 @@ video_sampler buffer entropy --buffer-size 20 ...
 ```
 
 where `buffer-size` for `entropy` and `gzip` mean the top-k sliding buffer size. Sliding buffer also uses hashing to reduce duplicated samples.
+
+## Gating
+
+Aside from basic sampling rules, you can also apply gating rules to the sampled frames, further reducing the number of frames.
+Right now, there is only one gating rule available, which is based on CLIP model.
+
+Here's a quick example of how to use it:
+
+```bash
+python3 -m video_sampler clip ./videos ./scratch/clip --pos-samples "a cat" --neg-samples "empty background, a lemur"  --hash-size 4
+```
+
+### CLIP-based gating comparison
+
+Here's a brief comparison of the frames sampled with and without CLIP-based gating with the following config:
+
+```python
+  gate_def = dict(
+      type="clip",
+      pos_samples=["a cat"],
+      neg_samples=[
+          "an empty background",
+          "text on screen",
+          "a forest with no animals",
+      ],
+      model_name="ViT-B-32",
+      batch_size=32,
+      pos_margin=0.2,
+      neg_margin=0.3,
+  )
+```
+
+Evidently, CLIP-based gating is able to filter out frames that do not contain a cat and in consequence, reduce the number of frames with plain background. It also thinks that a lemur is a cat, which is not entirely wrong as fluffy creatures go.
+
+|                      Pass gate (no gating)                      |                            CLIP gate                            |                            Grid                             |
+| :-------------------------------------------------------------: | :-------------------------------------------------------------: | :---------------------------------------------------------: |
+|   <img width="256" src="./assets/FatCat.mp4_hash_4_pass.gif">   |   <img width="256" src="./assets/FatCat.mp4_hash_4_clip.gif">   | <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif"> |
+|  <img width="256" src="./assets/SmolCat.mp4_hash_4_pass.gif">   |  <img width="256" src="./assets/SmolCat.mp4_hash_4_clip.gif">   | <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif"> |
+| <img width="256" src="./assets/HighLemurs.mp4_hash_4_pass.gif"> | <img width="256" src="./assets/HighLemurs.mp4_hash_4_clip.gif"> | <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif"> |
+
+The effects of gating in numbers, for this particular set of examples (see `produced` vs `gated` columns). `produced` represents the number of frames sampled without gating, here after the perceptual hashing, while `gated` represents the number of frames sampled after gating.
+
+| video          | buffer | gate | decoded | produced | gated |
+| -------------- | ------ | ---- | ------- | -------- | ----- |
+| FatCat.mp4     | grid   | pass | 179     | 31       | 31    |
+| SmolCat.mp4    | grid   | pass | 118     | 24       | 24    |
+| HighLemurs.mp4 | grid   | pass | 161     | 35       | 35    |
+| FatCat.mp4     | hash   | pass | 179     | 101      | 101   |
+| SmolCat.mp4    | hash   | pass | 118     | 61       | 61    |
+| HighLemurs.mp4 | hash   | pass | 161     | 126      | 126   |
+| FatCat.mp4     | hash   | clip | 179     | 101      | 73    |
+| SmolCat.mp4    | hash   | clip | 118     | 61       | 31    |
+| HighLemurs.mp4 | hash   | clip | 161     | 126      | 66    |
 
 ## Benchmarks
 

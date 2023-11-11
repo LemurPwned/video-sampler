@@ -14,6 +14,31 @@ from .logging import Color, console
 
 @dataclass
 class SamplerConfig:
+    """
+    Configuration options for the video sampler.
+
+    Args:
+        min_frame_interval_sec (float, optional): The minimum time interval
+            between sampled frames in seconds. Defaults to 1.
+        keyframes_only (bool, optional): Flag indicating whether to
+            sample only keyframes. Defaults to True.
+        queue_wait (float, optional): The time to wait between checking
+            the frame queue in seconds. Defaults to 0.1.
+        debug (bool, optional): Flag indicating whether to enable debug mode.
+            Defaults to False.
+        print_stats (bool, optional): Flag indicating whether to print
+            sampling statistics. Defaults to False.
+        buffer_config (dict[str, Any], optional): Configuration options for
+                the frame buffer. Defaults to {"type": "entropy", "size": 15,
+                "debug": True}.
+        gate_config (dict[str, Any], optional): Configuration options for
+                the frame gate. Defaults to {"type": "pass"}.
+    Methods:
+        __str__() -> str:
+            Returns a string representation of the configuration.
+
+    """
+
     min_frame_interval_sec: float = 1
     keyframes_only: bool = True
     queue_wait: float = 0.1
@@ -21,9 +46,15 @@ class SamplerConfig:
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
         default_factory=lambda: {
-            "type": "entropy",
+            "type": "hash",
+            "hash_size": 8,
             "size": 15,
             "debug": True,
+        }
+    )
+    gate_config: dict[str, Any] = field(
+        default_factory=lambda: {
+            "type": "pass",
         }
     )
 
@@ -70,6 +101,36 @@ class PassThroughBuffer(FrameBuffer):
 
 
 class HashBuffer(FrameBuffer):
+    """
+    A buffer that stores frames with their corresponding metadata and
+    checks for duplicates based on image hashes.
+    Args:
+        size (int): The maximum size of the buffer.
+        debug_flag (bool, optional): Flag indicating whether to enable debug mode. Defaults to False.
+        hash_size (int, optional): The size of the image hash. Defaults to 4.
+
+    Methods:
+        get_buffer_state() -> list[str]:
+            Returns the current state of the buffer as a list of image hashes.
+
+        add(item: Image.Image, metadata: dict[str, Any])
+            Adds an item to the buffer along with its metadata.
+
+        final_flush() -> Iterable[tuple[Image.Image | None, dict]]:
+            Yields the stored items and their metadata in the buffer.
+
+        clear()
+            Clears the buffer.
+
+    Private Methods:
+        __add(item: Image.Image, hash_: str, metadata: dict)
+            Adds an item to the buffer with the given hash and metadata.
+
+        __check_duplicate(hash_: str) -> bool:
+            Checks if the given hash already exists in the buffer and renews its validity if found.
+
+    """
+
     def __init__(self, size: int, debug_flag: bool = False, hash_size: int = 4) -> None:
         self.ordered_buffer = OrderedDict()
         self.max_size = size
@@ -81,17 +142,17 @@ class HashBuffer(FrameBuffer):
 
     def add(self, item: Image.Image, metadata: dict[str, Any]):
         hash_ = str(phash(item, hash_size=self.hash_size))
-        if not self.__check_duplicate(hash_):
-            return self.__add(item, hash_, metadata)
+        if not self._check_duplicate(hash_):
+            return self.__add(hash_, item, metadata)
         return None
 
-    def __add(self, item: Image.Image, hash_: str, metadata: dict):
+    def __add(self, hash_: str, item: Image.Image, metadata: dict):
         self.ordered_buffer[hash_] = (item, metadata)
         if len(self.ordered_buffer) >= self.max_size:
             return self.ordered_buffer.popitem(last=False)[1]
         return None
 
-    def __check_duplicate(self, hash_: str) -> bool:
+    def _check_duplicate(self, hash_: str) -> bool:
         if hash_ in self.ordered_buffer:
             # renew the hash validity
             if self.debug_flag:
@@ -110,11 +171,96 @@ class HashBuffer(FrameBuffer):
         self.ordered_buffer.clear()
 
 
+class GridBuffer(HashBuffer):
+    def __init__(
+        self,
+        size: int,
+        debug_flag: bool = False,
+        hash_size: int = 4,
+        grid_x: int = 4,
+        grid_y: int = 4,
+        max_hits: int = 1,
+    ) -> None:
+        super().__init__(size, debug_flag, hash_size)
+        self.grid_x = grid_x
+        self.grid_y = grid_y
+        self.max_hits = max_hits
+        self.mosaic_buffer = {}
+
+    def __get_grid_hash(self, item: Image.Image) -> str:
+        """Compute grid hashes for a given image"""
+        for x in range(self.grid_x):
+            for y in range(self.grid_y):
+                yield str(
+                    phash(
+                        item.crop(
+                            (
+                                x * item.width / self.grid_x,
+                                y * item.height / self.grid_y,
+                                (x + 1) * item.width / self.grid_x,
+                                (y + 1) * item.height / self.grid_y,
+                            )
+                        ),
+                        hash_size=self.hash_size,
+                    )
+                )
+
+    def _check_mosaic(self, mosaic_hash: str):
+        return mosaic_hash in self.mosaic_buffer
+
+    def update_ttl_buffer(self):
+        # expire the images that are not in the grid
+        if len(self.ordered_buffer) >= self.max_size:
+            to_return_hash, return_data = self.ordered_buffer.popitem(last=False)
+            if to_return_hash is not None:
+                removal_keys = [
+                    img_hash
+                    for img_hash, mosaic_hash in self.mosaic_buffer.items()
+                    if mosaic_hash == to_return_hash
+                ]
+                for key in removal_keys:
+                    del self.mosaic_buffer[key]
+            return return_data
+        return None
+
+    def add(self, item: Image.Image, metadata: dict[str, Any]):
+        hash_ = str(phash(item, hash_size=self.hash_size))
+        if not self._check_duplicate(hash_):
+            # not automatically rejected, check the mosaic buffer
+            hash_hits = 0
+            hash_sets = []
+            for el_hash_ in self.__get_grid_hash(item):
+                if el_hash_ in self.mosaic_buffer:
+                    hash_hits += 1
+                hash_sets.append(el_hash_)
+
+            if hash_hits < self.max_hits:
+                # add image hash to the ttl counter
+                self.ordered_buffer[hash_] = (item, metadata)
+                # add the image to the mosaic buffer
+                # this also automatically overwrites the deleted hashes
+                for el_hash in hash_sets:
+                    self.mosaic_buffer[el_hash] = hash_
+
+            if self.debug_flag:
+                console.print(
+                    f"\tHash hits: {hash_hits}"
+                    f"\tHash sets: {len(hash_sets)}"
+                    f"\tHash buffer: {len(self.get_buffer_state())}"
+                    f"\tMosaic buffer: {len(self.mosaic_buffer)}"
+                )
+        return self.update_ttl_buffer()
+
+    def clear(self):
+        super().clear()
+        self.mosaic_buffer = {}
+
+
 class SlidingTopKBuffer(FrameBuffer):
     def __init__(
         self, size: int, debug_flag: bool = False, expiry: int = 30, hash_size: int = 8
     ) -> None:
-        # it's a min heap with fixed size
+        # it's a min heap with a fixed size
         self.sliding_buffer = []
         self.max_size = size
         self.debug_flag = debug_flag
@@ -232,6 +378,8 @@ def check_args_validity(cfg: SamplerConfig):
         "hash": ("hash_size", "size"),
         "gzip": ("hash_size", "size", "expiry"),
         "entropy": ("hash_size", "size", "expiry"),
+        "gating": ("hash_size", "size"),
+        "grid": ("hash_size", "size", "grid_x", "grid_y", "max_hits"),
         "passthrough": (),
     }
     for arg in arg_check[cfg.buffer_config["type"]]:
@@ -252,6 +400,15 @@ def create_buffer(buffer_config: dict[str, Any]):
             size=buffer_config["size"],
             debug_flag=buffer_config["debug"],
             hash_size=buffer_config["hash_size"],
+        )
+    elif buffer_config["type"] == "grid":
+        return GridBuffer(
+            size=buffer_config["size"],
+            debug_flag=buffer_config["debug"],
+            hash_size=buffer_config["hash_size"],
+            grid_x=buffer_config["grid_x"],
+            grid_y=buffer_config["grid_y"],
+            max_hits=buffer_config["max_hits"],
         )
     elif buffer_config["type"] == "sliding_top_k":
         return SlidingTopKBuffer(

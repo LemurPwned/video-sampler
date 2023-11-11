@@ -1,5 +1,4 @@
 from collections import defaultdict
-from itertools import islice
 from pathlib import Path
 
 import numpy as np
@@ -10,15 +9,7 @@ from sklearn.manifold import TSNE
 from tqdm import tqdm
 from transformers import AutoFeatureExtractor, ResNetModel
 
-
-def batched(iterable, n):
-    "Batch data into tuples of length n. The last batch may be shorter."
-    """from https://docs.python.org/3/library/itertools.html#itertools-recipes"""
-    if n < 1:
-        raise ValueError("n must be at least one")
-    it = iter(iterable)
-    while batch := tuple(islice(it, n)):
-        yield batch
+from ..utils import batched
 
 
 def build_feature_model(model_str: str):

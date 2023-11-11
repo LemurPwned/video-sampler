@@ -2,6 +2,7 @@ import os
 import time
 from collections import Counter
 from collections.abc import Iterable
+from copy import deepcopy
 from queue import Queue
 from threading import Thread
 
@@ -9,16 +10,19 @@ import av
 from PIL import Image
 
 from .buffer import SamplerConfig, create_buffer
+from .gating import create_gate
 from .logging import Color, console
+from .schemas import PROCESSING_DONE_ITERABLE, FrameObject
 
 
 class VideoSampler:
     def __init__(self, cfg: SamplerConfig) -> None:
-        self.cfg = cfg
+        self.cfg = deepcopy(cfg)
         self.frame_buffer = create_buffer(self.cfg.buffer_config)
+        self.gate = create_gate(self.cfg.gate_config)
         self.stats = Counter()
 
-    def sample(self, video_path: str) -> Iterable[tuple[Image.Image | None, dict]]:
+    def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video"""
         self.stats.clear()
         self.frame_buffer.clear()
@@ -51,18 +55,28 @@ class VideoSampler:
                 self.stats["decoded"] += 1
                 if res:
                     self.stats["produced"] += 1
-                    yield res
+                    gated_obj = self.gate(*res)
+                    self.stats["gated"] += gated_obj.N
+                    if gated_obj.frames:
+                        yield gated_obj.frames
 
         # flush buffer
         for res in self.frame_buffer.final_flush():
             if res:
                 self.stats["produced"] += 1
-                yield res
-
-        yield None, {"end": True}
+                gated_obj = self.gate(*res)
+                self.stats["gated"] += gated_obj.N
+                if gated_obj.frames:
+                    yield gated_obj.frames
+        gated_obj = self.gate.flush()
+        self.stats["gated"] += gated_obj.N
+        if gated_obj.frames:
+            yield gated_obj.frames
+        yield PROCESSING_DONE_ITERABLE
 
     def write_queue(self, video_path: str, q: Queue):
         try:
+            item: tuple[FrameObject, int]
             for item in self.sample(video_path=video_path):
                 q.put(item)
         except (av.IsADirectoryError, av.InvalidDataError) as e:
@@ -71,7 +85,7 @@ class VideoSampler:
                 f"\n\t{e}",
                 style=f"bold {Color.red.value}",
             )
-            q.put(None, {"end": True})
+            q.put(PROCESSING_DONE_ITERABLE)
 
 
 class Worker:
@@ -81,8 +95,11 @@ class Worker:
         self.q = Queue()
         self.devnull = devnull
 
-    def launch(self, video_path: str, output_path: str) -> None:
-        os.makedirs(output_path, exist_ok=True)
+    def launch(self, video_path: str, output_path: str = "") -> None:
+        if output_path and self.devnull:
+            raise ValueError("Cannot write to disk when devnull is True")
+        if output_path:
+            os.makedirs(output_path, exist_ok=True)
         proc_thread = Thread(
             target=self.processor.write_queue, args=(video_path, self.q)
         )
@@ -95,20 +112,24 @@ class Worker:
                 f"\n\tTotal frames: {self.processor.stats['total']}",
                 f"\n\tDecoded frames: {self.processor.stats['decoded']}",
                 f"\n\tProduced frames: {self.processor.stats['produced']}",
+                f"\n\tGated frames: {self.processor.stats['gated']}",
                 style=f"bold {Color.magenta.value}",
             )
 
     def queue_reader(self, output_path, read_interval=0.1) -> None:
         while True:
             if not self.q.empty():
-                item = self.q.get()
-                frame, metadata = item
-                if frame is not None and (
-                    not self.devnull and isinstance(frame, Image.Image)
-                ):
-                    frame.save(
-                        os.path.join(output_path, f"{metadata['frame_time']}.jpg")
-                    )
-                if metadata.get("end", False):
-                    break
+                frame_object: FrameObject
+                for frame_object in self.q.get():
+                    if frame_object.metadata.get("end", False):
+                        return
+                    if frame_object.frame is not None and (
+                        not self.devnull and isinstance(frame_object.frame, Image.Image)
+                    ):
+                        frame_object.frame.save(
+                            os.path.join(
+                                output_path,
+                                f"{frame_object.metadata['frame_time']}.jpg",
+                            )
+                        )
             time.sleep(read_interval)
