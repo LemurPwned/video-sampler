@@ -11,7 +11,6 @@
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/video-sampler.svg)](https://img.shields.io/pypi/dm/video-sampler.svg)
 
-
 Video sampler allows you to efficiently sample video frames.
 Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
@@ -98,11 +97,11 @@ Here's a brief comparison of the frames sampled with and without CLIP-based gati
 
 Evidently, CLIP-based gating is able to filter out frames that do not contain a cat and in consequence, reduce the number of frames with plain background. It also thinks that a lemur is a cat, which is not entirely wrong as fluffy creatures go.
 
-|                      Pass gate (no gating)                      |                            CLIP gate                            |                            Grid                             |
-| :-------------------------------------------------------------: | :-------------------------------------------------------------: | :---------------------------------------------------------: |
-|   <img width="256" src="./assets/FatCat.mp4_hash_4_pass.gif">   |   <img width="256" src="./assets/FatCat.mp4_hash_4_clip.gif">   | <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif"> |
-|  <img width="256" src="./assets/SmolCat.mp4_hash_4_pass.gif">   |  <img width="256" src="./assets/SmolCat.mp4_hash_4_clip.gif">   | <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif"> |
-| <img width="256" src="./assets/HighLemurs.mp4_hash_4_pass.gif"> | <img width="256" src="./assets/HighLemurs.mp4_hash_4_clip.gif"> | <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif"> |
+|                      Pass gate (no gating)                      |                            CLIP gate                            |                              Grid                               |
+| :-------------------------------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------------: |
+|   <img width="256" src="./assets/FatCat.mp4_hash_4_pass.gif">   |   <img width="256" src="./assets/FatCat.mp4_hash_4_clip.gif">   |   <img width="256" src="./assets/FatCat.mp4_grid_4_pass.gif">   |
+|  <img width="256" src="./assets/SmolCat.mp4_hash_4_pass.gif">   |  <img width="256" src="./assets/SmolCat.mp4_hash_4_clip.gif">   |  <img width="256" src="./assets/SmolCat.mp4_grid_4_pass.gif">   |
+| <img width="256" src="./assets/HighLemurs.mp4_hash_4_pass.gif"> | <img width="256" src="./assets/HighLemurs.mp4_hash_4_clip.gif"> | <img width="256" src="./assets/HighLemurs.mp4_grid_4_pass.gif"> |
 
 The effects of gating in numbers, for this particular set of examples (see `produced` vs `gated` columns). `produced` represents the number of frames sampled without gating, here after the perceptual hashing, while `gated` represents the number of frames sampled after gating.
 
