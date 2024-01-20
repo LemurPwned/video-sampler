@@ -2,7 +2,7 @@
 name = "video_sampler"
 description = "Video Sampler -- sample frames from a video file"
 url = "https://github.com/LemurPwned/video-sampler"
-version = "0.6.0"
+version = "0.7.0"
 authors = [
     { name = "LemurPwned", email = "lemurpwned@gmail.com" }
 ]
@@ -30,7 +30,8 @@ dependencies = [
   "Pillow >=10.0.0",
   "rich >= 13.5.3",
   "typer[all] >= 0.9.0",
-  "tqdm >= 4.66.1"
+  "tqdm >= 4.66.1",
+  "opencv-python-headless >= 4.9.0.80"
   ]
 
 [project.urls]
