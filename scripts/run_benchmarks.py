@@ -53,7 +53,7 @@ def run_benchmarks(gate_config: dict, target_size: int = 256, debug: bool = Fals
         model_type = (
             f"{cfg.buffer_config['type']}_{cfg.buffer_config['hash_size']}_{gate_type}"
         )
-        for video_fn in glob.glob("videos/MadLad.mp4"):
+        for video_fn in glob.glob("videos/*.mp4"):
             frames = []
             timestamps = []
             for res in sampler.sample(video_path=video_fn):

@@ -28,9 +28,7 @@ def create_model(model_name: str):
 
 class PassGate:
     def __call__(self, frame: Image.Image, meta: dict, last=False) -> GatedObject:
-        return (
-            EMPTY_GATED_OBJECT if last else GatedObject([FrameObject(frame, meta)], 1)
-        )
+        return self.flush() if last else GatedObject([FrameObject(frame, meta)], 1)
 
     def flush(self):
         return EMPTY_GATED_OBJECT
@@ -40,6 +38,14 @@ class BlurGate:
     def __init__(
         self, method: Literal["fft", "laplacian"] = "laplacian", threshold: float = 100
     ) -> None:
+        """Gate frames based on bluriness.
+        :param method: The method to use for blur detection. Can be "fft" or "laplacian".
+        :param threshold: The threshold for bluriness. The higher the threshold, the more
+            blurry the image needs to be to be gated.
+            Those are different depending on the method:
+            - 20 is a good start for fft
+            - 100 is a good start for laplacian.
+        """
         self.is_blurry = None
         if method == "fft":
             self.is_blurry = self._is_blurry_fft
@@ -64,7 +70,7 @@ class BlurGate:
         )
 
     def _is_blurry_fft(self, frame: Image.Image) -> bool:
-        """Check if the image is blurry with laplacian method."""
+        """Check if the image is blurry with fft method."""
         f = np.fft.fft2(frame)
         fshift = np.fft.fftshift(f)
         magnitude_spectrum = 20 * np.log(np.abs(fshift))
