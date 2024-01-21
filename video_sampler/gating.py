@@ -40,8 +40,8 @@ class BlurGate:
     ) -> None:
         """Gate frames based on bluriness.
         :param method: The method to use for blur detection. Can be "fft" or "laplacian".
-        :param threshold: The threshold for bluriness. The higher the threshold, the more
-            blurry the image needs to be to be gated.
+        :param threshold: The threshold for bluriness. The higher the threshold, the less
+            blurry the image needs to be to be discarded.
             Those are different depending on the method:
             - 20 is a good start for fft
             - 100 is a good start for laplacian.
@@ -73,7 +73,7 @@ class BlurGate:
         """Check if the image is blurry with fft method."""
         f = np.fft.fft2(frame)
         fshift = np.fft.fftshift(f)
-        magnitude_spectrum = 20 * np.log(np.abs(fshift))
+        magnitude_spectrum = 20 * np.log(np.abs(fshift) + 1e-12)
         return magnitude_spectrum.mean() < self.threshold
 
     def flush(self):

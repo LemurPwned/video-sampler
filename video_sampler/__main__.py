@@ -81,6 +81,12 @@ def main(
     hash_size: int = typer.Option(4, help="Size of the hash."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
     debug: bool = typer.Option(False, help="Enable debug mode."),
+    threshold: float = typer.Option(
+        20.0, help="Threshold for the blur gate. If 0 then no blur gate is used."
+    ),
+    blur_method: str = typer.Option(
+        "fft", help="Method to use for blur gate. Can be fft or variance."
+    ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
 
@@ -96,8 +102,16 @@ def main(
             "debug": debug,
             "hash_size": hash_size,
         },
+        gate_config={
+            "type": "blur",
+            "method": blur_method,
+            "threshold": threshold,
+        }
+        if threshold > 0
+        else {
+            "type": "pass",
+        },
     )
-    console.print(cfg, style=f"bold {Color.yellow.value}")
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -120,6 +134,12 @@ def buffer(
     debug: bool = typer.Option(False, help="Enable debug mode."),
     grid_size: int = typer.Option(4, help="Grid size for the grid buffer."),
     max_hits: int = typer.Option(2, help="Max hits for the grid buffer."),
+    threshold: float = typer.Option(
+        20.0, help="Threshold for the blur gate. If 0 then no blur gate is used."
+    ),
+    blur_method: str = typer.Option(
+        "fft", help="Method to use for blur gate. Can be fft or variance."
+    ),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
     cfg = SamplerConfig(
@@ -137,6 +157,15 @@ def buffer(
             "grid_x": grid_size,
             "grid_y": grid_size,
             "max_hits": max_hits,
+        },
+        gate_config={
+            "type": "blur",
+            "method": blur_method,
+            "threshold": threshold,
+        }
+        if threshold > 0
+        else {
+            "type": "pass",
         },
     )
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)

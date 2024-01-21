@@ -21,25 +21,25 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 ## Installation and Usage
 
 ```bash
-pip install -U video-sampler
+pip install -U video_sampler
 ```
 
 then you can run
 
 ```bash
-python3 -m video-sampler --help
+python3 -m video_sampler --help
 ```
 
 or simply
 
 ```bash
-video-sampler --help
+video_sampler --help
 ```
 
 ### Basic usage
 
 ```bash
-python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
+python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
 
 #### API examples
@@ -83,16 +83,6 @@ Here's a quick example of how to use clip:
 python3 -m video_sampler clip ./videos ./scratch/clip --pos-samples "a cat" --neg-samples "empty background, a lemur"  --hash-size 4
 ```
 
-### Blur gating
-
-Helps a little with blurry videos. Adjust threshold and method (`laplacian` or `fft`) for best results.
-
-| video      | buffer | gate | decoded | produced | gated |
-| ---------- | ------ | ---- | ------- | -------- | ----- |
-| MadLad.mp4 | grid   | pass | 120     | 31       | 31    |
-| MadLad.mp4 | hash   | pass | 120     | 110      | 110   |
-| MadLad.mp4 | hash   | blur | 120     | 110      | 85    |
-
 ### CLIP-based gating comparison
 
 Here's a brief comparison of the frames sampled with and without CLIP-based gating with the following config:
@@ -134,6 +124,17 @@ The effects of gating in numbers, for this particular set of examples (see `prod
 | FatCat.mp4     | hash   | clip | 179     | 101      | 73    |
 | SmolCat.mp4    | hash   | clip | 118     | 61       | 31    |
 | HighLemurs.mp4 | hash   | clip | 161     | 126      | 66    |
+
+### Blur gating
+
+Helps a little with blurry videos. Adjust threshold and method (`laplacian` or `fft`) for best results.
+Some results from `fft` at `threshold=20`:
+
+| video      | buffer | gate | decoded | produced | gated |
+| ---------- | ------ | ---- | ------- | -------- | ----- |
+| MadLad.mp4 | grid   | pass | 120     | 31       | 31    |
+| MadLad.mp4 | hash   | pass | 120     | 110      | 110   |
+| MadLad.mp4 | hash   | blur | 120     | 110      | 85    |
 
 ## Benchmarks
 
