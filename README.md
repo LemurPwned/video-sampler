@@ -21,26 +21,30 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 ## Installation and Usage
 
 ```bash
-pip install -U video-sampler
+pip install -U video_sampler
 ```
 
 then you can run
 
 ```bash
-python3 -m video-sampler --help
+python3 -m video_sampler --help
 ```
 
 or simply
 
 ```bash
-video-sampler --help
+video_sampler --help
 ```
 
 ### Basic usage
 
 ```bash
-python3 -m video-sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
+python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
+
+#### API examples
+
+See examples in [./scripts](./scripts/run_benchmarks.py).
 
 ### Advanced usage
 
@@ -67,9 +71,13 @@ where `buffer-size` for `entropy` and `gzip` mean the top-k sliding buffer size.
 ## Gating
 
 Aside from basic sampling rules, you can also apply gating rules to the sampled frames, further reducing the number of frames.
-Right now, there is only one gating rule available, which is based on CLIP model.
+There are 3 gating methods available:
 
-Here's a quick example of how to use it:
+- `pass` - pass all frames
+- `clip` - use CLIP to filter out frames that do not contain the specified objects
+- `blur` - use blur detection to filter out frames that are too blurry
+
+Here's a quick example of how to use clip:
 
 ```bash
 python3 -m video_sampler clip ./videos ./scratch/clip --pos-samples "a cat" --neg-samples "empty background, a lemur"  --hash-size 4
@@ -117,6 +125,17 @@ The effects of gating in numbers, for this particular set of examples (see `prod
 | SmolCat.mp4    | hash   | clip | 118     | 61       | 31    |
 | HighLemurs.mp4 | hash   | clip | 161     | 126      | 66    |
 
+### Blur gating
+
+Helps a little with blurry videos. Adjust threshold and method (`laplacian` or `fft`) for best results.
+Some results from `fft` at `threshold=20`:
+
+| video      | buffer | gate | decoded | produced | gated |
+| ---------- | ------ | ---- | ------- | -------- | ----- |
+| MadLad.mp4 | grid   | pass | 120     | 31       | 31    |
+| MadLad.mp4 | hash   | pass | 120     | 110      | 110   |
+| MadLad.mp4 | hash   | blur | 120     | 110      | 85    |
+
 ## Benchmarks
 
 Configuration for this benchmark:
@@ -155,6 +174,13 @@ SamplerConfig(
 | [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC) |      -       |  gzip   |    -    |  73   |
 |       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |     4020     | entropy |   161   |  59   |
 |       [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)       |      -       |  gzip   |    -    |  63   |
+
+## Benchmark videos
+
+- [SmolCat](https://www.youtube.com/watch?v=W86cTIoMv2U)
+- [Fat Cat](https://www.youtube.com/watch?v=kgrV3_g9rYY&ab_channel=BBC)
+- [HighLemurs](https://www.youtube.com/watch?v=yYXoCHLqr4o)
+- [MadLad](https://www.youtube.com/watch?v=MWyBgudQqsI)
 
 ## Flit commands
 

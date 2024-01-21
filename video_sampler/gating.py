@@ -1,14 +1,19 @@
-from typing import Any
+import contextlib
+from typing import Any, Literal
 
 import numpy as np
-import open_clip
-import torch
 from PIL import Image
 
 from .schemas import EMPTY_GATED_OBJECT, FrameObject, GatedObject
 from .utils import batched
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+with contextlib.suppress(ImportError):
+    import cv2
+with contextlib.suppress(ImportError):
+    import open_clip
+    import torch
+
+    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def create_model(model_name: str):
@@ -23,9 +28,53 @@ def create_model(model_name: str):
 
 class PassGate:
     def __call__(self, frame: Image.Image, meta: dict, last=False) -> GatedObject:
+        return self.flush() if last else GatedObject([FrameObject(frame, meta)], 1)
+
+    def flush(self):
+        return EMPTY_GATED_OBJECT
+
+
+class BlurGate:
+    def __init__(
+        self, method: Literal["fft", "laplacian"] = "laplacian", threshold: float = 100
+    ) -> None:
+        """Gate frames based on bluriness.
+        :param method: The method to use for blur detection. Can be "fft" or "laplacian".
+        :param threshold: The threshold for bluriness. The higher the threshold, the less
+            blurry the image needs to be to be discarded.
+            Those are different depending on the method:
+            - 20 is a good start for fft
+            - 100 is a good start for laplacian.
+        """
+        self.is_blurry = None
+        if method == "fft":
+            self.is_blurry = self._is_blurry_fft
+        elif method == "laplacian":
+            self.is_blurry = self._is_blurry_laplacian
+        else:
+            raise ValueError(f"Unknown blur method {method}")
+        self.threshold = threshold
+
+    def __call__(self, frame: Image.Image, meta: dict, last=False) -> GatedObject:
+        if self.is_blurry(frame) or last:
+            return EMPTY_GATED_OBJECT
+        return GatedObject([FrameObject(frame, meta)], 1)
+
+    def _is_blurry_laplacian(self, frame: Image.Image) -> bool:
+        """Check if the image is blurry with laplacian method."""
         return (
-            EMPTY_GATED_OBJECT if last else GatedObject([FrameObject(frame, meta)], 1)
+            cv2.Laplacian(
+                cv2.cvtColor(np.array(frame), cv2.COLOR_BGR2GRAY), cv2.CV_64F
+            ).var()
+            < self.threshold
         )
+
+    def _is_blurry_fft(self, frame: Image.Image) -> bool:
+        """Check if the image is blurry with fft method."""
+        f = np.fft.fft2(frame)
+        fshift = np.fft.fftshift(f)
+        magnitude_spectrum = 20 * np.log(np.abs(fshift) + 1e-12)
+        return magnitude_spectrum.mean() < self.threshold
 
     def flush(self):
         return EMPTY_GATED_OBJECT
@@ -124,5 +173,7 @@ def create_gate(gate_config: dict):
         return PassGate()
     elif gate_type == "clip":
         return ClipGate(**gate_config)
+    elif gate_type == "blur":
+        return BlurGate(**gate_config)
     else:
         raise ValueError(f"Unknown gate type {gate_type}")
