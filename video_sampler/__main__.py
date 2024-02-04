@@ -1,26 +1,27 @@
 # type: ignore[attr-defined]
 
-import glob
-import os
+from collections.abc import Generator
 from typing import Annotated
 
 import typer
-from tqdm import tqdm
 
 from video_sampler import version
 from video_sampler.buffer import SamplerConfig, check_args_validity
+from video_sampler.iterators import delegate_workers
 from video_sampler.logging import Color, console
-from video_sampler.sampler import Worker
 from video_sampler.schemas import BufferType
 
 app = typer.Typer(
     name="video-sampler",
-    help="Video sampler allows you to efficiently sample video frames",
+    help="Video sampler allows you to efficiently sample video frames"
+    " from a video file or a list of video files or urls.",
     add_completion=True,
 )
 
 
-def _create_from_config(cfg: SamplerConfig, video_path: str, output_path: str):
+def _create_from_config(
+    cfg: SamplerConfig, video_path: str | Generator, output_path: str
+):
     # create a test buffer
     try:
         check_args_validity(cfg)
@@ -43,29 +44,6 @@ def version_callback(print_version: bool = True) -> None:
         raise typer.Exit()
 
 
-def delegate_workers(video_path: str, output_path: str, cfg: SamplerConfig):
-    msg = "Detected input as a file"
-    if not os.path.isfile(video_path):
-        if "*" not in video_path:
-            videos = glob.glob(os.path.join(video_path, "*"))
-        else:
-            videos = glob.glob(video_path)
-        msg = f"Detected input as a folder with {len(videos)} files"
-    else:
-        videos = [video_path]
-    console.print(msg, style=f"bold {Color.cyan.value}")
-
-    worker = Worker(
-        cfg=cfg,
-    )
-    for video in tqdm(videos, desc="Processing videos..."):
-        video_subpath = os.path.join(output_path, os.path.basename(video))
-        worker.launch(
-            video_path=video,
-            output_path=video_subpath,
-        )
-
-
 @app.command(name="hash")
 def main(
     video_path: str = typer.Argument(
@@ -86,6 +64,11 @@ def main(
     ),
     blur_method: str = typer.Option(
         "fft", help="Method to use for blur gate. Can be fft or variance."
+    ),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
     ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
@@ -112,6 +95,11 @@ def main(
             "type": "pass",
         },
     )
+    if ytdlp:
+        from video_sampler.integrations import YTDLPPlugin
+
+        plugin = YTDLPPlugin()
+        video_path = plugin.generate_urls(video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -139,6 +127,11 @@ def buffer(
     ),
     blur_method: str = typer.Option(
         "fft", help="Method to use for blur gate. Can be fft or variance."
+    ),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
     ),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
@@ -168,6 +161,11 @@ def buffer(
             "type": "pass",
         },
     )
+    if ytdlp:
+        from video_sampler.integrations import YTDLPPlugin
+
+        plugin = YTDLPPlugin()
+        video_path = plugin.generate_urls(video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -196,6 +194,11 @@ def clip(
     hash_size: int = typer.Option(4, help="Size of the hash."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
     debug: bool = typer.Option(False, help="Enable debug mode."),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
+    ),
 ):
     """Buffer type can be only of type hash when using CLIP gating."""
     if pos_samples is not None:
@@ -228,6 +231,11 @@ def clip(
             "batch_size": batch_size,
         },
     )
+    if ytdlp:
+        from video_sampler.integrations import YTDLPPlugin
+
+        plugin = YTDLPPlugin()
+        video_path = plugin.generate_urls(video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 

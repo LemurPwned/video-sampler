@@ -45,6 +45,9 @@ clip = [
   "open_clip_torch >= 2.23.0",
   "torch >= 2.1.0"
 ]
+ytdlp = [
+  "yt-dlp >= 2023.12.30"
+]
 dev = [
     "pre-commit",
     "bump2version",

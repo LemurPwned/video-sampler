@@ -95,7 +95,16 @@ class Worker:
         self.q = Queue()
         self.devnull = devnull
 
-    def launch(self, video_path: str, output_path: str = "") -> None:
+    def launch(
+        self, video_path: str, output_path: str = "", pretty_video_name: str = ""
+    ) -> None:
+        """Launch the worker
+        :param video_path: path to the video file
+        :param output_path: path to the output folder
+        :param pretty_video_name: name of the video file for pretty printing (useful for urls)
+        """
+        if not pretty_video_name:
+            pretty_video_name = os.path.basename(video_path)
         if output_path and self.devnull:
             raise ValueError("Cannot write to disk when devnull is True")
         if output_path:
@@ -108,7 +117,7 @@ class Worker:
         proc_thread.join()
         if self.cfg.print_stats:
             console.print(
-                f"Stats for: {os.path.basename(video_path)}",
+                f"Stats for: {pretty_video_name}",
                 f"\n\tTotal frames: {self.processor.stats['total']}",
                 f"\n\tDecoded frames: {self.processor.stats['decoded']}",
                 f"\n\tProduced frames: {self.processor.stats['produced']}",
