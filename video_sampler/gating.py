@@ -117,9 +117,9 @@ class ClipGate:
             for i, batch in enumerate(batched(inputs, n=self.batch_size)):
                 batch = torch.stack(batch)
                 text_embeds = self.model.encode_text(batch.to(DEVICE))
-                embeds[
-                    i * self.batch_size : (i + 1) * self.batch_size
-                ] = text_embeds.cpu()
+                embeds[i * self.batch_size : (i + 1) * self.batch_size] = (
+                    text_embeds.cpu()
+                )
         embeds /= embeds.norm(dim=-1, keepdim=True)
         return embeds
 

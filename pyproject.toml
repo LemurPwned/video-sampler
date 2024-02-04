@@ -2,7 +2,7 @@
 name = "video_sampler"
 description = "Video Sampler -- sample frames from a video file"
 url = "https://github.com/LemurPwned/video-sampler"
-version = "0.7.0"
+version = "0.8.0"
 authors = [
     { name = "LemurPwned", email = "lemurpwned@gmail.com" }
 ]
@@ -44,6 +44,9 @@ video_sampler = "video_sampler.__main__:main_loop"
 clip = [
   "open_clip_torch >= 2.23.0",
   "torch >= 2.1.0"
+]
+ytdlp = [
+  "yt-dlp >= 2023.12.30"
 ]
 dev = [
     "pre-commit",

@@ -18,6 +18,44 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 
 </div>
 
+## Table of Contents
+
+- [video-sampler](#video-sampler)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Installation and Usage](#installation-and-usage)
+    - [Basic usage](#basic-usage)
+      - [YT-DLP integration plugin](#yt-dlp-integration-plugin)
+        - [Extra YT-DLP options](#extra-yt-dlp-options)
+      - [API examples](#api-examples)
+    - [Advanced usage](#advanced-usage)
+      - [Gating](#gating)
+      - [CLIP-based gating comparison](#clip-based-gating-comparison)
+      - [Blur gating](#blur-gating)
+  - [Benchmarks](#benchmarks)
+  - [Benchmark videos](#benchmark-videos)
+  - [Flit commands](#flit-commands)
+    - [Build](#build)
+    - [Install](#install)
+    - [Publish](#publish)
+  - [🛡 License](#-license)
+  - [📃 Citation](#-citation)
+
+## Features
+
+- [x] Direct sampling methods:
+  - [x] `hash` - uses perceptual hashing to reduce duplicated samples
+  - [x] `entropy` - uses entropy to reduce duplicated samples (work in progress)
+  - [x] `gzip` - uses gzip compressed size to reduce duplicated samples (work in progress)
+  - [x] `buffer` - uses sliding buffer to reduce duplicated samples
+  - [x] `grid` - uses grid sampling to reduce duplicated samples
+- [x] Gating methods (modifications on top of direct sampling methods):
+  - [x] `clip` - uses CLIP to filter out frames that do not contain the specified objects
+  - [x] `blur` - uses blur detection to filter out frames that are too blurry
+- [x] Integrations
+  - [x] YTDLP integration -- streams directly from [yt-dlp](http://github.com//yt-dlp/yt-dlp) queries,
+        playlists or single videos
+
 ## Installation and Usage
 
 ```bash
@@ -40,6 +78,57 @@ video_sampler --help
 
 ```bash
 python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
+```
+
+#### YT-DLP integration plugin
+
+Before using please consult the ToS of the website you are scraping from -- use responsibly and for research purposes.
+To use the YT-DLP integration, you need to install `yt-dlp` first (see [yt-dlp](http://github.com//yt-dlp/yt-dlp)).
+Then, you simply add `--yt-dlp` to the command, and it changes the meaning of the `video_path` argument.
+
+- to search
+
+```bash
+video_sampler hash "ytsearch:cute cats" ./folder-frames/ \
+  --hash-size 3 --buffer-size 20 --yt-dlp
+```
+
+- to sample a single video
+
+```bash
+video_sampler hash "https://www.youtube.com/watch?v=W86cTIoMv2U" ./folder-frames/ \
+    --hash-size 3 --buffer-size 20 --yt-dlp
+```
+
+- to sample a playlist
+
+```bash
+video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk" ./folder-frames/ \
+  --hash-size 3 --buffer-size 20 --yt-dlp
+```
+
+The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.
+
+##### Extra YT-DLP options
+
+You can pass extra options to yt-dlp by using the `-yt-extra-args` flag. For example:
+
+this will only sample videos uploaded before 2019-01-01:
+
+```bash
+... --ytdlp --yt-extra-args '--datebefore 20190101'
+```
+
+or this will only sample videos uploaded after 2019-01-01:
+
+```bash
+... --ytdlp --yt-extra-args '--dateafter 20190101'
+```
+
+or this will skip all shorts:
+
+```bash
+... --ytdlp --yt-extra-args '--match-filter "original_url!*=/shorts/ & url!*=/shorts/"
 ```
 
 #### API examples
@@ -68,7 +157,7 @@ video_sampler buffer entropy --buffer-size 20 ...
 
 where `buffer-size` for `entropy` and `gzip` mean the top-k sliding buffer size. Sliding buffer also uses hashing to reduce duplicated samples.
 
-## Gating
+#### Gating
 
 Aside from basic sampling rules, you can also apply gating rules to the sampled frames, further reducing the number of frames.
 There are 3 gating methods available:
@@ -83,7 +172,7 @@ Here's a quick example of how to use clip:
 python3 -m video_sampler clip ./videos ./scratch/clip --pos-samples "a cat" --neg-samples "empty background, a lemur"  --hash-size 4
 ```
 
-### CLIP-based gating comparison
+#### CLIP-based gating comparison
 
 Here's a brief comparison of the frames sampled with and without CLIP-based gating with the following config:
 
@@ -125,7 +214,7 @@ The effects of gating in numbers, for this particular set of examples (see `prod
 | SmolCat.mp4    | hash   | clip | 118     | 61       | 31    |
 | HighLemurs.mp4 | hash   | clip | 161     | 126      | 66    |
 
-### Blur gating
+#### Blur gating
 
 Helps a little with blurry videos. Adjust threshold and method (`laplacian` or `fft`) for best results.
 Some results from `fft` at `threshold=20`:
@@ -197,6 +286,8 @@ flit install
 ```
 
 #### Publish
+
+Remember to bump the version in `pyproject.toml` before publishing.
 
 ```
 flit publish

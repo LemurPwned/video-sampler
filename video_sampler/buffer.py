@@ -84,8 +84,7 @@ class FrameBuffer(ABC):
 
 
 class PassThroughBuffer(FrameBuffer):
-    def __init__(self) -> None:
-        ...
+    def __init__(self) -> None: ...
 
     def get_buffer_state(self) -> list[str]:
         return []
@@ -172,6 +171,34 @@ class HashBuffer(FrameBuffer):
 
 
 class GridBuffer(HashBuffer):
+    """
+    A class representing a grid-based buffer for images.
+    Splits the image into a grid and stores the hashes of the grid cells in a mosaic buffer.
+
+    Args:
+        size (int): The maximum size of the buffer.
+        debug_flag (bool, optional): A flag indicating whether debug information should be printed.
+        hash_size (int, optional): The size of the hash.
+        grid_x (int, optional): The number of grid cells in the x-axis.
+        grid_y (int, optional): The number of grid cells in the y-axis.
+        max_hits (int, optional): The maximum number of hits allowed for a hash.
+
+    Attributes:
+        grid_x (int): The number of grid cells in the x-axis.
+        grid_y (int): The number of grid cells in the y-axis.
+        max_hits (int): The maximum number of hits allowed for a hash.
+        mosaic_buffer (dict): A dictionary storing the mosaic buffer.
+
+    Methods:
+        add(item, metadata):
+            Adds an image to the buffer along with its metadata.
+        clear():
+            Clears the buffer and the mosaic buffer.
+        update_ttl_buffer():
+            Updates the buffer by expiring images that are not in the grid.
+
+    """
+
     def __init__(
         self,
         size: int,
@@ -257,6 +284,34 @@ class GridBuffer(HashBuffer):
 
 
 class SlidingTopKBuffer(FrameBuffer):
+    """
+    A class representing a sliding top-k buffer for frames.
+
+    Args:
+        size (int): The maximum size of the buffer.
+        debug_flag (bool, optional): A flag indicating whether debug information should be printed.
+        expiry (int, optional): The expiry count for frames.
+        hash_size (int, optional): The size of the hash.
+
+    Attributes:
+        sliding_buffer (list): The sliding buffer implemented as a min heap.
+        max_size (int): The maximum size of the buffer.
+        debug_flag (bool): A flag indicating whether debug information should be printed.
+        expiry_count (int): The expiry count for frames.
+        hash_size (int): The size of the hash.
+
+    Methods:
+        get_buffer_state() -> list[str]:
+            Returns the current state of the buffer.
+        add(item, metadata):
+            Adds a frame to the buffer along with its metadata.
+        final_flush() -> Iterable[tuple[Image.Image | None, dict]]:
+            Performs a final flush of the buffer and yields the remaining frames.
+        clear():
+            Clears the buffer.
+
+    """
+
     def __init__(
         self, size: int, debug_flag: bool = False, expiry: int = 30, hash_size: int = 8
     ) -> None:

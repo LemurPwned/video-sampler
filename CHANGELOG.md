@@ -4,6 +4,15 @@
 
 Changelog for the `video-sampler`.
 
+### 0.8.0
+
+- added yt-dlp integration
+- extra yt-dlp options are supported
+
+### 0.7.0
+
+- added blur gating
+
 ### 0.6.0
 
 - adding CLIP-based gating for sampling

@@ -1,26 +1,55 @@
 # type: ignore[attr-defined]
 
-import glob
-import os
+import shlex
+from collections.abc import Generator
 from typing import Annotated
 
 import typer
-from tqdm import tqdm
 
 from video_sampler import version
 from video_sampler.buffer import SamplerConfig, check_args_validity
+from video_sampler.iterators import delegate_workers
 from video_sampler.logging import Color, console
-from video_sampler.sampler import Worker
 from video_sampler.schemas import BufferType
 
 app = typer.Typer(
     name="video-sampler",
-    help="Video sampler allows you to efficiently sample video frames",
+    help="Video sampler allows you to efficiently sample video frames"
+    " from a video file or a list of video files or urls.",
     add_completion=True,
 )
 
 
-def _create_from_config(cfg: SamplerConfig, video_path: str, output_path: str):
+def _ytdlp_plugin(yt_extra_args: str, video_path: str | Generator):
+    """Use yt-dlp to download videos from urls. Default is False.
+    Enabling this will treat video_path as an input to ytdlp command.
+    Parse the extra arguments for YouTube-DLP extraction in classic format.
+
+    Examples:
+    --------
+    >>> _ytdlp_plugin("--format bestvideo+bestaudio")
+    >>> _ytdlp_plugin("--datebefore 20190101")
+    >>> _ytdlp_plugin('--match-filter "original_url!*=/shorts/ & url!*=/shorts/"')
+
+    """
+    # the above import will fail if yt-dlp is not installed and prints an error message
+    import yt_dlp
+
+    from video_sampler.integrations import YTDLPPlugin
+
+    if yt_extra_args is not None:
+        yt_extra_args = yt_dlp.parse_options(shlex.split(yt_extra_args)).ydl_opts
+        default_opts = yt_dlp.parse_options([]).ydl_opts
+        yt_extra_args = {k: v for k, v in yt_extra_args.items() if default_opts[k] != v}
+    plugin = YTDLPPlugin()
+
+    video_path = plugin.generate_urls(video_path, extra_info_extract_opts=yt_extra_args)
+    return video_path
+
+
+def _create_from_config(
+    cfg: SamplerConfig, video_path: str | Generator, output_path: str
+):
     # create a test buffer
     try:
         check_args_validity(cfg)
@@ -41,29 +70,6 @@ def version_callback(print_version: bool = True) -> None:
     if print_version:
         console.print(f"[yellow]video-sampler[/] version: [bold blue]{version}[/]")
         raise typer.Exit()
-
-
-def delegate_workers(video_path: str, output_path: str, cfg: SamplerConfig):
-    msg = "Detected input as a file"
-    if not os.path.isfile(video_path):
-        if "*" not in video_path:
-            videos = glob.glob(os.path.join(video_path, "*"))
-        else:
-            videos = glob.glob(video_path)
-        msg = f"Detected input as a folder with {len(videos)} files"
-    else:
-        videos = [video_path]
-    console.print(msg, style=f"bold {Color.cyan.value}")
-
-    worker = Worker(
-        cfg=cfg,
-    )
-    for video in tqdm(videos, desc="Processing videos..."):
-        video_subpath = os.path.join(output_path, os.path.basename(video))
-        worker.launch(
-            video_path=video,
-            output_path=video_subpath,
-        )
 
 
 @app.command(name="hash")
@@ -87,6 +93,14 @@ def main(
     blur_method: str = typer.Option(
         "fft", help="Method to use for blur gate. Can be fft or variance."
     ),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
+    ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
+    ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
 
@@ -102,16 +116,20 @@ def main(
             "debug": debug,
             "hash_size": hash_size,
         },
-        gate_config={
-            "type": "blur",
-            "method": blur_method,
-            "threshold": threshold,
-        }
-        if threshold > 0
-        else {
-            "type": "pass",
-        },
+        gate_config=(
+            {
+                "type": "blur",
+                "method": blur_method,
+                "threshold": threshold,
+            }
+            if threshold > 0
+            else {
+                "type": "pass",
+            }
+        ),
     )
+    if ytdlp:
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -140,6 +158,14 @@ def buffer(
     blur_method: str = typer.Option(
         "fft", help="Method to use for blur gate. Can be fft or variance."
     ),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
+    ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
+    ),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
     cfg = SamplerConfig(
@@ -158,16 +184,20 @@ def buffer(
             "grid_y": grid_size,
             "max_hits": max_hits,
         },
-        gate_config={
-            "type": "blur",
-            "method": blur_method,
-            "threshold": threshold,
-        }
-        if threshold > 0
-        else {
-            "type": "pass",
-        },
+        gate_config=(
+            {
+                "type": "blur",
+                "method": blur_method,
+                "threshold": threshold,
+            }
+            if threshold > 0
+            else {
+                "type": "pass",
+            }
+        ),
     )
+    if ytdlp:
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -196,6 +226,14 @@ def clip(
     hash_size: int = typer.Option(4, help="Size of the hash."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
     debug: bool = typer.Option(False, help="Enable debug mode."),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
+    ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
+    ),
 ):
     """Buffer type can be only of type hash when using CLIP gating."""
     if pos_samples is not None:
@@ -228,6 +266,8 @@ def clip(
             "batch_size": batch_size,
         },
     )
+    if ytdlp:
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
