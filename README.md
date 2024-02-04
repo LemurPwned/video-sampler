@@ -81,6 +81,7 @@ python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffe
 
 #### YT-DLP integration plugin
 
+Before using please consult the ToS of the website you are scraping from -- use responsibly and for research purposes.
 To use the YT-DLP integration, you need to install `yt-dlp` first (see [yt-dlp](http://github.com//yt-dlp/yt-dlp)).
 Then, you simply add `--yt-dlp` to the command, and it changes the meaning of the `video_path` argument.
 
