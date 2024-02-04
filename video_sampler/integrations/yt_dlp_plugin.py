@@ -67,10 +67,21 @@ class YTDLPPlugin:
             "format": best_video_only,
         }
 
-    def generate_urls(self, url: str) -> Iterable[str]:
+    def generate_urls(
+        self,
+        url: str,
+        extra_yt_constr_args: dict = None,
+        extra_info_extract_opts: dict = None,
+    ) -> Iterable[str]:
+        if extra_yt_constr_args is None:
+            extra_yt_constr_args = {}
+        if extra_info_extract_opts is None:
+            extra_info_extract_opts = {}
         extr_args = {"ie_key": self.ie_key} if "ytsearch" not in url else {}
-        with YoutubeDL(self.ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False, **extr_args)
+        with YoutubeDL(self.ydl_opts | extra_yt_constr_args) as ydl:
+            info = ydl.extract_info(
+                url, download=False, **(extr_args | extra_info_extract_opts)
+            )
             if "entries" not in info:
                 yield info["title"], info["url"]
             else:

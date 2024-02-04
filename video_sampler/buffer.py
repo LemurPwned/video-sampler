@@ -84,8 +84,7 @@ class FrameBuffer(ABC):
 
 
 class PassThroughBuffer(FrameBuffer):
-    def __init__(self) -> None:
-        ...
+    def __init__(self) -> None: ...
 
     def get_buffer_state(self) -> list[str]:
         return []

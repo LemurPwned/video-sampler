@@ -85,15 +85,17 @@ def main(
             "debug": debug,
             "hash_size": hash_size,
         },
-        gate_config={
-            "type": "blur",
-            "method": blur_method,
-            "threshold": threshold,
-        }
-        if threshold > 0
-        else {
-            "type": "pass",
-        },
+        gate_config=(
+            {
+                "type": "blur",
+                "method": blur_method,
+                "threshold": threshold,
+            }
+            if threshold > 0
+            else {
+                "type": "pass",
+            }
+        ),
     )
     if ytdlp:
         from video_sampler.integrations import YTDLPPlugin
@@ -151,15 +153,17 @@ def buffer(
             "grid_y": grid_size,
             "max_hits": max_hits,
         },
-        gate_config={
-            "type": "blur",
-            "method": blur_method,
-            "threshold": threshold,
-        }
-        if threshold > 0
-        else {
-            "type": "pass",
-        },
+        gate_config=(
+            {
+                "type": "blur",
+                "method": blur_method,
+                "threshold": threshold,
+            }
+            if threshold > 0
+            else {
+                "type": "pass",
+            }
+        ),
     )
     if ytdlp:
         from video_sampler.integrations import YTDLPPlugin
