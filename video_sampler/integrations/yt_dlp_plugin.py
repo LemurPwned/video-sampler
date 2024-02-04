@@ -43,7 +43,7 @@ def best_video_best_audio(ctx):
 
 
 def best_video_only(ctx):
-    """Just best video"""
+    """Just best video -- save bandwidth"""
     # formats are already sorted worst to best
     formats = ctx.get("formats")[::-1]
 
@@ -59,10 +59,28 @@ def best_video_only(ctx):
     }
 
 
+def no_shorts(info, *, incomplete):
+    """Filter out short videos"""
+    if url := info.get("url", ""):
+        if "/shorts" in url:
+            return "This is a short video"
+
+
 class YTDLPPlugin:
+    """
+    A plugin for yt-dlp to generate URLs and corresponding titles from the given URL.
+    Methods:
+        generate_urls(url, extra_yt_constr_args=None, extra_info_extract_opts=None) -> Iterable[str]:
+            Generates URLs and corresponding titles from the given URL.
+
+    """
+
     def __init__(self, ie_key: str = "Generic"):
+        """
+        Initialize the YTDLPPlugin instance.
+        :param: ie_key (str): The key for the information extractor.
+        """
         self.ie_key = ie_key
-        # for now we only support video
         self.ydl_opts = {
             "format": best_video_only,
         }
@@ -70,18 +88,22 @@ class YTDLPPlugin:
     def generate_urls(
         self,
         url: str,
-        extra_yt_constr_args: dict = None,
         extra_info_extract_opts: dict = None,
     ) -> Iterable[str]:
-        if extra_yt_constr_args is None:
-            extra_yt_constr_args = {}
+        """
+        Generate URLs and corresponding titles from the given URL.
+
+        :param url (str): The URL to extract information from.
+        :param extra_info_extract_opts (dict, optional): Extra options for information extraction.
+
+        :return Iterable[str]:
+            Tuple[str, str]: A tuple containing the title and URL of each extracted entry.
+        """
         if extra_info_extract_opts is None:
             extra_info_extract_opts = {}
         extr_args = {"ie_key": self.ie_key} if "ytsearch" not in url else {}
-        with YoutubeDL(self.ydl_opts | extra_yt_constr_args) as ydl:
-            info = ydl.extract_info(
-                url, download=False, **(extr_args | extra_info_extract_opts)
-            )
+        with YoutubeDL(params=(self.ydl_opts | extra_info_extract_opts)) as ydl:
+            info = ydl.extract_info(url, download=False, **extr_args)
             if "entries" not in info:
                 yield info["title"], info["url"]
             else:

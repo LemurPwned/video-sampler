@@ -26,6 +26,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Installation and Usage](#installation-and-usage)
     - [Basic usage](#basic-usage)
       - [YT-DLP integration plugin](#yt-dlp-integration-plugin)
+        - [Extra YT-DLP options](#extra-yt-dlp-options)
       - [API examples](#api-examples)
     - [Advanced usage](#advanced-usage)
       - [Gating](#gating)
@@ -107,6 +108,28 @@ video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96
 ```
 
 The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.
+
+##### Extra YT-DLP options
+
+You can pass extra options to yt-dlp by using the `-yt-extra-args` flag. For example:
+
+this will only sample videos uploaded before 2019-01-01:
+
+```bash
+... --ytdlp --yt-extra-args '--datebefore 20190101'
+```
+
+or this will only sample videos uploaded after 2019-01-01:
+
+```bash
+... --ytdlp --yt-extra-args '--dateafter 20190101'
+```
+
+or this will skip all shorts:
+
+```bash
+... --ytdlp --yt-extra-args '--match-filter "original_url!*=/shorts/ & url!*=/shorts/"
+```
 
 #### API examples
 

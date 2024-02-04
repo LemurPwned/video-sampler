@@ -1,5 +1,6 @@
 # type: ignore[attr-defined]
 
+import shlex
 from collections.abc import Generator
 from typing import Annotated
 
@@ -17,6 +18,33 @@ app = typer.Typer(
     " from a video file or a list of video files or urls.",
     add_completion=True,
 )
+
+
+def _ytdlp_plugin(yt_extra_args: str, video_path: str | Generator):
+    """Use yt-dlp to download videos from urls. Default is False.
+    Enabling this will treat video_path as an input to ytdlp command.
+    Parse the extra arguments for YouTube-DLP extraction in classic format.
+
+    Examples:
+    --------
+    >>> _ytdlp_plugin("--format bestvideo+bestaudio")
+    >>> _ytdlp_plugin("--datebefore 20190101")
+    >>> _ytdlp_plugin('--match-filter "original_url!*=/shorts/ & url!*=/shorts/"')
+
+    """
+    # the above import will fail if yt-dlp is not installed and prints an error message
+    import yt_dlp
+
+    from video_sampler.integrations import YTDLPPlugin
+
+    if yt_extra_args is not None:
+        yt_extra_args = yt_dlp.parse_options(shlex.split(yt_extra_args)).ydl_opts
+        default_opts = yt_dlp.parse_options([]).ydl_opts
+        yt_extra_args = {k: v for k, v in yt_extra_args.items() if default_opts[k] != v}
+    plugin = YTDLPPlugin()
+
+    video_path = plugin.generate_urls(video_path, extra_info_extract_opts=yt_extra_args)
+    return video_path
 
 
 def _create_from_config(
@@ -70,6 +98,9 @@ def main(
         help="Use yt-dlp to download videos from urls. Default is False."
         " Enabling this will treat video_path as an input to ytdlp command.",
     ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
+    ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
 
@@ -98,10 +129,7 @@ def main(
         ),
     )
     if ytdlp:
-        from video_sampler.integrations import YTDLPPlugin
-
-        plugin = YTDLPPlugin()
-        video_path = plugin.generate_urls(video_path)
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -135,6 +163,9 @@ def buffer(
         help="Use yt-dlp to download videos from urls. Default is False."
         " Enabling this will treat video_path as an input to ytdlp command.",
     ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
+    ),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
     cfg = SamplerConfig(
@@ -166,10 +197,7 @@ def buffer(
         ),
     )
     if ytdlp:
-        from video_sampler.integrations import YTDLPPlugin
-
-        plugin = YTDLPPlugin()
-        video_path = plugin.generate_urls(video_path)
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 
@@ -202,6 +230,9 @@ def clip(
         False,
         help="Use yt-dlp to download videos from urls. Default is False."
         " Enabling this will treat video_path as an input to ytdlp command.",
+    ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
     ),
 ):
     """Buffer type can be only of type hash when using CLIP gating."""
@@ -236,10 +267,7 @@ def clip(
         },
     )
     if ytdlp:
-        from video_sampler.integrations import YTDLPPlugin
-
-        plugin = YTDLPPlugin()
-        video_path = plugin.generate_urls(video_path)
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
 
 

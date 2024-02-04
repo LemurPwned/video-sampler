@@ -16,6 +16,26 @@ from .schemas import PROCESSING_DONE_ITERABLE, FrameObject
 
 
 class VideoSampler:
+    """
+    The fundamental class for sampling video frames.
+
+    Args:
+        cfg (SamplerConfig): The configuration for the video sampler.
+
+    Attributes:
+        cfg (SamplerConfig): The configuration for the video sampler.
+        frame_buffer (FrameBuffer): The frame buffer used for sampling frames.
+        gate (Gate): The gate used for filtering frames.
+        stats (Counter): A counter for tracking statistics.
+
+    Methods:
+        sample(video_path) -> Iterable[list[FrameObject]]:
+            Generates sample frames from a video.
+        write_queue(video_path, q):
+            Writes sampled frames to a queue.
+
+    """
+
     def __init__(self, cfg: SamplerConfig) -> None:
         self.cfg = deepcopy(cfg)
         self.frame_buffer = create_buffer(self.cfg.buffer_config)
@@ -98,7 +118,7 @@ class Worker:
     def launch(
         self, video_path: str, output_path: str = "", pretty_video_name: str = ""
     ) -> None:
-        """Launch the worker
+        """Launch the worker.
         :param video_path: path to the video file
         :param output_path: path to the output folder
         :param pretty_video_name: name of the video file for pretty printing (useful for urls)
