@@ -11,6 +11,7 @@ from PIL import Image
 
 from .buffer import SamplerConfig, create_buffer
 from .gating import create_gate
+from .language.keyword_capture import subtitle_line
 from .logging import Color, console
 from .schemas import PROCESSING_DONE_ITERABLE, FrameObject
 
@@ -68,14 +69,13 @@ class VideoSampler:
                         style=f"bold {Color.green.value}",
                     )
                 frame_meta = {"frame_time": frame.time, "frame_indx": frame_indx}
-                res = self.frame_buffer.add(
+                self.stats["decoded"] += 1
+                if res := self.frame_buffer.add(
                     frame_pil,
                     metadata=frame_meta,
-                )
-                self.stats["decoded"] += 1
-                if res:
-                    self.stats["produced"] += 1
+                ):
                     gated_obj = self.gate(*res)
+                    self.stats["produced"] += 1
                     self.stats["gated"] += gated_obj.N
                     if gated_obj.frames:
                         yield gated_obj.frames
@@ -108,10 +108,86 @@ class VideoSampler:
             q.put(PROCESSING_DONE_ITERABLE)
 
 
+class SegmentSampler(VideoSampler):
+    def __init__(
+        self, cfg: SamplerConfig, segment_generator: Iterable[subtitle_line]
+    ) -> None:
+        super().__init__(cfg)
+        self.segment_generator = segment_generator
+
+    def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
+        with av.open(video_path) as container:
+            stream = container.streams.video[0]
+            if self.cfg.keyframes_only:
+                stream.codec_context.skip_frame = "NONKEY"
+            prev_time = -10
+            avg_fps = stream.average_rate
+            print(f"Average FPS: {avg_fps}")
+            for segment in self.segment_generator:
+                start_time_sec, stop_time_sec = (
+                    segment.start_time / 1000,
+                    segment.end_time / 1000,
+                )
+                print(f"Stream time base: {stream.time_base}")
+                print(f"Processing segment: {int(start_time_sec*1000000)}")
+                container.seek(int(1 * 1e3), whence="time", backward=True)
+                print("Done seeking")
+                frame = next(container.decode(video=0))  # get the next available frame
+                print(f"Frame time: {frame.time}")
+
+                for frame in container.decode(stream):
+                    if frame.time > stop_time_sec:
+                        break
+                    time_diff = frame.time - prev_time
+                    if time_diff < self.cfg.min_frame_interval_sec:
+                        continue
+                    prev_time = frame.time
+                    frame_pil: Image = frame.to_image()
+                    frame_meta = {
+                        "frame_time": frame.time,
+                        "start_time": start_time_sec,
+                        "stop_time": stop_time_sec,
+                        "keyword": segment.keyword,
+                    }
+                    if res := self.frame_buffer.add(
+                        frame_pil,
+                        metadata=frame_meta,
+                    ):
+                        gated_obj = self.gate(*res)
+                        self.stats["produced"] += 1
+                        self.stats["gated"] += gated_obj.N
+                        if gated_obj.frames:
+                            yield gated_obj.frames
+        # flush buffer
+        for res in self.frame_buffer.final_flush():
+            if res:
+                self.stats["produced"] += 1
+                gated_obj = self.gate(*res)
+                self.stats["gated"] += gated_obj.N
+                if gated_obj.frames:
+                    yield gated_obj.frames
+        gated_obj = self.gate.flush()
+        self.stats["gated"] += gated_obj.N
+        if gated_obj.frames:
+            yield gated_obj.frames
+        yield PROCESSING_DONE_ITERABLE
+
+    def write_queue(self, video_path: str, q: Queue):
+        super().write_queue(video_path, q)
+
+
 class Worker:
-    def __init__(self, cfg: SamplerConfig, devnull: bool = False) -> None:
+    def __init__(
+        self,
+        cfg: SamplerConfig,
+        devnull: bool = False,
+        processor_cls: VideoSampler = VideoSampler,
+        extra_processor_args: dict = None,
+    ) -> None:
+        if extra_processor_args is None:
+            extra_processor_args = {}
         self.cfg = cfg
-        self.processor = VideoSampler(cfg=cfg)
+        self.processor = processor_cls(cfg=cfg, **extra_processor_args)
         self.q = Queue()
         self.devnull = devnull
 

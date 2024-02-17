@@ -1,5 +1,7 @@
 from collections.abc import Iterable
 
+from ..language.keyword_capture import download_sub
+
 try:
     from yt_dlp import YoutubeDL
 except ImportError:
@@ -78,7 +80,7 @@ class YTDLPPlugin:
     def __init__(self, ie_key: str = "Generic"):
         """
         Initialize the YTDLPPlugin instance.
-        :param: ie_key (str): The key for the information extractor.
+        :param ie_key (str): The key for the information extractor.
         """
         self.ie_key = ie_key
         self.ydl_opts = {
@@ -90,8 +92,7 @@ class YTDLPPlugin:
         url: str,
         extra_info_extract_opts: dict = None,
     ) -> Iterable[str]:
-        """
-        Generate URLs and corresponding titles from the given URL.
+        """Generate URLs and corresponding titles from the given URL.
 
         :param url (str): The URL to extract information from.
         :param extra_info_extract_opts (dict, optional): Extra options for information extraction.
@@ -105,8 +106,55 @@ class YTDLPPlugin:
         with YoutubeDL(params=(self.ydl_opts | extra_info_extract_opts)) as ydl:
             info = ydl.extract_info(url, download=False, **extr_args)
             if "entries" not in info:
-                yield info["title"], info["url"]
+                req_format = info["requested_formats"][0]
+                yield info["title"], req_format["url"]
             else:
                 for entry in info.get("entries", []):
                     req_format = entry["requested_formats"][0]
                     yield entry["title"], req_format["url"]
+
+    def get_subtitles_opts(self, no_download: bool = False) -> dict:
+        return {
+            "postprocessors": [
+                {
+                    "format": "srt",
+                    "key": "FFmpegSubtitlesConvertor",
+                    "when": "before_dl",
+                }
+            ],
+            "format": best_video_only,
+            "subtitleslangs": ["en.*"],
+            "writeautomaticsub": True,
+            "writesubtitles": True,
+        }
+
+    def generate_urls_by_subs(
+        self,
+        url: str,
+        extra_info_extract_opts: dict = None,
+    ):
+        """Download subtitles for a given video URL.
+
+        :param video_url (str): The URL of the video to download subtitles for.
+        """
+        if extra_info_extract_opts is None:
+            extra_info_extract_opts = {}
+        extr_args = {"ie_key": self.ie_key} if "ytsearch" not in url else {}
+        with YoutubeDL(
+            params=(self.ydl_opts | extra_info_extract_opts | self.get_subtitles_opts())
+        ) as ydl:
+            info = ydl.extract_info(url, download=False, **extr_args)
+            import json
+
+            json.dump(info, open("info.json", "w"))
+            if "entries" not in info:
+                req_subs = list(info["requested_subtitles"].values())[0]
+                req_format = info["requested_formats"][0]
+                yield info["title"], req_format["url"], download_sub(req_subs["url"])
+            else:
+                for entry in info.get("entries", []):
+                    req_format = entry["requested_formats"][0]
+                    req_subs = list(entry["requested_subtitles"].values())[0]
+                    yield entry["title"], req_format["url"], download_sub(
+                        req_subs["url"]
+                    )

@@ -6,11 +6,11 @@ from typing import Annotated
 
 import typer
 
-from video_sampler import version
-from video_sampler.buffer import SamplerConfig, check_args_validity
-from video_sampler.iterators import delegate_workers
-from video_sampler.logging import Color, console
-from video_sampler.schemas import BufferType
+from . import version
+from .buffer import SamplerConfig, check_args_validity
+from .iterators import delegate_workers
+from .logging import Color, console
+from .schemas import BufferType
 
 app = typer.Typer(
     name="video-sampler",

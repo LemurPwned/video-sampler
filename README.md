@@ -90,21 +90,21 @@ Then, you simply add `--yt-dlp` to the command, and it changes the meaning of th
 
 ```bash
 video_sampler hash "ytsearch:cute cats" ./folder-frames/ \
-  --hash-size 3 --buffer-size 20 --yt-dlp
+  --hash-size 3 --buffer-size 20 --ytdlp
 ```
 
 - to sample a single video
 
 ```bash
 video_sampler hash "https://www.youtube.com/watch?v=W86cTIoMv2U" ./folder-frames/ \
-    --hash-size 3 --buffer-size 20 --yt-dlp
+    --hash-size 3 --buffer-size 20 --ytdlp
 ```
 
 - to sample a playlist
 
 ```bash
 video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk" ./folder-frames/ \
-  --hash-size 3 --buffer-size 20 --yt-dlp
+  --hash-size 3 --buffer-size 20 --ytdlp
 ```
 
 The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.
