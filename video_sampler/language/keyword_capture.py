@@ -4,6 +4,7 @@ from collections.abc import Iterable
 import pysrt
 import requests
 import spacy
+from requests.exceptions import RequestException
 
 from ..logging import Color, console
 
@@ -12,26 +13,22 @@ subtitle_line = namedtuple(
 )
 
 
-def download_sub(sub_url: str):
-    """Download a VTT subtitle file to a string."""
-    response = requests.get(url=sub_url)
-    return parse_srt_subtitle(response.text)
-
-
-def parse_vtt_subtitle(vtt_content):
-    subtitle_list = []
-    lines = vtt_content.split("\n")
-    for i in range(len(lines)):
-        line = lines[i].strip()
-        if line.isdigit() and i + 1 < len(lines):
-            time = lines[i + 1].strip()
-            content = lines[i + 2].strip()
-            subtitle_list.append((time, content))
-    return subtitle_list
+def download_sub(sub_url: str, max_retries: int = 2):
+    """Download a VTT subtitle file to a string with retry mechanism."""
+    for _ in range(max_retries):
+        try:
+            response = requests.get(url=sub_url)
+            response.raise_for_status()
+            return parse_srt_subtitle(response.text)
+        except RequestException as e:
+            console.print(f"Download failed: {str(e)}", style=f"bold {Color.red.value}")
+    return None
 
 
 def parse_srt_subtitle(srt_content):
     subtitle_list = []
+    if not srt_content:
+        return subtitle_list
     subs = pysrt.from_string(srt_content)
     for sub in subs:
         time = (sub.start.ordinal, sub.end.ordinal)
