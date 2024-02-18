@@ -75,22 +75,28 @@ class VideoSampler:
                 stream.codec_context.skip_frame = "NONKEY"
             prev_time = -10
             for frame_indx, frame in enumerate(container.decode(stream)):
+                if frame is None:
+                    continue
+                try:
+                    ftime = frame.time
+                except AttributeError:
+                    continue
                 # skip frames if keyframes_only is True
-                time_diff = frame.time - prev_time
+                time_diff = ftime - prev_time
                 self.stats["total"] += 1
                 if time_diff < self.cfg.min_frame_interval_sec:
                     continue
-                prev_time = frame.time
+                prev_time = ftime
 
                 frame_pil: Image = frame.to_image()
                 if self.cfg.debug:
                     buf = self.frame_buffer.get_buffer_state()
                     console.print(
-                        f"Frame {frame_indx}\ttime: {frame.time}",
+                        f"Frame {frame_indx}\ttime: {ftime}",
                         f"\t Buffer ({len(buf)}): {buf}",
                         style=f"bold {Color.green.value}",
                     )
-                frame_meta = {"frame_time": frame.time, "frame_indx": frame_indx}
+                frame_meta = {"frame_time": ftime, "frame_indx": frame_indx}
                 self.stats["decoded"] += 1
                 if res := self.frame_buffer.add(
                     frame_pil,
@@ -147,7 +153,12 @@ class SegmentSampler(VideoSampler):
                 stream.codec_context.skip_frame = "NONKEY"
             prev_time = -10
             for frame_indx, frame in enumerate(container.decode(stream)):
-                ftime = frame.time
+                if frame is None:
+                    continue
+                try:
+                    ftime = frame.time
+                except AttributeError:
+                    continue
                 reiters = 0
                 # find the next segment that starts after the current frame
                 while ftime > segment_boundary_end_sec:

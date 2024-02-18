@@ -23,7 +23,7 @@ def local_path_iterable(
 def url_iterable(
     video_iterable: Iterable[str], output_path: str, worker: Worker
 ) -> None:
-    for video_title, video_url in tqdm(video_iterable, desc="Processing urls..."):
+    for video_title, video_url, _ in tqdm(video_iterable, desc="Processing urls..."):
         video_filename = slugify(video_title)
         video_subpath = os.path.join(output_path, video_filename)
         worker.launch(

@@ -1,10 +1,9 @@
 from collections import namedtuple
 from collections.abc import Iterable
 
-import nltk
 import pysrt
 import requests
-from nltk.stem import WordNetLemmatizer
+import spacy
 
 from ..logging import Color, console
 
@@ -42,28 +41,51 @@ def parse_srt_subtitle(srt_content):
 
 
 class KeywordExtractor:
+    """
+    Extracts keywords from subtitles using spaCy.
+
+    Args:
+        keywords (list[str]): List of keywords to extract.
+
+    Attributes:
+        keywords (list[str]): List of keywords to extract.
+        nlp: spaCy language model for text processing.
+        lemmatized_keywords (set[str]): Set of lemmatized keywords.
+
+    Methods:
+        capture_keyword_segments: Captures keyword segments from a list of subtitles.
+
+    """
+
     def __init__(self, keywords: list[str]) -> None:
         self.keywords = keywords
-        # use the WordNetLemmatizer to lemmatize the words,
-        # Stemming is not used because it is too aggressive
-        self.wnl = WordNetLemmatizer()
-        # expand the keywords with their synonyms
+        self.nlp = spacy.load("en_core_web_sm", disable=["parser", "ner", "textcat"])
         self.lemmatized_keywords = {
-            self.wnl.lemmatize(keyword) for keyword in self.keywords
+            tok.lemma_ for tok in self.nlp(" ".join(self.keywords))
         }
 
     def capture_keyword_segments(
         self, subtitle_list: list[tuple[int, int, str]]
     ) -> Iterable[subtitle_line]:
+        """
+        Captures keyword segments from a list of subtitles.
+
+        Args:
+            subtitle_list (list[tuple[int, int, str]]): List of subtitles in the format
+                (start_time, end_time, content).
+
+        Yields:
+            subtitle_line: A named tuple representing a keyword segment in the format
+                (start_time, end_time, lemma, content).
+
+        """
         for (start_time, end_time), content in subtitle_list:
-            tokens = nltk.word_tokenize(content.lower())
-            # TODO do tagging
-            for token in tokens:
-                token = self.wnl.lemmatize(token)
-                if token in self.lemmatized_keywords:
+            doc = self.nlp(content.lower())
+            for lemma in doc:
+                if lemma.lemma_ in self.lemmatized_keywords:
                     console.print(
-                        f"Keyword {token}: {start_time} - {end_time}",
+                        f"Keyword {lemma.lemma_}: {start_time} - {end_time}",
                         style=f"bold {Color.green.value}",
                     )
-                    yield subtitle_line(start_time, end_time, token, content)
+                    yield subtitle_line(start_time, end_time, lemma, content)
                     break

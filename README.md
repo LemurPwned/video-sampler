@@ -57,6 +57,8 @@ Documentation is available at [https://lemurpwned.github.io/video-sampler/](http
 - [x] Gating methods (modifications on top of direct sampling methods):
   - [x] `clip` - uses CLIP to filter out frames that do not contain the specified objects
   - [x] `blur` - uses blur detection to filter out frames that are too blurry
+- [x] Language capture:
+  - [x] Keyword capture from subtitles
 - [x] Integrations
   - [x] YTDLP integration -- streams directly from [yt-dlp](http://github.com//yt-dlp/yt-dlp) queries,
         playlists or single videos
