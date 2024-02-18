@@ -71,6 +71,7 @@ def no_shorts(info, *, incomplete):
 class YTDLPPlugin:
     """
     A plugin for yt-dlp to generate URLs and corresponding titles from the given URL.
+
     Methods:
         generate_urls(url, extra_yt_constr_args=None, extra_info_extract_opts=None) -> Iterable[str]:
             Generates URLs and corresponding titles from the given URL.
@@ -80,7 +81,6 @@ class YTDLPPlugin:
     def __init__(self, ie_key: str = "Generic"):
         """
         Initialize the YTDLPPlugin instance.
-        :param ie_key (str): The key for the information extractor.
         """
         self.ie_key = ie_key
         self.ydl_opts = {
@@ -92,13 +92,14 @@ class YTDLPPlugin:
         url: str,
         extra_info_extract_opts: dict = None,
     ) -> Iterable[str]:
-        """Generate URLs and corresponding titles from the given URL.
+        """Generate URLs and download subtitles for a given video URL.
 
-        :param url (str): The URL to extract information from.
-        :param extra_info_extract_opts (dict, optional): Extra options for information extraction.
+        Args:
+            url (str): The URL of the video to download subtitles for.
+            extra_info_extract_opts (dict, optional): Additional options for extracting video information.
 
-        :return Iterable[str]:
-            Tuple[str, str]: A tuple containing the title and URL of each extracted entry.
+        Yields:
+            tuple: A tuple containing the video title, video format URL, and downloaded subtitles.
         """
         if extra_info_extract_opts is None:
             extra_info_extract_opts = {}
@@ -133,9 +134,14 @@ class YTDLPPlugin:
         url: str,
         extra_info_extract_opts: dict = None,
     ):
-        """Download subtitles for a given video URL.
+        """Generate URLs and download subtitles for a given video URL.
 
-        :param video_url (str): The URL of the video to download subtitles for.
+        Args:
+            url (str): The URL of the video to download subtitles for.
+            extra_info_extract_opts (dict, optional): Additional options for extracting video information.
+
+        Yields:
+            tuple: A tuple containing the video title, video format URL, and downloaded subtitles.
         """
         if extra_info_extract_opts is None:
             extra_info_extract_opts = {}

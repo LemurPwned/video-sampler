@@ -24,19 +24,20 @@ theme:
 
 plugins:
   - search
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: sphinx
   - gen-files:
       scripts:
         - scripts/gen_ref_pages.py
   - literate-nav:
       nav_file: SUMMARY.md
   - section-index
-  - mkdocstrings:
-      handlers:
-        python:
-          selection:
-            docstring_style: sphinx
   - git-revision-date-localized:
       enable_creation_date: true
+
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true

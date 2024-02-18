@@ -59,7 +59,14 @@ class VideoSampler:
         yield PROCESSING_DONE_ITERABLE
 
     def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
-        """Generate sample frames from a video"""
+        """Generate sample frames from a video.
+
+        Args:
+            video_path (str): The path to the video file.
+
+        Yields:
+            Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
+        """
         self.stats.clear()
         self.frame_buffer.clear()
         with av.open(video_path) as container:
@@ -120,7 +127,14 @@ class SegmentSampler(VideoSampler):
         self.segment_generator: Iterable[subtitle_line] = segment_generator
 
     def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
-        """Generate sample frames from a video"""
+        """Generate sample frames from a video.
+
+        Args:
+            video_path (str): The path to the video file.
+
+        Yields:
+            Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
+        """
         self.stats.clear()
         self.frame_buffer.clear()
         next_segment = next(self.segment_generator)
@@ -213,10 +227,14 @@ class Worker:
     def launch(
         self, video_path: str, output_path: str = "", pretty_video_name: str = ""
     ) -> None:
-        """Launch the worker.
-        :param video_path: path to the video file
-        :param output_path: path to the output folder
-        :param pretty_video_name: name of the video file for pretty printing (useful for urls)
+        """
+        Launch the worker.
+
+        Args:
+            video_path (str): Path to the video file.
+            output_path (str, optional): Path to the output folder. Defaults to "".
+            pretty_video_name (str, optional): Name of the video file for pretty printing (useful for urls).
+                                                Defaults to "".
         """
         if not pretty_video_name:
             pretty_video_name = os.path.basename(video_path)
@@ -241,6 +259,14 @@ class Worker:
             )
 
     def queue_reader(self, output_path, read_interval=0.1) -> None:
+        """
+        Reads frames from the queue and saves them as JPEG images.
+
+        Args:
+            output_path (str): The directory path where the frames will be saved.
+            read_interval (float, optional): The time interval between reading frames from the queue.
+                    Defaults to 0.1 seconds.
+        """
         while True:
             if not self.q.empty():
                 frame_object: FrameObject
