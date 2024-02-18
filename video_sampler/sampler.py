@@ -43,6 +43,21 @@ class VideoSampler:
         self.gate = create_gate(self.cfg.gate_config)
         self.stats = Counter()
 
+    def flush_buffer(self):
+        """Flushes the frame buffer and yields gated frames"""
+        for res in self.frame_buffer.final_flush():
+            if res:
+                self.stats["produced"] += 1
+                gated_obj = self.gate(*res)
+                self.stats["gated"] += gated_obj.N
+                if gated_obj.frames:
+                    yield gated_obj.frames
+        gated_obj = self.gate.flush()
+        self.stats["gated"] += gated_obj.N
+        if gated_obj.frames:
+            yield gated_obj.frames
+        yield PROCESSING_DONE_ITERABLE
+
     def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video"""
         self.stats.clear()
@@ -81,18 +96,7 @@ class VideoSampler:
                         yield gated_obj.frames
 
         # flush buffer
-        for res in self.frame_buffer.final_flush():
-            if res:
-                self.stats["produced"] += 1
-                gated_obj = self.gate(*res)
-                self.stats["gated"] += gated_obj.N
-                if gated_obj.frames:
-                    yield gated_obj.frames
-        gated_obj = self.gate.flush()
-        self.stats["gated"] += gated_obj.N
-        if gated_obj.frames:
-            yield gated_obj.frames
-        yield PROCESSING_DONE_ITERABLE
+        yield from self.flush_buffer()
 
     def write_queue(self, video_path: str, q: Queue):
         try:
@@ -113,64 +117,79 @@ class SegmentSampler(VideoSampler):
         self, cfg: SamplerConfig, segment_generator: Iterable[subtitle_line]
     ) -> None:
         super().__init__(cfg)
-        self.segment_generator = segment_generator
+        self.segment_generator: Iterable[subtitle_line] = segment_generator
 
     def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
+        """Generate sample frames from a video"""
+        self.stats.clear()
+        self.frame_buffer.clear()
+        next_segment = next(self.segment_generator)
+        segment_boundary_end_sec = next_segment.end_time / 1000
+        segment_boundary_start_sec = next_segment.start_time / 1000
+        absolute_stop = False
         with av.open(video_path) as container:
             stream = container.streams.video[0]
             if self.cfg.keyframes_only:
                 stream.codec_context.skip_frame = "NONKEY"
             prev_time = -10
-            avg_fps = stream.average_rate
-            print(f"Average FPS: {avg_fps}")
-            for segment in self.segment_generator:
-                start_time_sec, stop_time_sec = (
-                    segment.start_time / 1000,
-                    segment.end_time / 1000,
-                )
-                print(f"Stream time base: {stream.time_base}")
-                print(f"Processing segment: {int(start_time_sec*1000000)}")
-                container.seek(int(1 * 1e3), whence="time", backward=True)
-                print("Done seeking")
-                frame = next(container.decode(video=0))  # get the next available frame
-                print(f"Frame time: {frame.time}")
-
-                for frame in container.decode(stream):
-                    if frame.time > stop_time_sec:
+            for frame_indx, frame in enumerate(container.decode(stream)):
+                ftime = frame.time
+                reiters = 0
+                # find the next segment that starts after the current frame
+                while ftime > segment_boundary_end_sec:
+                    console.print(
+                        f"Seeking to next segment: {segment_boundary_end_sec}/{ftime}",
+                        style=f"bold {Color.yellow.value}",
+                    )
+                    try:
+                        next_segment = next(self.segment_generator)
+                        reiters += 1
+                        segment_boundary_end_sec = next_segment.end_time / 1000
+                        segment_boundary_start_sec = next_segment.start_time / 1000
+                    except StopIteration:
+                        absolute_stop = True
                         break
-                    time_diff = frame.time - prev_time
-                    if time_diff < self.cfg.min_frame_interval_sec:
-                        continue
-                    prev_time = frame.time
-                    frame_pil: Image = frame.to_image()
-                    frame_meta = {
-                        "frame_time": frame.time,
-                        "start_time": start_time_sec,
-                        "stop_time": stop_time_sec,
-                        "keyword": segment.keyword,
-                    }
-                    if res := self.frame_buffer.add(
-                        frame_pil,
-                        metadata=frame_meta,
-                    ):
-                        gated_obj = self.gate(*res)
-                        self.stats["produced"] += 1
-                        self.stats["gated"] += gated_obj.N
-                        if gated_obj.frames:
-                            yield gated_obj.frames
+                if reiters > 0:
+                    console.print(
+                        f"Skipped {reiters} segments!",
+                        style=f"bold {Color.red.value}",
+                    )
+                if absolute_stop:
+                    break
+                # we haven't found the next segment yet
+                # the other condition, is where we are after the segment
+                # but this is handled by the while loop above
+                if ftime <= segment_boundary_start_sec:
+                    continue
+
+                self.stats["total"] += 1
+                time_diff = ftime - prev_time
+                if time_diff < self.cfg.min_frame_interval_sec:
+                    continue
+                prev_time = ftime
+
+                frame_pil: Image = frame.to_image()
+                if self.cfg.debug:
+                    buf = self.frame_buffer.get_buffer_state()
+                    console.print(
+                        f"Frame {frame_indx}\ttime: {ftime}",
+                        f"\t Buffer ({len(buf)}): {buf}",
+                        style=f"bold {Color.green.value}",
+                    )
+                frame_meta = {"frame_time": ftime, "frame_indx": frame_indx}
+                self.stats["decoded"] += 1
+                if res := self.frame_buffer.add(
+                    frame_pil,
+                    metadata=frame_meta,
+                ):
+                    gated_obj = self.gate(*res)
+                    self.stats["produced"] += 1
+                    self.stats["gated"] += gated_obj.N
+                    if gated_obj.frames:
+                        yield gated_obj.frames
+
         # flush buffer
-        for res in self.frame_buffer.final_flush():
-            if res:
-                self.stats["produced"] += 1
-                gated_obj = self.gate(*res)
-                self.stats["gated"] += gated_obj.N
-                if gated_obj.frames:
-                    yield gated_obj.frames
-        gated_obj = self.gate.flush()
-        self.stats["gated"] += gated_obj.N
-        if gated_obj.frames:
-            yield gated_obj.frames
-        yield PROCESSING_DONE_ITERABLE
+        yield from self.flush_buffer()
 
     def write_queue(self, video_path: str, q: Queue):
         super().write_queue(video_path, q)
