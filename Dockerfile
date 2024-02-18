@@ -8,6 +8,6 @@ RUN python3 -m pip install --upgrade pip
 WORKDIR /scratch
 RUN git clone https://github.com/LemurPwned/video-sampler.git && \
     cd video-sampler && \
-    python3 -m pip install .[clip]
+    python3 -m pip install .[clip,ytdlp,language]
 WORKDIR /app
 RUN video_sampler --help
