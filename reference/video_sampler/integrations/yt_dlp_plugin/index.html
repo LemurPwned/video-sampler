@@ -862,10 +862,29 @@
   <div class="doc doc-contents ">
 
   
-      <p>A plugin for yt-dlp to generate URLs and corresponding titles from the given URL.
-Methods:
-    generate_urls(url, extra_yt_constr_args=None, extra_info_extract_opts=None) -&gt; Iterable[str]:
-        Generates URLs and corresponding titles from the given URL.</p>
+      <p>A plugin for yt-dlp to generate URLs and corresponding titles from the given URL.</p>
+
+
+
+  <p><strong>Methods:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td><code><a class="autorefs autorefs-internal" title="video_sampler.integrations.yt_dlp_plugin.YTDLPPlugin.generate_urls" href="#video_sampler.integrations.yt_dlp_plugin.YTDLPPlugin.generate_urls">generate_urls</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Generates URLs and corresponding titles from the given URL.</p>
+              </div>
+            </td>
+          </tr>
+    </tbody>
+  </table>
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/integrations/yt_dlp_plugin.py</code></summary>
@@ -958,9 +977,16 @@ Methods:
 <span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
-<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">YTDLPPlugin</span><span class="p">:</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">YTDLPPlugin</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A plugin for yt-dlp to generate URLs and corresponding titles from the given URL.</span>
+
 <span class="sd">    Methods:</span>
 <span class="sd">        generate_urls(url, extra_yt_constr_args=None, extra_info_extract_opts=None) -&gt; Iterable[str]:</span>
 <span class="sd">            Generates URLs and corresponding titles from the given URL.</span>
@@ -970,7 +996,6 @@ Methods:
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ie_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Generic&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the YTDLPPlugin instance.</span>
-<span class="sd">        :param ie_key (str): The key for the information extractor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ie_key</span> <span class="o">=</span> <span class="n">ie_key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ydl_opts</span> <span class="o">=</span> <span class="p">{</span>
@@ -982,13 +1007,14 @@ Methods:
         <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">extra_info_extract_opts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate URLs and corresponding titles from the given URL.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate URLs and download subtitles for a given video URL.</span>
 
-<span class="sd">        :param url (str): The URL to extract information from.</span>
-<span class="sd">        :param extra_info_extract_opts (dict, optional): Extra options for information extraction.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            url (str): The URL of the video to download subtitles for.</span>
+<span class="sd">            extra_info_extract_opts (dict, optional): Additional options for extracting video information.</span>
 
-<span class="sd">        :return Iterable[str]:</span>
-<span class="sd">            Tuple[str, str]: A tuple containing the title and URL of each extracted entry.</span>
+<span class="sd">        Yields:</span>
+<span class="sd">            tuple: A tuple containing the video title, video format URL, and downloaded subtitles.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">extra_info_extract_opts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">extra_info_extract_opts</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1023,9 +1049,14 @@ Methods:
         <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">extra_info_extract_opts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Download subtitles for a given video URL.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate URLs and download subtitles for a given video URL.</span>
 
-<span class="sd">        :param video_url (str): The URL of the video to download subtitles for.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            url (str): The URL of the video to download subtitles for.</span>
+<span class="sd">            extra_info_extract_opts (dict, optional): Additional options for extracting video information.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            tuple: A tuple containing the video title, video format URL, and downloaded subtitles.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">extra_info_extract_opts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">extra_info_extract_opts</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1076,13 +1107,11 @@ Methods:
 
   <div class="doc doc-contents ">
   
-      <p>Initialize the YTDLPPlugin instance.
-:param ie_key (str): The key for the information extractor.</p>
+      <p>Initialize the YTDLPPlugin instance.</p>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/yt_dlp_plugin.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
-<span class="normal">81</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
 <span class="normal">84</span>
@@ -1092,7 +1121,6 @@ Methods:
 <span class="normal">88</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ie_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Generic&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the YTDLPPlugin instance.</span>
-<span class="sd">    :param ie_key (str): The key for the information extractor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">ie_key</span> <span class="o">=</span> <span class="n">ie_key</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">ydl_opts</span> <span class="o">=</span> <span class="p">{</span>
@@ -1117,11 +1145,75 @@ Methods:
 
   <div class="doc doc-contents ">
   
-      <p>Generate URLs and corresponding titles from the given URL.</p>
-<p>:param url (str): The URL to extract information from.
-:param extra_info_extract_opts (dict, optional): Extra options for information extraction.</p>
-<p>:return Iterable[str]:
-    Tuple[str, str]: A tuple containing the title and URL of each extracted entry.</p>
+      <p>Generate URLs and download subtitles for a given video URL.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>url</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The URL of the video to download subtitles for.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>extra_info_extract_opts</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Additional options for extracting video information.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>tuple</code></td>          <td>
+                <code><span title="collections.abc.Iterable">Iterable</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A tuple containing the video title, video format URL, and downloaded subtitles.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/yt_dlp_plugin.py</code></summary>
@@ -1149,18 +1241,20 @@ Methods:
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
-<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_urls</span><span class="p">(</span>
+<span class="normal">114</span>
+<span class="normal">115</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_urls</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">extra_info_extract_opts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate URLs and corresponding titles from the given URL.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate URLs and download subtitles for a given video URL.</span>
 
-<span class="sd">    :param url (str): The URL to extract information from.</span>
-<span class="sd">    :param extra_info_extract_opts (dict, optional): Extra options for information extraction.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The URL of the video to download subtitles for.</span>
+<span class="sd">        extra_info_extract_opts (dict, optional): Additional options for extracting video information.</span>
 
-<span class="sd">    :return Iterable[str]:</span>
-<span class="sd">        Tuple[str, str]: A tuple containing the title and URL of each extracted entry.</span>
+<span class="sd">    Yields:</span>
+<span class="sd">        tuple: A tuple containing the video title, video format URL, and downloaded subtitles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">extra_info_extract_opts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">extra_info_extract_opts</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1193,13 +1287,78 @@ Methods:
 
   <div class="doc doc-contents ">
   
-      <p>Download subtitles for a given video URL.</p>
-<p>:param video_url (str): The URL of the video to download subtitles for.</p>
+      <p>Generate URLs and download subtitles for a given video URL.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>url</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The URL of the video to download subtitles for.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>extra_info_extract_opts</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Additional options for extracting video information.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>tuple</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A tuple containing the video title, video format URL, and downloaded subtitles.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/yt_dlp_plugin.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
-<span class="normal">132</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
@@ -1227,14 +1386,25 @@ Methods:
 <span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
-<span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_urls_by_subs</span><span class="p">(</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_urls_by_subs</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">extra_info_extract_opts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download subtitles for a given video URL.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate URLs and download subtitles for a given video URL.</span>
 
-<span class="sd">    :param video_url (str): The URL of the video to download subtitles for.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The URL of the video to download subtitles for.</span>
+<span class="sd">        extra_info_extract_opts (dict, optional): Additional options for extracting video information.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        tuple: A tuple containing the video title, video format URL, and downloaded subtitles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">extra_info_extract_opts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">extra_info_extract_opts</span> <span class="o">=</span> <span class="p">{}</span>

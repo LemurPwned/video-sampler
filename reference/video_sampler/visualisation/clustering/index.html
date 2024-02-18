@@ -776,9 +776,60 @@
 
   <div class="doc doc-contents ">
   
-      <p>Build a feature extraction model
-:param model_str: model name
-:return: tuple of (model, extractor)</p>
+      <p>Build a feature extraction model.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>model_str</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Model name.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>tuple</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Tuple of (model, extractor).</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/visualisation/clustering.py</code></summary>
@@ -789,10 +840,18 @@
 <span class="normal">19</span>
 <span class="normal">20</span>
 <span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_feature_model</span><span class="p">(</span><span class="n">model_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a feature extraction model</span>
-<span class="sd">    :param model_str: model name</span>
-<span class="sd">    :return: tuple of (model, extractor)</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">build_feature_model</span><span class="p">(</span><span class="n">model_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a feature extraction model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_str (str): Model name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: Tuple of (model, extractor).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">extractor</span> <span class="o">=</span> <span class="n">AutoFeatureExtractor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_str</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">ResNetModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_str</span><span class="p">)</span>
@@ -816,22 +875,59 @@
 
   <div class="doc doc-contents ">
   
-      <p>Cluster features using t-SNE and KMeans
-:param features: dict with keys "embeds" and "paths"
-:param max_clusters: maximum number of clusters
-:return: tuple of (X, cluster_labels)</p>
+      <p>Cluster features using t-SNE and KMeans</p>
 
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>features</code></td>
+          <td>
+                <code><span title="numpy.ndarray">ndarray</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>dict with keys "embeds" and "paths"</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>max_clusters</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>maximum number of clusters</p>
+            </div>
+          </td>
+          <td>
+                <code>50</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<details class="retruns" open>
+  <summary>Retruns</summary>
+  <p>tuple: of (X, cluster_labels)</p>
+</details>
           <details class="quote">
             <summary>Source code in <code>video_sampler/visualisation/clustering.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
@@ -839,14 +935,30 @@
 <span class="normal">69</span>
 <span class="normal">70</span>
 <span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cluster_features</span><span class="p">(</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cluster_features</span><span class="p">(</span>
     <span class="n">features</span><span class="p">,</span>
     <span class="n">max_clusters</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Cluster features using t-SNE and KMeans</span>
-<span class="sd">    :param features: dict with keys &quot;embeds&quot; and &quot;paths&quot;</span>
-<span class="sd">    :param max_clusters: maximum number of clusters</span>
-<span class="sd">    :return: tuple of (X, cluster_labels)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        features (np.ndarray): dict with keys &quot;embeds&quot; and &quot;paths&quot;</span>
+<span class="sd">        max_clusters (int): maximum number of clusters</span>
+
+<span class="sd">    Retruns:</span>
+<span class="sd">      tuple: of (X, cluster_labels)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">proj</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;cosine&quot;</span><span class="p">)</span>
     <span class="n">Xorg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;embeds&quot;</span><span class="p">])</span>
@@ -875,20 +987,106 @@
 
   <div class="doc doc-contents ">
   
-      <p>Extract features from a folder of images
-:param model_str: model name
-:param image_folder: folder with images
-:param mkey: key for the pixel values
-:param batch_size: batch size
-:return: dict with keys "embeds" and "paths"</p>
+      <p>Extract features from a folder of images.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>model_str</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Model name.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>image_folder</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Folder with images.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>mkey</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Key for the pixel values. Defaults to "pixel_values".</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;pixel_values&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>batch_size</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Batch size. Defaults to 8.</p>
+            </div>
+          </td>
+          <td>
+                <code>8</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>dict</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Dictionary with keys "embeds" and "paths".</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/visualisation/clustering.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
@@ -912,15 +1110,27 @@
 <span class="normal">50</span>
 <span class="normal">51</span>
 <span class="normal">52</span>
-<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">extract_features</span><span class="p">(</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">extract_features</span><span class="p">(</span>
     <span class="n">model_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">image_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">mkey</span><span class="o">=</span><span class="s2">&quot;pixel_values&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract features from a folder of images</span>
-<span class="sd">    :param model_str: model name</span>
-<span class="sd">    :param image_folder: folder with images</span>
-<span class="sd">    :param mkey: key for the pixel values</span>
-<span class="sd">    :param batch_size: batch size</span>
-<span class="sd">    :return: dict with keys &quot;embeds&quot; and &quot;paths&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract features from a folder of images.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_str (str): Model name.</span>
+<span class="sd">        image_folder (Path): Folder with images.</span>
+<span class="sd">        mkey (str, optional): Key for the pixel values. Defaults to &quot;pixel_values&quot;.</span>
+<span class="sd">        batch_size (int, optional): Batch size. Defaults to 8.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Dictionary with keys &quot;embeds&quot; and &quot;paths&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">out_features</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
