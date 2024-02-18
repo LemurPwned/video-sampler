@@ -22,6 +22,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 
 - [video-sampler](#video-sampler)
   - [Table of Contents](#table-of-contents)
+  - [Documentation](#documentation)
   - [Features](#features)
   - [Installation and Usage](#installation-and-usage)
     - [Basic usage](#basic-usage)
@@ -40,6 +41,10 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
     - [Publish](#publish)
   - [🛡 License](#-license)
   - [📃 Citation](#-citation)
+
+## Documentation
+
+Documentation is available at [https://lemurpwned.github.io/video-sampler/](https://lemurpwned.github.io/video-sampler/).
 
 ## Features
 
