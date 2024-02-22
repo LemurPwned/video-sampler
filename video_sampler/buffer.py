@@ -33,6 +33,7 @@ class SamplerConfig:
                 "debug": True}.
         gate_config (dict[str, Any], optional): Configuration options for
                 the frame gate. Defaults to {"type": "pass"}.
+
     Methods:
         __str__() -> str:
             Returns a string representation of the configuration.

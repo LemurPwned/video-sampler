@@ -12,6 +12,13 @@ from .utils import slugify
 def local_path_iterable(
     video_iterable: Iterable[str], output_path: str, worker: Worker
 ):
+    """Process a list of local video files.
+
+    Args:
+        video_iterable (Iterable[str]): An iterable of video file paths.
+        output_path (str): Path to the output folder.
+        worker (Worker): Worker instance to process the videos.
+    """
     for video in tqdm(video_iterable, desc="Processing videos..."):
         video_subpath = os.path.join(output_path, os.path.basename(video))
         worker.launch(
@@ -23,7 +30,14 @@ def local_path_iterable(
 def url_iterable(
     video_iterable: Iterable[str], output_path: str, worker: Worker
 ) -> None:
-    for video_title, video_url in tqdm(video_iterable, desc="Processing urls..."):
+    """Process a list of video URLs.
+
+    Args:
+        video_iterable (Iterable[str]): An iterable of video URLs.
+        output_path (str): Path to the output folder.
+        worker (Worker): Worker instance to process the videos.
+    """
+    for video_title, video_url, _ in tqdm(video_iterable, desc="Processing urls..."):
         video_filename = slugify(video_title)
         video_subpath = os.path.join(output_path, video_filename)
         worker.launch(
@@ -34,6 +48,13 @@ def url_iterable(
 
 
 def delegate_workers(video_path: str | Generator, output_path: str, cfg: SamplerConfig):
+    """Delegate the processing of a list of videos to a worker instance.
+
+    Args:
+        video_path (str | Generator): Path to a video file, a generator of URLs or a list of video files.
+        output_path (str): Path to the output folder.
+        cfg (SamplerConfig): Configuration for the worker.
+    """
     msg = "Detected input as a file"
     processor = local_path_iterable
     if isinstance(video_path, Generator):

@@ -14,6 +14,14 @@ class BufferType(str, Enum):
 
 @dataclass
 class FrameObject:
+    """
+    A frame object.
+
+    Args:
+        frame (Image.Image): The frame image.
+        metadata (dict): The metadata for the frame.
+    """
+
     frame: Image.Image
     metadata: dict
 

@@ -13,6 +13,14 @@ from ..utils import batched
 
 
 def build_feature_model(model_str: str):
+    """Build a feature extraction model.
+
+    Args:
+        model_str (str): Model name.
+
+    Returns:
+        tuple: Tuple of (model, extractor).
+    """
     extractor = AutoFeatureExtractor.from_pretrained(model_str)
     model = ResNetModel.from_pretrained(model_str)
     return model, extractor
@@ -21,6 +29,18 @@ def build_feature_model(model_str: str):
 def extract_features(
     model_str: str, image_folder: Path, mkey="pixel_values", batch_size: int = 8
 ):
+    """Extract features from a folder of images.
+
+    Args:
+        model_str (str): Model name.
+        image_folder (Path): Folder with images.
+        mkey (str, optional): Key for the pixel values. Defaults to "pixel_values".
+        batch_size (int, optional): Batch size. Defaults to 8.
+
+    Returns:
+        dict: Dictionary with keys "embeds" and "paths".
+    """
+
     out_features = defaultdict(list)
     model, extractor = build_feature_model(model_str)
     with torch.no_grad():
@@ -45,6 +65,15 @@ def cluster_features(
     features,
     max_clusters=50,
 ):
+    """Cluster features using t-SNE and KMeans
+
+    Args:
+        features (np.ndarray): dict with keys "embeds" and "paths"
+        max_clusters (int): maximum number of clusters
+
+    Retruns:
+      tuple: of (X, cluster_labels)
+    """
     proj = TSNE(n_components=2, perplexity=35, metric="cosine")
     Xorg = np.asarray(features["embeds"])
     X = proj.fit_transform(Xorg)

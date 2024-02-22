@@ -1,5 +1,7 @@
 from collections.abc import Iterable
 
+from ..language.keyword_capture import download_sub
+
 try:
     from yt_dlp import YoutubeDL
 except ImportError:
@@ -69,6 +71,7 @@ def no_shorts(info, *, incomplete):
 class YTDLPPlugin:
     """
     A plugin for yt-dlp to generate URLs and corresponding titles from the given URL.
+
     Methods:
         generate_urls(url, extra_yt_constr_args=None, extra_info_extract_opts=None) -> Iterable[str]:
             Generates URLs and corresponding titles from the given URL.
@@ -78,7 +81,6 @@ class YTDLPPlugin:
     def __init__(self, ie_key: str = "Generic"):
         """
         Initialize the YTDLPPlugin instance.
-        :param: ie_key (str): The key for the information extractor.
         """
         self.ie_key = ie_key
         self.ydl_opts = {
@@ -89,24 +91,53 @@ class YTDLPPlugin:
         self,
         url: str,
         extra_info_extract_opts: dict = None,
-    ) -> Iterable[str]:
-        """
-        Generate URLs and corresponding titles from the given URL.
+        get_subs: bool = False,
+    ) -> Iterable[tuple[str, str, str | None]]:
+        """Generate URLs and download subtitles for a given video URL.
 
-        :param url (str): The URL to extract information from.
-        :param extra_info_extract_opts (dict, optional): Extra options for information extraction.
+        Args:
+            url (str): The URL of the video to download subtitles for.
+            extra_info_extract_opts (dict, optional): Additional options for extracting video information.
 
-        :return Iterable[str]:
-            Tuple[str, str]: A tuple containing the title and URL of each extracted entry.
+        Yields:
+            tuple: A tuple containing the video title, video format URL, and downloaded subtitles.
         """
         if extra_info_extract_opts is None:
             extra_info_extract_opts = {}
+        if get_subs:
+            extra_info_extract_opts |= self.get_subtitles_opts()
         extr_args = {"ie_key": self.ie_key} if "ytsearch" not in url else {}
+
+        def preproc_entry(info):
+            req_format = info["requested_formats"][0]
+            subs = None
+            if get_subs and "requested_subtitles" in info:
+                subs = download_sub(
+                    list(info["requested_subtitles"].values())[0]["url"]
+                )
+            return info["title"], req_format["url"], subs
+
         with YoutubeDL(params=(self.ydl_opts | extra_info_extract_opts)) as ydl:
             info = ydl.extract_info(url, download=False, **extr_args)
             if "entries" not in info:
-                yield info["title"], info["url"]
+                yield preproc_entry(info)
             else:
                 for entry in info.get("entries", []):
-                    req_format = entry["requested_formats"][0]
-                    yield entry["title"], req_format["url"]
+                    if not entry:
+                        continue
+                    yield preproc_entry(entry)
+
+    def get_subtitles_opts(self) -> dict:
+        return {
+            "postprocessors": [
+                {
+                    "format": "srt",
+                    "key": "FFmpegSubtitlesConvertor",
+                    "when": "before_dl",
+                }
+            ],
+            "format": best_video_only,
+            "subtitleslangs": ["en.*"],
+            "writeautomaticsub": True,
+            "writesubtitles": True,
+        }

@@ -6,7 +6,6 @@ exclude: "^\
   (build/.*)|\
   (.github/.*)|\
   (.vscode/.*)|\
-  (^tests)|\
   (docs/api/.*)
   "
 
