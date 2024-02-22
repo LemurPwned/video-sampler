@@ -15,8 +15,11 @@ def verify_frame_res(res: list[FrameObject]):
 def test_pass_gating(base_video: str):
     config = SamplerConfig()
     sampler = VideoSampler(config)
+    samples = 0
     for res in sampler.sample(base_video):
         verify_frame_res(res)
+        samples += len(res)
+    assert samples > 1, f"Expected more than 1 sample, got {samples}"
     stats = sampler.stats
     assert stats["produced"] == stats["gated"]
 
@@ -33,8 +36,11 @@ def test_clip_gating(base_video: str):
         neg_margin=0.3,
     )
     sampler = VideoSampler(config)
+    samples = 0
     for res in sampler.sample(base_video):
         verify_frame_res(res)
+        samples += len(res)
+    assert samples > 1, f"Expected more than 1 sample, got {samples}"
 
 
 def test_grid(base_video: str):
@@ -43,5 +49,8 @@ def test_grid(base_video: str):
         type="grid", hash_size=4, size=30, max_hits=2, grid_x=4, grid_y=4, debug=True
     )
     sampler = VideoSampler(config)
+    samples = 0
     for res in sampler.sample(base_video):
         verify_frame_res(res)
+        samples += len(res)
+    assert samples > 1, f"Expected more than 1 sample, got {samples}"

@@ -26,6 +26,7 @@ def download_sub(sub_url: str, max_retries: int = 2):
 
 
 def parse_srt_subtitle(srt_content):
+    """Parse a SRT subtitle file to a list of subtitle segments."""
     subtitle_list = []
     if not srt_content:
         return subtitle_list

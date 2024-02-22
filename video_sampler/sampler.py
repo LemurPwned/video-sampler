@@ -58,6 +58,31 @@ class VideoSampler:
             yield gated_obj.frames
         yield PROCESSING_DONE_ITERABLE
 
+    def _init_sampler(self):
+        self.stats.clear()
+        self.frame_buffer.clear()
+
+    def _process_frame(self, frame_indx, frame, ftime):
+        frame_pil: Image = frame.to_image()
+        if self.cfg.debug:
+            buf = self.frame_buffer.get_buffer_state()
+            console.print(
+                f"Frame {frame_indx}\ttime: {ftime}",
+                f"\t Buffer ({len(buf)}): {buf}",
+                style=f"bold {Color.green.value}",
+            )
+        frame_meta = {"frame_time": ftime, "frame_indx": frame_indx}
+        self.stats["decoded"] += 1
+        if res := self.frame_buffer.add(
+            frame_pil,
+            metadata=frame_meta,
+        ):
+            gated_obj = self.gate(*res)
+            self.stats["produced"] += 1
+            self.stats["gated"] += gated_obj.N
+            if gated_obj.frames:
+                yield gated_obj.frames
+
     def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video.
 
@@ -67,8 +92,7 @@ class VideoSampler:
         Yields:
             Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
         """
-        self.stats.clear()
-        self.frame_buffer.clear()
+        self._init_sampler()
         with av.open(video_path) as container:
             stream = container.streams.video[0]
             if self.cfg.keyframes_only:
@@ -88,25 +112,7 @@ class VideoSampler:
                     continue
                 prev_time = ftime
 
-                frame_pil: Image = frame.to_image()
-                if self.cfg.debug:
-                    buf = self.frame_buffer.get_buffer_state()
-                    console.print(
-                        f"Frame {frame_indx}\ttime: {ftime}",
-                        f"\t Buffer ({len(buf)}): {buf}",
-                        style=f"bold {Color.green.value}",
-                    )
-                frame_meta = {"frame_time": ftime, "frame_indx": frame_indx}
-                self.stats["decoded"] += 1
-                if res := self.frame_buffer.add(
-                    frame_pil,
-                    metadata=frame_meta,
-                ):
-                    gated_obj = self.gate(*res)
-                    self.stats["produced"] += 1
-                    self.stats["gated"] += gated_obj.N
-                    if gated_obj.frames:
-                        yield gated_obj.frames
+                yield from self._process_frame(frame_indx, frame, ftime)
 
         # flush buffer
         yield from self.flush_buffer()
@@ -126,6 +132,20 @@ class VideoSampler:
 
 
 class SegmentSampler(VideoSampler):
+    """
+    A class for sampling video frames based on subtitle segments.
+
+    Args:
+        cfg (SamplerConfig): The configuration for the video sampler.
+        segment_generator (Iterable[subtitle_line]): An iterable of subtitle segments.
+
+    Methods:
+        sample(video_path) -> Iterable[list[FrameObject]]:
+            Generates sample frames from a video.
+        write_queue(video_path, q):
+            Writes sampled frames to a queue.
+    """
+
     def __init__(
         self, cfg: SamplerConfig, segment_generator: Iterable[subtitle_line]
     ) -> None:
@@ -141,8 +161,7 @@ class SegmentSampler(VideoSampler):
         Yields:
             Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
         """
-        self.stats.clear()
-        self.frame_buffer.clear()
+        self._init_sampler()
         next_segment = next(self.segment_generator)
         segment_boundary_end_sec = next_segment.end_time / 1000
         segment_boundary_start_sec = next_segment.start_time / 1000
@@ -193,26 +212,7 @@ class SegmentSampler(VideoSampler):
                     continue
                 prev_time = ftime
 
-                frame_pil: Image = frame.to_image()
-                if self.cfg.debug:
-                    buf = self.frame_buffer.get_buffer_state()
-                    console.print(
-                        f"Frame {frame_indx}\ttime: {ftime}",
-                        f"\t Buffer ({len(buf)}): {buf}",
-                        style=f"bold {Color.green.value}",
-                    )
-                frame_meta = {"frame_time": ftime, "frame_indx": frame_indx}
-                self.stats["decoded"] += 1
-                if res := self.frame_buffer.add(
-                    frame_pil,
-                    metadata=frame_meta,
-                ):
-                    gated_obj = self.gate(*res)
-                    self.stats["produced"] += 1
-                    self.stats["gated"] += gated_obj.N
-                    if gated_obj.frames:
-                        yield gated_obj.frames
-
+                yield from self._process_frame(frame_indx, frame, ftime)
         # flush buffer
         yield from self.flush_buffer()
 

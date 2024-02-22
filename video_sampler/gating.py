@@ -195,6 +195,7 @@ class ClipGate:
 
 
 def create_gate(gate_config: dict):
+    """Create a gate from a configuration."""
     gate_type = gate_config["type"]
     del gate_config["type"]
     if gate_type == "pass":
