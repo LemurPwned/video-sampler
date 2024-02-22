@@ -1,10 +1,12 @@
-import pytest
-from video_sampler.integrations.yt_dlp_plugin import YTDLPPlugin
-from video_sampler.language.keyword_capture import download_sub, KeywordExtractor
-from video_sampler.sampler import SegmentSampler, SamplerConfig, Worker
-import tempfile
 import json
 import os
+import tempfile
+
+import pytest
+
+from video_sampler.integrations.yt_dlp_plugin import YTDLPPlugin
+from video_sampler.language.keyword_capture import KeywordExtractor
+from video_sampler.sampler import SamplerConfig, SegmentSampler, Worker
 
 
 @pytest.fixture

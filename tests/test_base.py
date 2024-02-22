@@ -1,10 +1,10 @@
+from PIL import Image
+
 from video_sampler.sampler import SamplerConfig, VideoSampler
 from video_sampler.schemas import FrameObject
-from PIL import Image
-from typing import List
 
 
-def verify_frame_res(res: List[FrameObject]):
+def verify_frame_res(res: list[FrameObject]):
     for frame_obj in res:
         if frame_obj.frame:
             assert isinstance(frame_obj.frame, Image.Image)
