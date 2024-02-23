@@ -595,9 +595,42 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#video_sampler.language.keyword_capture.KeywordExtractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      KeywordExtractor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KeywordExtractor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#video_sampler.language.keyword_capture.KeywordExtractor.capture_keyword_segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      capture_keyword_segments
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#video_sampler.language.keyword_capture.download_sub" class="md-nav__link">
     <span class="md-ellipsis">
       download_sub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video_sampler.language.keyword_capture.parse_srt_subtitle" class="md-nav__link">
+    <span class="md-ellipsis">
+      parse_srt_subtitle
     </span>
   </a>
   
@@ -682,9 +715,42 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#video_sampler.language.keyword_capture.KeywordExtractor" class="md-nav__link">
+    <span class="md-ellipsis">
+      KeywordExtractor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KeywordExtractor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#video_sampler.language.keyword_capture.KeywordExtractor.capture_keyword_segments" class="md-nav__link">
+    <span class="md-ellipsis">
+      capture_keyword_segments
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#video_sampler.language.keyword_capture.download_sub" class="md-nav__link">
     <span class="md-ellipsis">
       download_sub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video_sampler.language.keyword_capture.parse_srt_subtitle" class="md-nav__link">
+    <span class="md-ellipsis">
+      parse_srt_subtitle
     </span>
   </a>
   
@@ -728,6 +794,372 @@
 
 
 
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="video_sampler.language.keyword_capture.KeywordExtractor" class="doc doc-heading">
+          <code>KeywordExtractor</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Extracts keywords from subtitles using spaCy.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>keywords</code></td>
+          <td>
+                <code>list[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of keywords to extract.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code><span title="video_sampler.language.keyword_capture.KeywordExtractor.keywords">keywords</span></code></td>
+          <td>
+                <code>list[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of keywords to extract.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><span title="video_sampler.language.keyword_capture.KeywordExtractor.nlp">nlp</span></code></td>
+          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>spaCy language model for text processing.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code><span title="video_sampler.language.keyword_capture.KeywordExtractor.lemmatized_keywords">lemmatized_keywords</span></code></td>
+          <td>
+                <code>set[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Set of lemmatized keywords.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Methods:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td><code><a class="autorefs autorefs-internal" title="video_sampler.language.keyword_capture.KeywordExtractor.capture_keyword_segments" href="#video_sampler.language.keyword_capture.KeywordExtractor.capture_keyword_segments">capture_keyword_segments</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Captures keyword segments from a list of subtitles.</p>
+              </div>
+            </td>
+          </tr>
+    </tbody>
+  </table>
+
+            <details class="quote">
+              <summary>Source code in <code>video_sampler/language/keyword_capture.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">KeywordExtractor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts keywords from subtitles using spaCy.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        keywords (list[str]): List of keywords to extract.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        keywords (list[str]): List of keywords to extract.</span>
+<span class="sd">        nlp: spaCy language model for text processing.</span>
+<span class="sd">        lemmatized_keywords (set[str]): Set of lemmatized keywords.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        capture_keyword_segments: Captures keyword segments from a list of subtitles.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="n">keywords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_sm&quot;</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parser&quot;</span><span class="p">,</span> <span class="s2">&quot;ner&quot;</span><span class="p">,</span> <span class="s2">&quot;textcat&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lemmatized_keywords</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">tok</span><span class="o">.</span><span class="n">lemma_</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">))</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">capture_keyword_segments</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">subtitle_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">subtitle_line</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Captures keyword segments from a list of subtitles.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            subtitle_list (list[tuple[int, int, str]]): List of subtitles in the format</span>
+<span class="sd">                (start_time, end_time, content).</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            subtitle_line: A named tuple representing a keyword segment in the format</span>
+<span class="sd">                (start_time, end_time, lemma, content).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">),</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">subtitle_list</span><span class="p">:</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">lemma</span><span class="o">.</span><span class="n">lemma_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatized_keywords</span><span class="p">:</span>
+                    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Keyword </span><span class="si">{</span><span class="n">lemma</span><span class="o">.</span><span class="n">lemma_</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">start_time</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">end_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">subtitle_line</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">lemma</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                    <span class="k">break</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="video_sampler.language.keyword_capture.KeywordExtractor.capture_keyword_segments" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">capture_keyword_segments</span><span class="p">(</span><span class="n">subtitle_list</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Captures keyword segments from a list of subtitles.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>subtitle_list</code></td>
+          <td>
+                <code>list[tuple[int, int, str]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of subtitles in the format
+(start_time, end_time, content).</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>subtitle_line</code></td>          <td>
+                <code><span title="collections.abc.Iterable">Iterable</span>[<span title="video_sampler.language.keyword_capture.subtitle_line">subtitle_line</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A named tuple representing a keyword segment in the format
+(start_time, end_time, lemma, content).</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>video_sampler/language/keyword_capture.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">capture_keyword_segments</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">subtitle_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">subtitle_line</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Captures keyword segments from a list of subtitles.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        subtitle_list (list[tuple[int, int, str]]): List of subtitles in the format</span>
+<span class="sd">            (start_time, end_time, content).</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        subtitle_line: A named tuple representing a keyword segment in the format</span>
+<span class="sd">            (start_time, end_time, lemma, content).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">),</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">subtitle_list</span><span class="p">:</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">lemma</span><span class="o">.</span><span class="n">lemma_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatized_keywords</span><span class="p">:</span>
+                <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Keyword </span><span class="si">{</span><span class="n">lemma</span><span class="o">.</span><span class="n">lemma_</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">start_time</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">end_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">yield</span> <span class="n">subtitle_line</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">lemma</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                <span class="k">break</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
 
 
 <div class="doc doc-object doc-function">
@@ -735,24 +1167,80 @@
 
 
 <h2 id="video_sampler.language.keyword_capture.download_sub" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">download_sub</span><span class="p">(</span><span class="n">sub_url</span><span class="p">)</span></code>
+          <code class="highlight language-python"><span class="n">download_sub</span><span class="p">(</span><span class="n">sub_url</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></code>
 
 </h2>
 
 
   <div class="doc doc-contents ">
   
-      <p>Download a VTT subtitle file to a string.</p>
+      <p>Download a VTT subtitle file to a string with retry mechanism.</p>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/language/keyword_capture.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
-<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">download_sub</span><span class="p">(</span><span class="n">sub_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download a VTT subtitle file to a string.&quot;&quot;&quot;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">sub_url</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">parse_srt_subtitle</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">download_sub</span><span class="p">(</span><span class="n">sub_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download a VTT subtitle file to a string with retry mechanism.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">sub_url</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">parse_srt_subtitle</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Download failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="video_sampler.language.keyword_capture.parse_srt_subtitle" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">parse_srt_subtitle</span><span class="p">(</span><span class="n">srt_content</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Parse a SRT subtitle file to a list of subtitle segments.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>video_sampler/language/keyword_capture.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parse_srt_subtitle</span><span class="p">(</span><span class="n">srt_content</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a SRT subtitle file to a list of subtitle segments.&quot;&quot;&quot;</span>
+    <span class="n">subtitle_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">srt_content</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">subtitle_list</span>
+    <span class="n">subs</span> <span class="o">=</span> <span class="n">pysrt</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">srt_content</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">:</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">ordinal</span><span class="p">,</span> <span class="n">sub</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">ordinal</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">subtitle_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">subtitle_list</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -788,7 +1276,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 18, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 23, 2024</span>
   </span>
 
     
@@ -798,7 +1286,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 18, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 23, 2024</span>
   </span>
 
     
