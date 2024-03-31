@@ -16,23 +16,28 @@ def subtitles() -> list[list]:
 
 def test_keyword_extractor(subtitles):
     ke = KeywordExtractor(["cat", "kitten", "feline"])
-    c = sum(1 for _ in ke.capture_keyword_segments(subtitles))
+    c = sum(1 for _ in ke.generate_segments(subtitles))
     assert c == 4
 
 
 def test_segment_sampler(random_video):
     ytdlp = YTDLPPlugin()
-    ke = KeywordExtractor(["cat", "kitten", "feline"])
     title, url, subs = next(ytdlp.generate_urls(random_video, get_subs=True))
     worker = Worker(
-        cfg=SamplerConfig(),
-        processor_cls=SegmentSampler,
-        extra_processor_args={
-            "segment_generator": ke.capture_keyword_segments(subs),
-        },
+        cfg=SamplerConfig(
+            extractor_config={
+                "type": "keyword",
+                "args": {
+                    "keywords": ["cat", "kitten", "feline"],
+                },
+            }
+        ),
+        sampler_cls=SegmentSampler,
     )
     with tempfile.TemporaryDirectory() as tempdir:
-        worker.launch(video_path=url, output_path=tempdir, pretty_video_name=title)
+        worker.launch(
+            video_path=url, output_path=tempdir, pretty_video_name=title, subs=subs
+        )
         assert len(os.listdir(tempdir)) > 0
 
 
