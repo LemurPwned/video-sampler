@@ -4,6 +4,10 @@
 
 Changelog for the `video-sampler`.
 
+### 0.9.0
+
+- keyword yt-dlp extraction
+
 ### 0.8.0
 
 - added yt-dlp integration

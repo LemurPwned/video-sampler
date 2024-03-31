@@ -11,7 +11,7 @@ from PIL import Image
 
 from .buffer import SamplerConfig, create_buffer
 from .gating import create_gate
-from .language.keyword_capture import subtitle_line
+from .language.keyword_capture import create_extractor, subtitle_line
 from .logging import Color, console
 from .schemas import PROCESSING_DONE_ITERABLE, FrameObject
 
@@ -83,11 +83,12 @@ class VideoSampler:
             if gated_obj.frames:
                 yield gated_obj.frames
 
-    def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
+    def sample(self, video_path: str, subs: str = None) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video.
 
         Args:
             video_path (str): The path to the video file.
+            subs (str): Unused in video sampler
 
         Yields:
             Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
@@ -117,10 +118,10 @@ class VideoSampler:
         # flush buffer
         yield from self.flush_buffer()
 
-    def write_queue(self, video_path: str, q: Queue):
+    def write_queue(self, video_path: str, q: Queue, subs: str = None):
         try:
             item: tuple[FrameObject, int]
-            for item in self.sample(video_path=video_path):
+            for item in self.sample(video_path=video_path, subs=subs):
                 q.put(item)
         except (av.IsADirectoryError, av.InvalidDataError) as e:
             console.print(
@@ -146,23 +147,25 @@ class SegmentSampler(VideoSampler):
             Writes sampled frames to a queue.
     """
 
-    def __init__(
-        self, cfg: SamplerConfig, segment_generator: Iterable[subtitle_line]
-    ) -> None:
+    def __init__(self, cfg: SamplerConfig) -> None:
         super().__init__(cfg)
-        self.segment_generator: Iterable[subtitle_line] = segment_generator
+        self.extractor = create_extractor(cfg.extractor_config)
 
-    def sample(self, video_path: str) -> Iterable[list[FrameObject]]:
+    def sample(self, video_path: str, subs: str = None) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video.
 
         Args:
             video_path (str): The path to the video file.
+            subs (str): Subtitles for the video file.
 
         Yields:
             Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
         """
+        segment_generator: Iterable[subtitle_line] = self.extractor.generate_segments(
+            subs
+        )
         self._init_sampler()
-        next_segment = next(self.segment_generator)
+        next_segment = next(segment_generator)
         segment_boundary_end_sec = next_segment.end_time / 1000
         segment_boundary_start_sec = next_segment.start_time / 1000
         absolute_stop = False
@@ -186,7 +189,7 @@ class SegmentSampler(VideoSampler):
                         style=f"bold {Color.yellow.value}",
                     )
                     try:
-                        next_segment = next(self.segment_generator)
+                        next_segment = next(segment_generator)
                         reiters += 1
                         segment_boundary_end_sec = next_segment.end_time / 1000
                         segment_boundary_start_sec = next_segment.start_time / 1000
@@ -216,8 +219,8 @@ class SegmentSampler(VideoSampler):
         # flush buffer
         yield from self.flush_buffer()
 
-    def write_queue(self, video_path: str, q: Queue):
-        super().write_queue(video_path, q)
+    def write_queue(self, video_path: str, q: Queue, subs: str = None):
+        super().write_queue(video_path, q, subs=subs)
 
 
 class Worker:
@@ -225,18 +228,22 @@ class Worker:
         self,
         cfg: SamplerConfig,
         devnull: bool = False,
-        processor_cls: VideoSampler = VideoSampler,
-        extra_processor_args: dict = None,
+        sampler_cls: VideoSampler = VideoSampler,
+        extra_sampler_args: dict = None,
     ) -> None:
-        if extra_processor_args is None:
-            extra_processor_args = {}
+        if extra_sampler_args is None:
+            extra_sampler_args = {}
         self.cfg = cfg
-        self.processor = processor_cls(cfg=cfg, **extra_processor_args)
+        self.sampler: VideoSampler = sampler_cls(cfg=cfg, **extra_sampler_args)
         self.q = Queue()
         self.devnull = devnull
 
     def launch(
-        self, video_path: str, output_path: str = "", pretty_video_name: str = ""
+        self,
+        video_path: str,
+        output_path: str = "",
+        pretty_video_name: str = "",
+        subs: str = None,
     ) -> None:
         """
         Launch the worker.
@@ -254,7 +261,7 @@ class Worker:
         if output_path:
             os.makedirs(output_path, exist_ok=True)
         proc_thread = Thread(
-            target=self.processor.write_queue, args=(video_path, self.q)
+            target=self.sampler.write_queue, args=(video_path, self.q, subs)
         )
         proc_thread.start()
         self.queue_reader(output_path, read_interval=self.cfg.queue_wait)
@@ -262,10 +269,10 @@ class Worker:
         if self.cfg.print_stats:
             console.print(
                 f"Stats for: {pretty_video_name}",
-                f"\n\tTotal frames: {self.processor.stats['total']}",
-                f"\n\tDecoded frames: {self.processor.stats['decoded']}",
-                f"\n\tProduced frames: {self.processor.stats['produced']}",
-                f"\n\tGated frames: {self.processor.stats['gated']}",
+                f"\n\tTotal frames: {self.sampler.stats['total']}",
+                f"\n\tDecoded frames: {self.sampler.stats['decoded']}",
+                f"\n\tProduced frames: {self.sampler.stats['produced']}",
+                f"\n\tGated frames: {self.sampler.stats['gated']}",
                 style=f"bold {Color.magenta.value}",
             )
 

@@ -51,7 +51,7 @@ class KeywordExtractor:
         lemmatized_keywords (set[str]): Set of lemmatized keywords.
 
     Methods:
-        capture_keyword_segments: Captures keyword segments from a list of subtitles.
+        generate_segments: Captures keyword segments from a list of subtitles.
 
     """
 
@@ -61,8 +61,12 @@ class KeywordExtractor:
         self.lemmatized_keywords = {
             tok.lemma_ for tok in self.nlp(" ".join(self.keywords))
         }
+        console.print(
+            f"Keyword capture initialised with: {keywords}",
+            style=f"bold {Color.magenta.value}",
+        )
 
-    def capture_keyword_segments(
+    def generate_segments(
         self, subtitle_list: list[tuple[int, int, str]]
     ) -> Iterable[subtitle_line]:
         """
@@ -87,3 +91,10 @@ class KeywordExtractor:
                     )
                     yield subtitle_line(start_time, end_time, lemma, content)
                     break
+
+
+def create_extractor(config: dict):
+    if config["type"] == "keyword":
+        return KeywordExtractor(**config["args"])
+
+    raise NotImplementedError(f"{config['type']} not implemented yet")

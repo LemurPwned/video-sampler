@@ -33,7 +33,6 @@ def test_segment_sampler(random_video):
     )
     with tempfile.TemporaryDirectory() as tempdir:
         worker.launch(video_path=url, output_path=tempdir, pretty_video_name=title)
-
         assert len(os.listdir(tempdir)) > 0
 
 

@@ -10,6 +10,7 @@ from . import version
 from .buffer import SamplerConfig, check_args_validity
 from .iterators import delegate_workers
 from .logging import Color, console
+from .sampler import SegmentSampler, VideoSampler
 from .schemas import BufferType
 
 app = typer.Typer(
@@ -20,7 +21,9 @@ app = typer.Typer(
 )
 
 
-def _ytdlp_plugin(yt_extra_args: str, video_path: str | Generator):
+def _ytdlp_plugin(
+    yt_extra_args: str, video_path: str | Generator, get_subs: bool = False
+):
     """Use yt-dlp to download videos from urls. Default is False.
     Enabling this will treat video_path as an input to ytdlp command.
     Parse the extra arguments for YouTube-DLP extraction in classic format.
@@ -43,12 +46,17 @@ def _ytdlp_plugin(yt_extra_args: str, video_path: str | Generator):
         yt_extra_args = {k: v for k, v in yt_extra_args.items() if default_opts[k] != v}
     plugin = YTDLPPlugin()
 
-    video_path = plugin.generate_urls(video_path, extra_info_extract_opts=yt_extra_args)
+    video_path = plugin.generate_urls(
+        video_path, extra_info_extract_opts=yt_extra_args, get_subs=get_subs
+    )
     return video_path
 
 
 def _create_from_config(
-    cfg: SamplerConfig, video_path: str | Generator, output_path: str
+    cfg: SamplerConfig,
+    video_path: str | Generator,
+    output_path: str,
+    sampler_cls: VideoSampler = VideoSampler,
 ):
     # create a test buffer
     try:
@@ -62,7 +70,12 @@ def _create_from_config(
         raise typer.Exit(code=-1) from e
 
     console.print(cfg, style=f"bold {Color.yellow.value}")
-    delegate_workers(video_path=video_path, output_path=output_path, cfg=cfg)
+    delegate_workers(
+        video_path=video_path,
+        output_path=output_path,
+        cfg=cfg,
+        sampler_cls=sampler_cls,
+    )
 
 
 def version_callback(print_version: bool = True) -> None:
@@ -101,9 +114,21 @@ def main(
     yt_extra_args: str = typer.Option(
         None, help="Extra arguments for YouTube-DLP extraction in classic format."
     ),
+    keywords: str = typer.Option(
+        None, help="Comma separated positive keywords for text extraction."
+    ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
-
+    extractor_cfg = {}
+    sampler_cls = VideoSampler
+    subs_enable = False
+    if keywords is not None:
+        if not ytdlp:
+            raise ValueError("Subtitle extraction supported only with yt-dlp!")
+        keywords_ = [s.strip() for s in keywords.split(",")]
+        extractor_cfg = {"type": "keyword", "args": {"keywords": keywords_}}
+        sampler_cls = SegmentSampler
+        subs_enable = True
     cfg = SamplerConfig(
         min_frame_interval_sec=min_frame_interval_sec,
         keyframes_only=keyframes_only,
@@ -127,10 +152,13 @@ def main(
                 "type": "pass",
             }
         ),
+        extractor_config=extractor_cfg,
     )
     if ytdlp:
-        video_path = _ytdlp_plugin(yt_extra_args, video_path)
-    _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
+        video_path = _ytdlp_plugin(yt_extra_args, video_path, get_subs=subs_enable)
+    _create_from_config(
+        cfg=cfg, video_path=video_path, output_path=output_path, sampler_cls=sampler_cls
+    )
 
 
 @app.command(name="buffer")

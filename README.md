@@ -114,6 +114,13 @@ video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96
   --hash-size 3 --buffer-size 20 --ytdlp
 ```
 
+- segment based on the keyword extraction
+
+```bash
+video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk" ./folder-frames/ \
+  --hash-size 3 --buffer-size 20 --ytdlp --keywords "cat,dog,another keyword,test keyword"
+```
+
 The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.
 
 ##### Extra YT-DLP options
