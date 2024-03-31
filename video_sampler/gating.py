@@ -28,6 +28,17 @@ def create_model(model_name: str):
 
 class PassGate:
     def __call__(self, frame: Image.Image, meta: dict, last=False) -> GatedObject:
+        """
+        Passes the frame through the gating mechanism.
+
+        Args:
+            frame (Image.Image): The frame to pass through.
+            meta (dict): The metadata for the frame.
+            last (bool): If this is the last frame in the video.
+
+        Returns:
+            GatedObject: The gated object containing the processed frame.
+        """
         return self.flush() if last else GatedObject([FrameObject(frame, meta)], 1)
 
     def flush(self):
@@ -38,13 +49,19 @@ class BlurGate:
     def __init__(
         self, method: Literal["fft", "laplacian"] = "laplacian", threshold: float = 100
     ) -> None:
-        """Gate frames based on bluriness.
-        :param method: The method to use for blur detection. Can be "fft" or "laplacian".
-        :param threshold: The threshold for bluriness. The higher the threshold, the less
-            blurry the image needs to be to be discarded.
-            Those are different depending on the method:
-            - 20 is a good start for fft
-            - 100 is a good start for laplacian.
+        """
+        Initializes the Gating object.
+
+        Args:
+            method (str): The method to use for blur detection. Can be "fft" or "laplacian".
+            threshold (float): The threshold for bluriness. The higher the threshold, the less
+                blurry the image needs to be to be discarded.
+                The default threshold values are:
+                - 20 for the "fft" method
+                - 100 for the "laplacian" method.
+
+        Raises:
+            ValueError: If an unknown blur method is provided.
         """
         self.is_blurry = None
         if method == "fft":
@@ -90,6 +107,17 @@ class ClipGate:
         pos_margin: float = 0.2,
         neg_margin: float = 0.3,
     ) -> None:
+        """
+        Initializes the Clip Gating object.
+
+        Args:
+            pos_samples (list[str], optional): List of positive samples. Defaults to None.
+            neg_samples (list[str], optional): List of negative samples. Defaults to None.
+            model_name (str, optional): Name of the model. Defaults to "ViT-B-32".
+            batch_size (int, optional): Batch size. Defaults to 32.
+            pos_margin (float, optional): Positive margin. Defaults to 0.2.
+            neg_margin (float, optional): Negative margin. Defaults to 0.3.
+        """
         self.model, self.preprocess, self.tokenizer = create_model(
             model_name=model_name
         )
@@ -167,6 +195,7 @@ class ClipGate:
 
 
 def create_gate(gate_config: dict):
+    """Create a gate from a configuration."""
     gate_type = gate_config["type"]
     del gate_config["type"]
     if gate_type == "pass":

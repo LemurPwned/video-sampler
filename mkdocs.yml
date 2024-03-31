@@ -1,0 +1,49 @@
+site_name: Video Sampler docs
+repo_url: https://github.com/LemurPwned/video-sampler
+repo_name: LemurPwned/video-sampler
+
+hooks:
+  - scripts/readme_copy.py
+
+nav:
+  - Home: index.md
+  - Code Reference: reference/
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: sphinx
+  - gen-files:
+      scripts:
+        - scripts/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - codehilite
+  - attr_list
+  - md_in_html

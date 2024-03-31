@@ -33,6 +33,9 @@ class SamplerConfig:
                 "debug": True}.
         gate_config (dict[str, Any], optional): Configuration options for
                 the frame gate. Defaults to {"type": "pass"}.
+        extractor_config (dict[str, Any], optional): Configuration options for
+                the extractor (keyword, audio). Defaults to None.
+
     Methods:
         __str__() -> str:
             Returns a string representation of the configuration.
@@ -57,6 +60,7 @@ class SamplerConfig:
             "type": "pass",
         }
     )
+    extractor_config: dict[str, Any] = field(default_factory=dict)
 
     def __str__(self) -> str:
         return str(asdict(self))

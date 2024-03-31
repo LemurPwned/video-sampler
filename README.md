@@ -22,6 +22,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 
 - [video-sampler](#video-sampler)
   - [Table of Contents](#table-of-contents)
+  - [Documentation](#documentation)
   - [Features](#features)
   - [Installation and Usage](#installation-and-usage)
     - [Basic usage](#basic-usage)
@@ -41,6 +42,10 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [🛡 License](#-license)
   - [📃 Citation](#-citation)
 
+## Documentation
+
+Documentation is available at [https://lemurpwned.github.io/video-sampler/](https://lemurpwned.github.io/video-sampler/).
+
 ## Features
 
 - [x] Direct sampling methods:
@@ -52,6 +57,8 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 - [x] Gating methods (modifications on top of direct sampling methods):
   - [x] `clip` - uses CLIP to filter out frames that do not contain the specified objects
   - [x] `blur` - uses blur detection to filter out frames that are too blurry
+- [x] Language capture:
+  - [x] Keyword capture from subtitles
 - [x] Integrations
   - [x] YTDLP integration -- streams directly from [yt-dlp](http://github.com//yt-dlp/yt-dlp) queries,
         playlists or single videos
@@ -90,21 +97,28 @@ Then, you simply add `--yt-dlp` to the command, and it changes the meaning of th
 
 ```bash
 video_sampler hash "ytsearch:cute cats" ./folder-frames/ \
-  --hash-size 3 --buffer-size 20 --yt-dlp
+  --hash-size 3 --buffer-size 20 --ytdlp
 ```
 
 - to sample a single video
 
 ```bash
 video_sampler hash "https://www.youtube.com/watch?v=W86cTIoMv2U" ./folder-frames/ \
-    --hash-size 3 --buffer-size 20 --yt-dlp
+    --hash-size 3 --buffer-size 20 --ytdlp
 ```
 
 - to sample a playlist
 
 ```bash
 video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk" ./folder-frames/ \
-  --hash-size 3 --buffer-size 20 --yt-dlp
+  --hash-size 3 --buffer-size 20 --ytdlp
+```
+
+- segment based on the keyword extraction
+
+```bash
+video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk" ./folder-frames/ \
+  --hash-size 3 --buffer-size 20 --ytdlp --keywords "cat,dog,another keyword,test keyword"
 ```
 
 The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.
