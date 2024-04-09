@@ -233,10 +233,28 @@ class Worker:
     ) -> None:
         if extra_sampler_args is None:
             extra_sampler_args = {}
-        self.cfg = cfg
+        self.cfg: SamplerConfig = cfg
         self.sampler: VideoSampler = sampler_cls(cfg=cfg, **extra_sampler_args)
         self.q = Queue()
         self.devnull = devnull
+        self.describe_frame = self._nop_describe_frame
+        if self.cfg.summary_config:
+
+            self.frame_queue = Queue()
+            self.pool = Thread(
+                target=self._describe_frame_llama, args=(self.frame_queue,)
+            )
+
+    def _nop_describe_frame(self, frame_object: FrameObject) -> None: ...
+
+    def _describe_frame_llama(self, queue: Queue, cfg: SamplerConfig) -> None:
+        from .integrations.llava_chat import ImageDescription
+
+        desc_client = ImageDescription(cfg.summary_config.get("url", None))
+        summaries = []
+        while True:
+            frame_object: FrameObject = queue.get(block=True)
+            summaries.append(desc_client.summarise_image(frame_object.frame))
 
     def launch(
         self,
@@ -300,4 +318,5 @@ class Worker:
                                 f"{frame_object.metadata['frame_time']}.jpg",
                             )
                         )
+                        self.describe_frame(frame_object)
             time.sleep(read_interval)
