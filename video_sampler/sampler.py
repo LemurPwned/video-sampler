@@ -238,23 +238,48 @@ class Worker:
         self.q = Queue()
         self.devnull = devnull
         self.describe_frame = self._nop_describe_frame
+        self.frame_queue, self.pool = None, None
         if self.cfg.summary_config:
-
             self.frame_queue = Queue()
             self.pool = Thread(
-                target=self._describe_frame_llama, args=(self.frame_queue,)
+                target=self._describe_frame_llama,
+                args=(self.frame_queue, cfg.summary_config),
             )
 
-    def _nop_describe_frame(self, frame_object: FrameObject) -> None: ...
+    def _nop_describe_frame(self, _: FrameObject) -> None: ...
 
-    def _describe_frame_llama(self, queue: Queue, cfg: SamplerConfig) -> None:
-        from .integrations.llava_chat import ImageDescription
+    def _describe_frame_llama(self, queue: Queue, cfg: dict) -> None:
+        from .integrations.llava_chat import ImageDescription, VideoSummary
 
-        desc_client = ImageDescription(cfg.summary_config.get("url", None))
+        desc_client = ImageDescription(cfg.get("url"))
         summaries = []
+        min_sum_interval = cfg.get("min_sum_interval", 30)  # seconds
+        last_summary_time = -10
         while True:
             frame_object: FrameObject = queue.get(block=True)
-            summaries.append(desc_client.summarise_image(frame_object.frame))
+            if frame_object is None:
+                break
+            ftime = frame_object.metadata["frame_time"]
+            if ftime - last_summary_time < min_sum_interval:
+                continue
+            if summary := desc_client.summarise_image(frame_object.frame):
+                summaries[ftime] = summary
+                last_summary_time = ftime
+        vs = VideoSummary(cfg.get("url"))
+        summary = vs.summarise_video(list(summaries.values()))
+
+        return summary, summaries
+
+    def join_summary_pool(self, savepath: str):
+        if self.pool:
+            self.frame_queue.put(None)
+            console.print("Waiting for summary pool to finish...", style="bold yellow")
+            summary, summaries = self.pool.join()
+            with open(os.path.join(savepath, "summary.txt"), "w") as f:
+                f.write(summary)
+            with open(os.path.join(savepath, "summaries.txt"), "w") as f:
+                for s in summaries:
+                    f.write(s)
 
     def launch(
         self,
@@ -284,6 +309,7 @@ class Worker:
         proc_thread.start()
         self.queue_reader(output_path, read_interval=self.cfg.queue_wait)
         proc_thread.join()
+        self.join_summary_pool(output_path)
         if self.cfg.print_stats:
             console.print(
                 f"Stats for: {pretty_video_name}",
@@ -318,5 +344,6 @@ class Worker:
                                 f"{frame_object.metadata['frame_time']}.jpg",
                             )
                         )
-                        self.describe_frame(frame_object)
+                        if self.frame_queue:
+                            self.frame_queue.put(frame_object)
             time.sleep(read_interval)
