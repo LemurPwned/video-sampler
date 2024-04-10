@@ -117,6 +117,12 @@ def main(
     keywords: str = typer.Option(
         None, help="Comma separated positive keywords for text extraction."
     ),
+    summary_url: str = typer.Option(
+        None, help="URL to summarise the video using LLaMA."
+    ),
+    summary_interval: int = typer.Option(
+        10, help="Interval in seconds to summarise the video."
+    ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
     extractor_cfg = {}
@@ -140,6 +146,10 @@ def main(
             "size": buffer_size,
             "debug": debug,
             "hash_size": hash_size,
+        },
+        summary_config={
+            "url": summary_url,
+            "min_sum_interval": summary_interval,
         },
         gate_config=(
             {

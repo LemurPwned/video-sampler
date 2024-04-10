@@ -240,20 +240,21 @@ class Worker:
         self.describe_frame = self._nop_describe_frame
         self.frame_queue, self.pool = None, None
         if self.cfg.summary_config:
+            console.print("Initialising summary pool...", style="bold yellow")
             self.frame_queue = Queue()
             self.pool = Thread(
                 target=self._describe_frame_llama,
-                args=(self.frame_queue, cfg.summary_config),
+                args=(self.frame_queue, cfg),
             )
 
     def _nop_describe_frame(self, _: FrameObject) -> None: ...
 
-    def _describe_frame_llama(self, queue: Queue, cfg: dict) -> None:
+    def _describe_frame_llama(self, queue: Queue, cfg: SamplerConfig) -> None:
         from .integrations.llava_chat import ImageDescription, VideoSummary
 
-        desc_client = ImageDescription(cfg.get("url"))
-        summaries = []
-        min_sum_interval = cfg.get("min_sum_interval", 30)  # seconds
+        desc_client = ImageDescription(cfg.summary_config.get("url"))
+        summaries, summary = {}, ""
+        min_sum_interval = cfg.summary_config.get("min_sum_interval", 30)  # seconds
         last_summary_time = -10
         while True:
             frame_object: FrameObject = queue.get(block=True)
@@ -263,10 +264,24 @@ class Worker:
             if ftime - last_summary_time < min_sum_interval:
                 continue
             if summary := desc_client.summarise_image(frame_object.frame):
+                if cfg.debug:
+                    console.print(
+                        f"Summary for frame {frame_object.metadata['frame_time']}",
+                        f"\t{summary}",
+                        style="bold green",
+                    )
                 summaries[ftime] = summary
                 last_summary_time = ftime
-        vs = VideoSummary(cfg.get("url"))
-        summary = vs.summarise_video(list(summaries.values()))
+            else:
+                console.print(
+                    f"Failed to summarise frame {frame_object.metadata['frame_time']}",
+                    style="bold red",
+                )
+        # vs = VideoSummary(cfg.summary_config.get("url"))
+        # if summary_vals := list(summaries.values()):
+        #     summary = vs.summarise_video(summary_vals)
+        # else:
+        #     console.print("No summaries generated", style="bold yellow")
 
         return summary, summaries
 
@@ -307,6 +322,7 @@ class Worker:
             target=self.sampler.write_queue, args=(video_path, self.q, subs)
         )
         proc_thread.start()
+        self.pool.start()
         self.queue_reader(output_path, read_interval=self.cfg.queue_wait)
         proc_thread.join()
         self.join_summary_pool(output_path)
