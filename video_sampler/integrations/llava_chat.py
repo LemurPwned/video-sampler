@@ -59,7 +59,19 @@ class PromptClient:
 
 
 class ImageDescription:
+    """A client to interact with the LLaMA image description API.
+    The API is used to generate short phrases that describe an image.
+
+    Methods:
+        summarise_image(image: Image) -> str:
+            Summarise the image using the LLaMA API.
+    """
+
     def __init__(self, url: str = "http://localhost:8080"):
+        """Initialise the client with the base URL of the LLaMA API.
+        Args:
+            url (str): The base URL of the LLaMA API.
+        """
         """TODO: migrate to OpenAI API when available"""
         if url is None:
             url = "http://localhost:8080/"
@@ -77,6 +89,12 @@ class ImageDescription:
         \nASSISTANT:"""
 
     def summarise_image(self, image: Image):
+        """Summarise the image using the LLaMA API.
+        Args:
+            image (Image): The image to summarise.
+        Returns:
+            str: The description of the image.
+        """
         b64image = encode_image(resize_image(image))
 
         json_body = {
@@ -118,7 +136,18 @@ class ImageDescription:
 
 
 class VideoSummary(PromptClient):
+    """A client to interact with the LLaMA video summarisation API.
+    The API is used to generate a summary of a video based on image descriptions.
+
+    Methods:
+        summarise_video(image_descriptions: list[str]) -> str:
+            Summarise the video using the LLaMA API.
+    """
+
     def __init__(self, url: str = "http://localhost:8080/v1"):
+        """Initialise the client with the base URL of the LLaMA API.
+        Args:
+            url (str): The base URL of the LLaMA API."""
         if url is None:
             url = "http://localhost:8080/v1"
         super().__init__(url)
@@ -128,6 +157,12 @@ class VideoSummary(PromptClient):
         Combine image descriptions into a coherent summary of the video."""
 
     def summarise_video(self, image_descriptions: list[str]):
+        """Summarise the video using the LLaMA API.
+        Args:
+            image_descriptions (list[str]): The descriptions of the images in the video.
+        Returns:
+            str: The summary of the video.
+        """
         return self.client.chat.completions.create(
             model="LLaMA_CPP",
             messages=[
