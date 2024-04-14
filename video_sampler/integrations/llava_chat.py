@@ -6,6 +6,7 @@ except ImportError:
     )
 import base64
 import io
+import os
 
 import requests
 from PIL import Image
@@ -46,7 +47,7 @@ class PromptClient:
     def __init__(self, url: str) -> None:
         self.client = OpenAI(
             base_url=url,
-            api_key="sk-no-key-required",
+            api_key=os.getenv("OPENAI_API_KEY", "sk-no-key-required"),
         )
         self.base_settings = {"cache_prompt": True, "temperature": 0.01}
         self.headers = {

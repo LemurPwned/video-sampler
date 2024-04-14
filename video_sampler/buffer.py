@@ -50,7 +50,7 @@ class SamplerConfig:
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
         default_factory=lambda: {
-            "type": "hash3",
+            "type": "hash",
             "hash_size": 8,
             "size": 15,
             "debug": True,

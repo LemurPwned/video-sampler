@@ -152,7 +152,8 @@ or this will skip all shorts:
 To use the OpenAI multimodal models integration, you need to install `openai` first `pip install openai`.
 Then, you simply add `--summary-interval` to the command and the url.
 
-In the example, I'm using [llamafile](https://github.com/Mozilla-Ocho/llamafile) LLAVA model to summarize the video every 50 frames.
+In the example, I'm using [llamafile](https://github.com/Mozilla-Ocho/llamafile) LLAVA model to summarize the video every 50 frames. If you want to use the OpenAI multimodal models, you need to export `OPENAI_API_KEY=your_api_key` first.
+
 To replicate, run LLAVA model locally and set the `summary-url` to the address of the model. Specify the `summary-interval` to the minimal interval in seconds between frames that are to be summarised/described.
 
 ```bash
