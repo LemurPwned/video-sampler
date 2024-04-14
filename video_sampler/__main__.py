@@ -121,7 +121,7 @@ def main(
         None, help="URL to summarise the video using LLaMA."
     ),
     summary_interval: int = typer.Option(
-        10, help="Interval in seconds to summarise the video."
+        -1, help="Interval in seconds to summarise the video."
     ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
@@ -135,6 +135,15 @@ def main(
         extractor_cfg = {"type": "keyword", "args": {"keywords": keywords_}}
         sampler_cls = SegmentSampler
         subs_enable = True
+    summary_config = {}
+    if summary_interval > 0:
+        summary_config = {"url": summary_url, "min_sum_interval": summary_interval}
+    elif summary_url is not None:
+        console.print(
+            "Set summary interval to be greater than 0 to enable summary feature.",
+            style=f"bold {Color.red.value}",
+        )
+        return typer.Exit(code=-1)
     cfg = SamplerConfig(
         min_frame_interval_sec=min_frame_interval_sec,
         keyframes_only=keyframes_only,
@@ -147,10 +156,7 @@ def main(
             "debug": debug,
             "hash_size": hash_size,
         },
-        summary_config={
-            "url": summary_url,
-            "min_sum_interval": summary_interval,
-        },
+        summary_config=summary_config,
         gate_config=(
             {
                 "type": "blur",

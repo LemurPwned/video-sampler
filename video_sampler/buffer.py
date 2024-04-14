@@ -50,7 +50,7 @@ class SamplerConfig:
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
         default_factory=lambda: {
-            "type": "hash",
+            "type": "hash3",
             "hash_size": 8,
             "size": 15,
             "debug": True,
@@ -220,7 +220,7 @@ class GridBuffer(HashBuffer):
         self.max_hits = max_hits
         self.mosaic_buffer = {}
 
-    def __get_grid_hash(self, item: Image.Image) -> str:
+    def __get_grid_hash(self, item: Image.Image) -> Iterable[str]:
         """Compute grid hashes for a given image"""
         for x in range(self.grid_x):
             for y in range(self.grid_y):

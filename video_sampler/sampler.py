@@ -237,64 +237,42 @@ class Worker:
         self.sampler: VideoSampler = sampler_cls(cfg=cfg, **extra_sampler_args)
         self.q = Queue()
         self.devnull = devnull
-        self.describe_frame = self._nop_describe_frame
-        self.frame_queue, self.pool = None, None
+        self.pool = None
+        self.futures = {}
         if self.cfg.summary_config:
+            from concurrent.futures import ThreadPoolExecutor
+
+            from .integrations.llava_chat import ImageDescription
+
             console.print("Initialising summary pool...", style="bold yellow")
-            self.frame_queue = Queue()
-            self.pool = Thread(
-                target=self._describe_frame_llama,
-                args=(self.frame_queue, cfg),
+            self.pool = ThreadPoolExecutor(
+                max_workers=self.cfg.summary_config.get("max_workers", 2)
             )
+            self.desc_client = ImageDescription(url=self.cfg.summary_config.get("url"))
 
-    def _nop_describe_frame(self, _: FrameObject) -> None: ...
-
-    def _describe_frame_llama(self, queue: Queue, cfg: SamplerConfig) -> None:
-        from .integrations.llava_chat import ImageDescription, VideoSummary
-
-        desc_client = ImageDescription(cfg.summary_config.get("url"))
-        summaries, summary = {}, ""
-        min_sum_interval = cfg.summary_config.get("min_sum_interval", 30)  # seconds
-        last_summary_time = -10
-        while True:
-            frame_object: FrameObject = queue.get(block=True)
-            if frame_object is None:
-                break
-            ftime = frame_object.metadata["frame_time"]
-            if ftime - last_summary_time < min_sum_interval:
-                continue
-            if summary := desc_client.summarise_image(frame_object.frame):
-                if cfg.debug:
+    def collect_summaries(self, savepath: str):
+        if not self.pool:
+            return
+        console.print(
+            f"Waiting for summary pool to finish: [{len(self.futures)}] items...",
+            style="bold yellow",
+        )
+        summary_info = []
+        for k, v in self.futures.items():
+            if summary := v.result():
+                summary_info.append({"time": k, "summary": summary})
+                if self.cfg.debug:
                     console.print(
-                        f"Summary for frame {frame_object.metadata['frame_time']}",
+                        f"Summary for frame {k}",
                         f"\t{summary}",
                         style="bold green",
                     )
-                summaries[ftime] = summary
-                last_summary_time = ftime
-            else:
-                console.print(
-                    f"Failed to summarise frame {frame_object.metadata['frame_time']}",
-                    style="bold red",
-                )
-        # vs = VideoSummary(cfg.summary_config.get("url"))
-        # if summary_vals := list(summaries.values()):
-        #     summary = vs.summarise_video(summary_vals)
-        # else:
-        #     console.print("No summaries generated", style="bold yellow")
+        import json
 
-        return summary, summaries
-
-    def join_summary_pool(self, savepath: str):
-        if self.pool:
-            self.frame_queue.put(None)
-            console.print("Waiting for summary pool to finish...", style="bold yellow")
-            summary, summaries = self.pool.join()
-            with open(os.path.join(savepath, "summary.txt"), "w") as f:
-                f.write(summary)
-            with open(os.path.join(savepath, "summaries.txt"), "w") as f:
-                for s in summaries:
-                    f.write(s)
+        # save as a jsonl
+        with open(os.path.join(savepath, "summaries.jsonl"), "w") as f:
+            for item in summary_info:
+                f.write(json.dumps(item) + "\n")
 
     def launch(
         self,
@@ -318,14 +296,14 @@ class Worker:
             raise ValueError("Cannot write to disk when devnull is True")
         if output_path:
             os.makedirs(output_path, exist_ok=True)
+
         proc_thread = Thread(
             target=self.sampler.write_queue, args=(video_path, self.q, subs)
         )
         proc_thread.start()
-        self.pool.start()
         self.queue_reader(output_path, read_interval=self.cfg.queue_wait)
         proc_thread.join()
-        self.join_summary_pool(output_path)
+        self.collect_summaries(output_path)
         if self.cfg.print_stats:
             console.print(
                 f"Stats for: {pretty_video_name}",
@@ -345,6 +323,8 @@ class Worker:
             read_interval (float, optional): The time interval between reading frames from the queue.
                     Defaults to 0.1 seconds.
         """
+        last_summary_time = -10
+        self.futures = {}  # clear futures
         while True:
             if not self.q.empty():
                 frame_object: FrameObject
@@ -360,6 +340,21 @@ class Worker:
                                 f"{frame_object.metadata['frame_time']}.jpg",
                             )
                         )
-                        if self.frame_queue:
-                            self.frame_queue.put(frame_object)
+                        if self.pool:
+                            ftime = frame_object.metadata["frame_time"]
+                            if ftime - last_summary_time < self.cfg.summary_config.get(
+                                "min_sum_interval", 30
+                            ):  # seconds
+                                continue
+
+                            future = self.pool.submit(
+                                self.desc_client.summarise_image, frame_object.frame
+                            )
+                            if self.cfg.debug:
+                                console.print(
+                                    f"Submitting summary for frame {ftime}",
+                                    style="bold yellow",
+                                )
+                            self.futures[ftime] = future
+                            last_summary_time = ftime
             time.sleep(read_interval)
