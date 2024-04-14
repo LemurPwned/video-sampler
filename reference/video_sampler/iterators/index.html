@@ -594,16 +594,67 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../integrations/yt_dlp_plugin/" class="md-nav__link">
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../integrations/llava_chat/" class="md-nav__link ">
+              
   
   <span class="md-ellipsis">
     Integrations
   </span>
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            Integrations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/yt_dlp_plugin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Yt dlp plugin
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -771,7 +822,7 @@
 
 
 <h2 id="video_sampler.iterators.delegate_workers" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">delegate_workers</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span></code>
+          <code class="highlight language-python"><span class="n">delegate_workers</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">sampler_cls</span><span class="o">=</span><span class="n">VideoSampler</span><span class="p">)</span></code>
 
 </h2>
 
@@ -840,9 +891,7 @@
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/iterators.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span>
@@ -868,7 +917,24 @@
 <span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">delegate_workers</span><span class="p">(</span><span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span><span class="p">):</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">delegate_workers</span><span class="p">(</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Generator</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span><span class="p">,</span>
+    <span class="n">sampler_cls</span><span class="p">:</span> <span class="n">VideoSampler</span> <span class="o">=</span> <span class="n">VideoSampler</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delegate the processing of a list of videos to a worker instance.</span>
 
 <span class="sd">    Args:</span>
@@ -891,9 +957,14 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">videos</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">([</span><span class="n">video_path</span><span class="p">])</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">cyan</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
+    <span class="k">if</span> <span class="n">sampler_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Sampler class was not specified, defaulting to Video Sampler&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">sampler_cls</span> <span class="o">=</span> <span class="n">VideoSampler</span>
     <span class="n">worker</span> <span class="o">=</span> <span class="n">Worker</span><span class="p">(</span>
         <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span>
+        <span class="n">sampler_cls</span><span class="o">=</span><span class="n">sampler_cls</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">processor</span><span class="p">(</span><span class="n">videos</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">worker</span><span class="p">)</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;All videos processed&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -978,8 +1049,7 @@
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/iterators.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
-<span class="normal">13</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
@@ -993,7 +1063,8 @@
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">local_path_iterable</span><span class="p">(</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">local_path_iterable</span><span class="p">(</span>
     <span class="n">video_iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">Worker</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a list of local video files.</span>
@@ -1090,8 +1161,7 @@
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/iterators.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">30</span>
-<span class="normal">31</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
 <span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
@@ -1107,7 +1177,9 @@
 <span class="normal">44</span>
 <span class="normal">45</span>
 <span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">url_iterable</span><span class="p">(</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">url_iterable</span><span class="p">(</span>
     <span class="n">video_iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">worker</span><span class="p">:</span> <span class="n">Worker</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a list of video URLs.</span>
@@ -1117,13 +1189,14 @@
 <span class="sd">        output_path (str): Path to the output folder.</span>
 <span class="sd">        worker (Worker): Worker instance to process the videos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">video_title</span><span class="p">,</span> <span class="n">video_url</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">video_iterable</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing urls...&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">video_title</span><span class="p">,</span> <span class="n">video_url</span><span class="p">,</span> <span class="n">subs</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">video_iterable</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing urls...&quot;</span><span class="p">):</span>
         <span class="n">video_filename</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">video_title</span><span class="p">)</span>
         <span class="n">video_subpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">video_filename</span><span class="p">)</span>
         <span class="n">worker</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
             <span class="n">video_path</span><span class="o">=</span><span class="n">video_url</span><span class="p">,</span>
             <span class="n">output_path</span><span class="o">=</span><span class="n">video_subpath</span><span class="p">,</span>
             <span class="n">pretty_video_name</span><span class="o">=</span><span class="n">video_filename</span><span class="p">,</span>
+            <span class="n">subs</span><span class="o">=</span><span class="n">subs</span><span class="p">,</span>
         <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
@@ -1160,7 +1233,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 23, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2024</span>
   </span>
 
     
@@ -1170,7 +1243,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 23, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2024</span>
   </span>
 
     

@@ -368,6 +368,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#openai-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenAI summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#api-examples" class="md-nav__link">
     <span class="md-ellipsis">
       API examples
@@ -766,16 +775,67 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="reference/video_sampler/integrations/yt_dlp_plugin/" class="md-nav__link">
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="reference/video_sampler/integrations/llava_chat/" class="md-nav__link ">
+              
   
   <span class="md-ellipsis">
     Integrations
   </span>
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            Integrations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/video_sampler/integrations/yt_dlp_plugin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Yt dlp plugin
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -932,6 +992,15 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openai-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenAI summary
+    </span>
+  </a>
   
 </li>
         
@@ -1099,7 +1168,7 @@
 <a href="https://github.com/LemurPwned/video-sampler/blob/main/.pre-commit-config.yaml"><img alt="Pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a></p>
 <p><a href="https://github.com/LemurPwned/video-sampler/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/LemurPwned/video-sampler" /></a>
 <a href="https://img.shields.io/pypi/dm/video-sampler.svg"><img alt="Downloads" src="https://img.shields.io/pypi/dm/video-sampler.svg" /></a></p>
-<p>Video sampler allows you to efficiently sample video frames.
+<p>Video sampler allows you to efficiently sample video frames and summarise the videos.
 Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.</p>
 <p><strong>Use case:</strong> for sampling videos for later annotations used in machine learning.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
@@ -1114,6 +1183,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 <li><a href="#extra-yt-dlp-options">Extra YT-DLP options</a></li>
 </ul>
 </li>
+<li><a href="#openai-summary">OpenAI summary</a></li>
 <li><a href="#api-examples">API examples</a></li>
 <li><a href="#advanced-usage">Advanced usage</a></li>
 <li><a href="#gating">Gating</a></li>
@@ -1150,6 +1220,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 <li>[x] Integrations</li>
 <li>[x] YTDLP integration -- streams directly from <a href="http://github.com//yt-dlp/yt-dlp">yt-dlp</a> queries,
         playlists or single videos</li>
+<li>[x] OpenAI multimodal models integration for video summaries</li>
 </ul>
 <h2 id="installation-and-usage">Installation and Usage</h2>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>video_sampler
@@ -1185,6 +1256,12 @@ Then, you simply add <code>--yt-dlp</code> to the command, and it changes the me
 <div class="highlight"><pre><span></span><code>video_sampler<span class="w"> </span><span class="nb">hash</span><span class="w"> </span><span class="s2">&quot;https://www.youtube.com/watch?v=GbpP3Sxp-1U&amp;list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk&quot;</span><span class="w"> </span>./folder-frames/<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--hash-size<span class="w"> </span><span class="m">3</span><span class="w"> </span>--buffer-size<span class="w"> </span><span class="m">20</span><span class="w"> </span>--ytdlp
 </code></pre></div>
+<ul>
+<li>segment based on the keyword extraction</li>
+</ul>
+<div class="highlight"><pre><span></span><code>video_sampler<span class="w"> </span><span class="nb">hash</span><span class="w"> </span><span class="s2">&quot;https://www.youtube.com/watch?v=GbpP3Sxp-1U&amp;list=PLFezMcAw96RGvTTTbdKrqew9seO2ZGRmk&quot;</span><span class="w"> </span>./folder-frames/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--hash-size<span class="w"> </span><span class="m">3</span><span class="w"> </span>--buffer-size<span class="w"> </span><span class="m">20</span><span class="w"> </span>--ytdlp<span class="w"> </span>--keywords<span class="w"> </span><span class="s2">&quot;cat,dog,another keyword,test keyword&quot;</span>
+</code></pre></div>
 <p>The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.</p>
 <h5 id="extra-yt-dlp-options">Extra YT-DLP options</h5>
 <p>You can pass extra options to yt-dlp by using the <code>-yt-extra-args</code> flag. For example:</p>
@@ -1196,6 +1273,20 @@ Then, you simply add <code>--yt-dlp</code> to the command, and it changes the me
 </code></pre></div>
 <p>or this will skip all shorts:</p>
 <div class="highlight"><pre><span></span><code>...<span class="w"> </span>--ytdlp<span class="w"> </span>--yt-extra-args<span class="w"> </span><span class="err">&#39;</span>--match-filter<span class="w"> </span><span class="s2">&quot;original_url!*=/shorts/ &amp; url!*=/shorts/&quot;</span>
+</code></pre></div>
+<h4 id="openai-summary">OpenAI summary</h4>
+<p>To use the OpenAI multimodal models integration, you need to install <code>openai</code> first <code>pip install openai</code>.
+Then, you simply add <code>--summary-interval</code> to the command and the url.</p>
+<p>In the example, I'm using <a href="https://github.com/Mozilla-Ocho/llamafile">llamafile</a> LLAVA model to summarize the video every 50 frames.
+To replicate, run LLAVA model locally and set the <code>summary-url</code> to the address of the model. Specify the <code>summary-interval</code> to the minimal interval in seconds between frames that are to be summarised/described.</p>
+<div class="highlight"><pre><span></span><code>video_sampler<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>./videos/FatCat.mp4<span class="w"> </span>./output-frames/<span class="w"> </span>--hash-size<span class="w"> </span><span class="m">3</span><span class="w"> </span>--buffer-size<span class="w"> </span><span class="m">20</span><span class="w"> </span>--summary-url<span class="w"> </span><span class="s2">&quot;http://localhost:8080&quot;</span><span class="w"> </span>--summary-interval<span class="w"> </span><span class="m">50</span>
+</code></pre></div>
+<p>Some of the frames, based on the interval specified, will be summarised by the model and the result will saved in the <code>./output-frames/summaries.json</code> folder. The frames that are summarised come after the sampling and gating process happens, and only those frames that pass both stages are viable for summarisation.</p>
+<div class="highlight"><pre><span></span><code>summaries.jsonl
+---
+{&quot;time&quot;: 56.087, &quot;summary&quot;: &quot;A cat is walking through a field of tall grass, with its head down and ears back. The cat appears to be looking for something in the grass, possibly a mouse or another small creature. The field is covered in snow, adding a wintry atmosphere to the scene.&quot;}
+{&quot;time&quot;: 110.087, &quot;summary&quot;: &quot;A dog is walking in the snow, with its head down, possibly sniffing the ground. The dog is the main focus of the image, and it appears to be a small animal. The snowy landscape is visible in the background, creating a serene and cold atmosphere.&quot;}
+{&quot;time&quot;: 171.127, &quot;summary&quot;: &quot;The image features a group of animals, including a dog and a cat, standing on a beach near the ocean. The dog is positioned closer to the left side of the image, while the cat is located more towards the center. The scene is set against a beautiful backdrop of a blue sky and a vibrant green ocean. The animals appear to be enjoying their time on the beach, possibly taking a break from their daily activities.&quot;}
 </code></pre></div>
 <h4 id="api-examples">API examples</h4>
 <p>See examples in <a href="https://github.com/LemurPwned/video-sampler/tree/main/scripts/run_benchmarks.py">https://github.com/LemurPwned/video-sampler/tree/main/scripts</a>.</p>
@@ -1572,7 +1663,7 @@ Some results from <code>fft</code> at <code>threshold=20</code>:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 23, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2024</span>
   </span>
 
     
@@ -1582,7 +1673,7 @@ Some results from <code>fft</code> at <code>threshold=20</code>:</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 23, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2024</span>
   </span>
 
     
