@@ -38,7 +38,7 @@ class VideoSampler:
     """
 
     def __init__(self, cfg: SamplerConfig) -> None:
-        self.cfg = deepcopy(cfg)
+        self.cfg: SamplerConfig = deepcopy(cfg)
         self.frame_buffer = create_buffer(self.cfg.buffer_config)
         self.gate = create_gate(self.cfg.gate_config)
         self.stats = Counter()
@@ -237,6 +237,9 @@ class Worker:
         self.sampler: VideoSampler = sampler_cls(cfg=cfg, **extra_sampler_args)
         self.q = Queue()
         self.devnull = devnull
+        self.__initialise_summary_objs()
+
+    def __initialise_summary_objs(self):
         self.pool = None
         self.futures = {}
         if self.cfg.summary_config:
@@ -270,9 +273,12 @@ class Worker:
         import json
 
         # save as a jsonl
-        with open(os.path.join(savepath, "summaries.jsonl"), "w") as f:
-            for item in summary_info:
-                f.write(json.dumps(item) + "\n")
+        try:
+            with open(os.path.join(savepath, "summaries.jsonl"), "w") as f:
+                for item in summary_info:
+                    f.write(json.dumps(item) + "\n")
+        except OSError as e:
+            console.print(f"Failed to write to file: {e}", style="bold red")
 
     def launch(
         self,

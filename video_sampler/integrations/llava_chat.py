@@ -81,6 +81,8 @@ class ImageDescription:
             "accept-language": "en-GB,en",
             "content-type": "application/json",
         }
+        if api_key := os.getenv("OPENAI_API_KEY"):
+            self.headers["Authorization"] = f"Bearer {api_key}"
         self.session = requests.Session()
 
     def get_prompt(self):
