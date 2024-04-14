@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/video-sampler.svg)](https://img.shields.io/pypi/dm/video-sampler.svg)
 
-Video sampler allows you to efficiently sample video frames.
+Video sampler allows you to efficiently sample video frames and summarise the videos.
 Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
 **Use case:** for sampling videos for later annotations used in machine learning.
