@@ -2,7 +2,7 @@
 name = "video_sampler"
 description = "Video Sampler -- sample frames from a video file"
 url = "https://github.com/LemurPwned/video-sampler"
-version = "0.9.0"
+version = "0.10.0"
 authors = [
     { name = "LemurPwned", email = "lemurpwned@gmail.com" }
 ]

@@ -4,6 +4,10 @@
 
 Changelog for the `video-sampler`.
 
+### 0.11.0
+
+- added summary creation from sampled frames
+
 ### 0.9.0
 
 - keyword yt-dlp extraction

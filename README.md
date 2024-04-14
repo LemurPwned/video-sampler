@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/video-sampler.svg)](https://img.shields.io/pypi/dm/video-sampler.svg)
 
-Video sampler allows you to efficiently sample video frames.
+Video sampler allows you to efficiently sample video frames and summarise the videos.
 Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
 **Use case:** for sampling videos for later annotations used in machine learning.
@@ -28,6 +28,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
     - [Basic usage](#basic-usage)
       - [YT-DLP integration plugin](#yt-dlp-integration-plugin)
         - [Extra YT-DLP options](#extra-yt-dlp-options)
+      - [OpenAI summary](#openai-summary)
       - [API examples](#api-examples)
     - [Advanced usage](#advanced-usage)
       - [Gating](#gating)
@@ -62,6 +63,7 @@ Documentation is available at [https://lemurpwned.github.io/video-sampler/](http
 - [x] Integrations
   - [x] YTDLP integration -- streams directly from [yt-dlp](http://github.com//yt-dlp/yt-dlp) queries,
         playlists or single videos
+  - [x] OpenAI multimodal models integration for video summaries
 
 ## Installation and Usage
 
@@ -143,6 +145,29 @@ or this will skip all shorts:
 
 ```bash
 ... --ytdlp --yt-extra-args '--match-filter "original_url!*=/shorts/ & url!*=/shorts/"
+```
+
+#### OpenAI summary
+
+To use the OpenAI multimodal models integration, you need to install `openai` first `pip install openai`.
+Then, you simply add `--summary-interval` to the command and the url.
+
+In the example, I'm using [llamafile](https://github.com/Mozilla-Ocho/llamafile) LLAVA model to summarize the video every 50 frames. If you want to use the OpenAI multimodal models, you need to export `OPENAI_API_KEY=your_api_key` first.
+
+To replicate, run LLAVA model locally and set the `summary-url` to the address of the model. Specify the `summary-interval` to the minimal interval in seconds between frames that are to be summarised/described.
+
+```bash
+video_sampler hash ./videos/FatCat.mp4 ./output-frames/ --hash-size 3 --buffer-size 20 --summary-url "http://localhost:8080" --summary-interval 50
+```
+
+Some of the frames, based on the interval specified, will be summarised by the model and the result will saved in the `./output-frames/summaries.json` folder. The frames that are summarised come after the sampling and gating process happens, and only those frames that pass both stages are viable for summarisation.
+
+```jsonl
+summaries.jsonl
+---
+{"time": 56.087, "summary": "A cat is walking through a field of tall grass, with its head down and ears back. The cat appears to be looking for something in the grass, possibly a mouse or another small creature. The field is covered in snow, adding a wintry atmosphere to the scene."}
+{"time": 110.087, "summary": "A dog is walking in the snow, with its head down, possibly sniffing the ground. The dog is the main focus of the image, and it appears to be a small animal. The snowy landscape is visible in the background, creating a serene and cold atmosphere."}
+{"time": 171.127, "summary": "The image features a group of animals, including a dog and a cat, standing on a beach near the ocean. The dog is positioned closer to the left side of the image, while the cat is located more towards the center. The scene is set against a beautiful backdrop of a blue sky and a vibrant green ocean. The animals appear to be enjoying their time on the beach, possibly taking a break from their daily activities."}
 ```
 
 #### API examples

@@ -35,7 +35,8 @@ class SamplerConfig:
                 the frame gate. Defaults to {"type": "pass"}.
         extractor_config (dict[str, Any], optional): Configuration options for
                 the extractor (keyword, audio). Defaults to None.
-
+        summary_config (dict[str, Any], optional): Configuration options for
+                the summary generator. Defaults to None.
     Methods:
         __str__() -> str:
             Returns a string representation of the configuration.
@@ -61,6 +62,7 @@ class SamplerConfig:
         }
     )
     extractor_config: dict[str, Any] = field(default_factory=dict)
+    summary_config: dict[str, Any] = field(default_factory=dict)
 
     def __str__(self) -> str:
         return str(asdict(self))
@@ -218,7 +220,7 @@ class GridBuffer(HashBuffer):
         self.max_hits = max_hits
         self.mosaic_buffer = {}
 
-    def __get_grid_hash(self, item: Image.Image) -> str:
+    def __get_grid_hash(self, item: Image.Image) -> Iterable[str]:
         """Compute grid hashes for a given image"""
         for x in range(self.grid_x):
             for y in range(self.grid_y):
@@ -418,8 +420,9 @@ class EntropyByffer(FrameBuffer):
         return self.sliding_top_k_buffer.get_buffer_state()
 
     def add(self, item: Image.Image, metadata: dict[str, Any]):
-        entropy = item.entropy()
-        return self.sliding_top_k_buffer.add(item, {**metadata, "index": -entropy})
+        return self.sliding_top_k_buffer.add(
+            item, {**metadata, "index": -item.entropy()}
+        )
 
     def final_flush(self) -> Iterable[tuple[Image.Image | None, dict]]:
         return self.sliding_top_k_buffer.final_flush()
