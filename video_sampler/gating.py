@@ -13,7 +13,11 @@ with contextlib.suppress(ImportError):
     import open_clip
     import torch
 
-    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+    DEVICE = "cpu"
+    if torch.backends.cuda.is_built():
+        DEVICE = "cuda"
+    if torch.backends.mps.is_built():
+        DEVICE = "mps"
 
 
 def create_model(model_name: str):
