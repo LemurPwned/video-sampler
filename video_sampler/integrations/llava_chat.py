@@ -101,6 +101,7 @@ class ImageDescription:
         b64image = encode_image(resize_image(image))
 
         json_body = {
+            "model": "LLaVA_CPP",
             "stream": False,
             "n_predict": 300,
             "temperature": 0.1,
@@ -125,17 +126,16 @@ class ImageDescription:
             "stop": ["</s>", "Llama:", "User:"],
             "prompt": self.get_prompt(),
         }
-
         response = self.session.post(
-            f"{self.url}/completion",
+            f"{self.url}/completions",
             json=json_body,
             headers=self.headers,
             stream=False,
         )
         if response.status_code != 200:
-            print(f"Failed to summarise image: {response.content}")
+            print(f"Failed to summarise image: {response}")
             return None
-        return response.json()["content"].strip()
+        return response.json()["choices"][0]["text"].strip()
 
 
 class VideoSummary(PromptClient):
