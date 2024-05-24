@@ -14,7 +14,7 @@ with contextlib.suppress(ImportError):
     import torch
 
     DEVICE = "cpu"
-    if torch.backends.cuda.is_available():
+    if torch.cuda.is_available():
         DEVICE = "cuda"
     if torch.backends.mps.is_available():
         DEVICE = "mps"
