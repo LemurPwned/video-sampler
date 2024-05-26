@@ -2,7 +2,7 @@
 name = "video_sampler"
 description = "Video Sampler -- sample frames from a video file"
 url = "https://github.com/LemurPwned/video-sampler"
-version = "0.10.0"
+version = "0.10.2"
 authors = [
     { name = "LemurPwned", email = "lemurpwned@gmail.com" }
 ]
@@ -58,10 +58,17 @@ dev = [
     "pre-commit",
     "bump2version",
     "tabulate",
+    "pytest"
 ]
-test = [
-  "pytest"
+all = [
+  "open_clip_torch >= 2.23.0",
+  "torch >= 2.1.0",
+  "yt-dlp >= 2023.12.30",
+  "spacy >= 3.7.0",
+  "pysrt >= 1.1.2",
+  "openai >= 1.16.2",
 ]
+
 [build-system]
 build-backend = "flit_core.buildapi"
 requires = ["flit_core >=3.2,<4"]
