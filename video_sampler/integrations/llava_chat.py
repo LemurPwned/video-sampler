@@ -149,10 +149,7 @@ class ImageDescriptionDefault(ImageDescription):
             return res["choices"][0]["text"].strip()
         elif "content" in res:
             return res["content"].strip()
-        raise ValueError(
-            f"Failed to summarise image: unknown response format: {res}"
-        )
-        )
+        raise ValueError(f"Failed to summarise image: unknown response format: {res}")
 
 
 class ImageDescriptionOpenAI(ImageDescription):
