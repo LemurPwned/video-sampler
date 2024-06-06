@@ -4,7 +4,7 @@
 
 Changelog for the `video-sampler`.
 
-### 0.11.0
+### 0.10.0
 
 - added summary creation from sampled frames
 

@@ -11,10 +11,10 @@
 [![License](https://img.shields.io/github/license/LemurPwned/video-sampler)](https://github.com/LemurPwned/video-sampler/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/video-sampler.svg)](https://img.shields.io/pypi/dm/video-sampler.svg)
 
-Video sampler allows you to efficiently sample video frames and summarise the videos.
+Video sampler allows you to efficiently sample video frames and summarize the videos.
 Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
-**Use case:** for sampling videos for later annotations used in machine learning.
+**Use case:** video data collection for machine learning, video summarisation, video frame analysis.
 
 </div>
 
@@ -68,10 +68,24 @@ Documentation is available at [https://lemurpwned.github.io/video-sampler/](http
 ## Installation and Usage
 
 ```bash
-pip install -U video_sampler
+python3 -m pip install -U video_sampler
 ```
 
-then you can run
+If you intend to use all the integrations, you need can with all dependencies:
+
+```bash
+python3 -m pip install -U video_sampler[all]
+```
+
+Available extras are:
+
+- `yt-dlp` - for YT-DLP integration
+- `clip` - for CLIP models integration
+- `language` - for language capture
+- `all` - for all dependencies
+- `dev` - for development dependencies
+
+To see all available options, run:
 
 ```bash
 python3 -m video_sampler --help
@@ -152,15 +166,22 @@ or this will skip all shorts:
 To use the OpenAI multimodal models integration, you need to install `openai` first `pip install openai`.
 Then, you simply add `--summary-interval` to the command and the url.
 
-In the example, I'm using [llamafile](https://github.com/Mozilla-Ocho/llamafile) LLAVA model to summarize the video every 50 frames. If you want to use the OpenAI multimodal models, you need to export `OPENAI_API_KEY=your_api_key` first.
+In the example, I'm using [llamafile](https://github.com/Mozilla-Ocho/llamafile) LLAVA model to summarize the video every 50 frames. If you want to use the OpenAI multimodal models, you need to export `OPENAI_API_KEY=your_api_key` first. The format should also work with default OpenAI stuff.
 
 To replicate, run LLAVA model locally and set the `summary-url` to the address of the model. Specify the `summary-interval` to the minimal interval in seconds between frames that are to be summarised/described.
 
 ```bash
-video_sampler hash ./videos/FatCat.mp4 ./output-frames/ --hash-size 3 --buffer-size 20 --summary-url "http://localhost:8080" --summary-interval 50
+video_sampler hash ./videos/FatCat.mp4 ./output-frames/ --hash-size 3 --buffer-size 20 --summary-url "http://localhost:8080/completion" --summary-interval 50
 ```
 
-Some of the frames, based on the interval specified, will be summarised by the model and the result will saved in the `./output-frames/summaries.json` folder. The frames that are summarised come after the sampling and gating process happens, and only those frames that pass both stages are viable for summarisation.
+Supported env in case you need those:
+
+- `OPENAI_API_KEY` - OpenAI API key
+- `OPENAI_MODEL` - OpenAI model name
+
+Confirmed that you can make it work with e.g. LM Studio, but you need to adjust the `summary-url` to the correct address, e.g. it might be `"http://localhost:8080/completions"`. Similar if you want to use the OpenAI API.
+
+Some frames, based on the interval specified, will be summarised by the model and the result will saved in the `./output-frames/summaries.json` folder. The frames that are summarised come after the sampling and gating process happens, and only those frames that pass both stages are viable for summarisation.
 
 ```jsonl
 summaries.jsonl
