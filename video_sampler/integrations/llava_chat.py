@@ -14,7 +14,8 @@ from PIL import Image
 
 def resize_image(image: Image, max_side: int = 512):
     """
-    Resize the image to max_side if any of the sides is greater than max_side
+    Resize the image to max_side if any of the sides is greater than max_side.
+    If max_side is None, the image is returned as is.
     """
     # get the image shape
     if max_side is None:
@@ -45,23 +46,7 @@ def encode_image(image: Image):
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
 
-class PromptClient:
-    def __init__(self, url: str) -> None:
-        self.client = OpenAI(
-            base_url=url,
-            api_key=os.getenv("OPENAI_API_KEY", "sk-no-key-required"),
-        )
-        self.base_settings = {"cache_prompt": True, "temperature": 0.01}
-        self.headers = {
-            "accept-language": "en-US,en",
-            "content-type": "application/json",
-        }
-
-    def get_prompt(self):
-        raise NotImplementedError
-
-
-class ImageDescription(PromptClient):
+class ImageDescription:
     """A client to interact with the image description API.
     The API is used to generate short phrases that describe an image.
 
@@ -162,7 +147,11 @@ class ImageDescriptionDefault(ImageDescription):
         res = response.json()
         if "choices" in res:
             return res["choices"][0]["text"].strip()
-        return res["content"].strip()
+        elif "content" in res:
+            return res["content"].strip()
+        raise ValueError(
+            "Failed to summarise image:" f" unknown response format: {res}"
+        )
 
 
 class ImageDescriptionOpenAI(ImageDescription):
@@ -199,7 +188,7 @@ class ImageDescriptionOpenAI(ImageDescription):
         return completion["choices"][0]["message"]["content"]
 
 
-class VideoSummary(PromptClient):
+class VideoSummary:
     """A client to interact with the LLaMA video summarisation API.
     The API is used to generate a summary of a video based on image descriptions.
 

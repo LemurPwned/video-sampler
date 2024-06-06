@@ -14,8 +14,10 @@ with contextlib.suppress(ImportError):
     import torch
 
     DEVICE = "cpu"
+    # Check if CUDA is available and set the device to 'cuda'
     if torch.cuda.is_available():
         DEVICE = "cuda"
+    # Check if MPS (Metal Performance Shaders) is available and set the device to 'mps'
     if torch.backends.mps.is_available():
         DEVICE = "mps"
 
