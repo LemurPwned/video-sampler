@@ -17,6 +17,8 @@ def resize_image(image: Image, max_side: int = 512):
     Resize the image to max_side if any of the sides is greater than max_side
     """
     # get the image shape
+    if max_side is None:
+        return image
     width, height = image.size
     if max(width, height) > max_side:
         # resize the image to max_side
@@ -59,7 +61,31 @@ class PromptClient:
         raise NotImplementedError
 
 
-class ImageDescription:
+class ImageDescription(PromptClient):
+    """A client to interact with the image description API.
+    The API is used to generate short phrases that describe an image.
+
+    Methods:
+        summarise_image(image: Image) -> str:
+            Summarise the image using the LLaMA API.
+    """
+
+    def __init__(self, url: str) -> None:
+        if url is None:
+            url = "http://localhost:8080/"
+        self.url = url
+
+    def summarise_image(self, image: Image) -> str:
+        """Summarise the image
+        Args:
+            image (Image): The image to summarise.
+        Returns:
+            str: The description of the image.
+        """
+        ...
+
+
+class ImageDescriptionDefault(ImageDescription):
     """A client to interact with the LLaMA image description API.
     The API is used to generate short phrases that describe an image.
 
@@ -68,15 +94,13 @@ class ImageDescription:
             Summarise the image using the LLaMA API.
     """
 
-    def __init__(self, url: str = "http://localhost:8080"):
+    def __init__(self, url: str = "http://localhost:8080/completion"):
         """Initialise the client with the base URL of the LLaMA API.
         Args:
             url (str): The base URL of the LLaMA API.
         """
         """TODO: migrate to OpenAI API when available"""
-        if url is None:
-            url = "http://localhost:8080/"
-        self.url = url
+        super().__init__(url)
         self.headers = {
             "accept-language": "en-GB,en",
             "content-type": "application/json",
@@ -91,7 +115,7 @@ class ImageDescription:
         \nIMAGE:[img-10]
         \nASSISTANT:"""
 
-    def summarise_image(self, image: Image):
+    def summarise_image(self, image: Image) -> str:
         """Summarise the image using the LLaMA API.
         Args:
             image (Image): The image to summarise.
@@ -101,9 +125,9 @@ class ImageDescription:
         b64image = encode_image(resize_image(image))
 
         json_body = {
-            "model": "LLaVA_CPP",
+            "model": os.getenv("OPENAI_MODEL", "LLaVA_CPP"),
             "stream": False,
-            "n_predict": 300,
+            "n_predict": 1000,
             "temperature": 0.1,
             "repeat_last_n": 78,
             "image_data": [{"data": b64image, "id": 10}],
@@ -121,13 +145,13 @@ class ImageDescription:
             "grammar": "",
             "n_probs": 0,
             "min_keep": 0,
-            "api_key": "",
+            "api_key": os.getenv("OPENAI_API_KEY", ""),
             "slot_id": 0,
             "stop": ["</s>", "Llama:", "User:"],
             "prompt": self.get_prompt(),
         }
         response = self.session.post(
-            f"{self.url}/completions",
+            f"{self.url}",
             json=json_body,
             headers=self.headers,
             stream=False,
@@ -135,7 +159,44 @@ class ImageDescription:
         if response.status_code != 200:
             print(f"Failed to summarise image: {response}")
             return None
-        return response.json()["choices"][0]["text"].strip()
+        res = response.json()
+        if "choices" in res:
+            return res["choices"][0]["text"].strip()
+        return res["content"].strip()
+
+
+class ImageDescriptionOpenAI(ImageDescription):
+    def __init__(self, url: str = "http://localhost:8080"):
+        super().__init__(url)
+        if api_key := os.getenv("OPENAI_API_KEY"):
+            self.headers["Authorization"] = f"Bearer {api_key}"
+        self.client = OpenAI(base_url=self.url, api_key=api_key)
+
+    def summarise_image(self, image: Image) -> str:
+        b64image = encode_image(resize_image(image))
+        completion = self.client.chat.completions.create(
+            model=os.getenv("OPENAI_MODEL", "LLaVA_CPP"),
+            messages=[
+                {
+                    "role": "system",
+                    "content": "This is a chat between a user and an assistant. "
+                    "The assistant is helping the user to describe an image.",
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "What’s in this image?"},
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:image/jpeg;base64,{b64image}"},
+                        },
+                    ],
+                },
+            ],
+            max_tokens=300,
+            stream=False,
+        )
+        return completion["choices"][0]["message"]["content"]
 
 
 class VideoSummary(PromptClient):
