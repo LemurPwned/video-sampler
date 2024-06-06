@@ -691,7 +691,31 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#video_sampler.integrations.llava_chat.ImageDescription.__init__" class="md-nav__link">
+  <a href="#video_sampler.integrations.llava_chat.ImageDescription.summarise_image" class="md-nav__link">
+    <span class="md-ellipsis">
+      summarise_image
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#video_sampler.integrations.llava_chat.ImageDescriptionDefault" class="md-nav__link">
+    <span class="md-ellipsis">
+      ImageDescriptionDefault
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ImageDescriptionDefault">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#video_sampler.integrations.llava_chat.ImageDescriptionDefault.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       __init__
     </span>
@@ -700,7 +724,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#video_sampler.integrations.llava_chat.ImageDescription.summarise_image" class="md-nav__link">
+  <a href="#video_sampler.integrations.llava_chat.ImageDescriptionDefault.summarise_image" class="md-nav__link">
     <span class="md-ellipsis">
       summarise_image
     </span>
@@ -816,7 +840,7 @@
   <div class="doc doc-contents ">
 
   
-      <p>A client to interact with the LLaMA image description API.
+      <p>A client to interact with the image description API.
 The API is used to generate short phrases that describe an image.</p>
 
 
@@ -844,19 +868,160 @@ Summarise the image using the LLaMA API.</p>
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageDescription</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A client to interact with the image description API.</span>
+<span class="sd">    The API is used to generate short phrases that describe an image.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        summarise_image(image: Image) -&gt; str:</span>
+<span class="sd">            Summarise the image using the LLaMA API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+
+    <span class="k">def</span> <span class="nf">summarise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Summarise the image</span>
+<span class="sd">        Args:</span>
+<span class="sd">            image (Image): The image to summarise.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The description of the image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="video_sampler.integrations.llava_chat.ImageDescription.summarise_image" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">summarise_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Summarise the image
+Args:
+    image (Image): The image to summarise.
+Returns:
+    str: The description of the image.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summarise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarise the image</span>
+<span class="sd">    Args:</span>
+<span class="sd">        image (Image): The image to summarise.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The description of the image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="video_sampler.integrations.llava_chat.ImageDescriptionDefault" class="doc doc-heading">
+          <code>ImageDescriptionDefault</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="video_sampler.integrations.llava_chat.ImageDescription" href="#video_sampler.integrations.llava_chat.ImageDescription">ImageDescription</a></code></p>
+
+  
+      <p>A client to interact with the LLaMA image description API.
+The API is used to generate short phrases that describe an image.</p>
+
+
+
+  <p><strong>Methods:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td><code><a class="autorefs autorefs-internal" title="video_sampler.integrations.llava_chat.ImageDescriptionDefault.summarise_image" href="#video_sampler.integrations.llava_chat.ImageDescriptionDefault.summarise_image">summarise_image</a></code></td>
+            <td>
+              <div class="doc-md-description">
+                <p>Image) -&gt; str:
+Summarise the image using the LLaMA API.</p>
+              </div>
+            </td>
+          </tr>
+    </tbody>
+  </table>
+
+            <details class="quote">
+              <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 73</span>
 <span class="normal"> 74</span>
 <span class="normal"> 75</span>
 <span class="normal"> 76</span>
@@ -918,7 +1083,24 @@ Summarise the image using the LLaMA API.</p>
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
-<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageDescription</span><span class="p">:</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ImageDescriptionDefault</span><span class="p">(</span><span class="n">ImageDescription</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A client to interact with the LLaMA image description API.</span>
 <span class="sd">    The API is used to generate short phrases that describe an image.</span>
 
@@ -927,19 +1109,19 @@ Summarise the image using the LLaMA API.</p>
 <span class="sd">            Summarise the image using the LLaMA API.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/completion&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise the client with the base URL of the LLaMA API.</span>
 <span class="sd">        Args:</span>
 <span class="sd">            url (str): The base URL of the LLaMA API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;TODO: migrate to OpenAI API when available&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;accept-language&quot;</span><span class="p">:</span> <span class="s2">&quot;en-GB,en&quot;</span><span class="p">,</span>
             <span class="s2">&quot;content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
         <span class="p">}</span>
+        <span class="k">if</span> <span class="n">api_key</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">get_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -948,7 +1130,7 @@ Summarise the image using the LLaMA API.</p>
 <span class="s2">        </span><span class="se">\n</span><span class="s2">IMAGE:[img-10]</span>
 <span class="s2">        </span><span class="se">\n</span><span class="s2">ASSISTANT:&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">summarise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">summarise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Summarise the image using the LLaMA API.</span>
 <span class="sd">        Args:</span>
 <span class="sd">            image (Image): The image to summarise.</span>
@@ -958,8 +1140,9 @@ Summarise the image using the LLaMA API.</p>
         <span class="n">b64image</span> <span class="o">=</span> <span class="n">encode_image</span><span class="p">(</span><span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
 
         <span class="n">json_body</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_MODEL&quot;</span><span class="p">,</span> <span class="s2">&quot;LLaVA_CPP&quot;</span><span class="p">),</span>
             <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-            <span class="s2">&quot;n_predict&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+            <span class="s2">&quot;n_predict&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
             <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
             <span class="s2">&quot;repeat_last_n&quot;</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span>
             <span class="s2">&quot;image_data&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">b64image</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}],</span>
@@ -977,22 +1160,26 @@ Summarise the image using the LLaMA API.</p>
             <span class="s2">&quot;grammar&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;n_probs&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s2">&quot;min_keep&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
             <span class="s2">&quot;slot_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&lt;/s&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;Llama:&quot;</span><span class="p">,</span> <span class="s2">&quot;User:&quot;</span><span class="p">],</span>
             <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_prompt</span><span class="p">(),</span>
         <span class="p">}</span>
-
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">/completion&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="n">json_body</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
             <span class="n">stream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to summarise image: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to summarise image: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;choices&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s2">&quot;content&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to summarise image: unknown response format: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
 
@@ -1013,8 +1200,8 @@ Summarise the image using the LLaMA API.</p>
 
 
 
-<h3 id="video_sampler.integrations.llava_chat.ImageDescription.__init__" class="doc doc-heading">
-          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8080&#39;</span><span class="p">)</span></code>
+<h3 id="video_sampler.integrations.llava_chat.ImageDescriptionDefault.__init__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;http://localhost:8080/completion&#39;</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1027,32 +1214,32 @@ Args:
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080&quot;</span><span class="p">):</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/completion&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the client with the base URL of the LLaMA API.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        url (str): The base URL of the LLaMA API.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;TODO: migrate to OpenAI API when available&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;accept-language&quot;</span><span class="p">:</span> <span class="s2">&quot;en-GB,en&quot;</span><span class="p">,</span>
         <span class="s2">&quot;content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
     <span class="p">}</span>
+    <span class="k">if</span> <span class="n">api_key</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
           </details>
@@ -1065,7 +1252,7 @@ Args:
 
 
 
-<h3 id="video_sampler.integrations.llava_chat.ImageDescription.summarise_image" class="doc doc-heading">
+<h3 id="video_sampler.integrations.llava_chat.ImageDescriptionDefault.summarise_image" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">summarise_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span></code>
 
 </h3>
@@ -1081,19 +1268,7 @@ Returns:
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
@@ -1125,7 +1300,24 @@ Returns:
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
-<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summarise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summarise_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarise the image using the LLaMA API.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        image (Image): The image to summarise.</span>
@@ -1135,8 +1327,9 @@ Returns:
     <span class="n">b64image</span> <span class="o">=</span> <span class="n">encode_image</span><span class="p">(</span><span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
 
     <span class="n">json_body</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_MODEL&quot;</span><span class="p">,</span> <span class="s2">&quot;LLaVA_CPP&quot;</span><span class="p">),</span>
         <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;n_predict&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+        <span class="s2">&quot;n_predict&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
         <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
         <span class="s2">&quot;repeat_last_n&quot;</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span>
         <span class="s2">&quot;image_data&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">b64image</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}],</span>
@@ -1154,22 +1347,26 @@ Returns:
         <span class="s2">&quot;grammar&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="s2">&quot;n_probs&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s2">&quot;min_keep&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
         <span class="s2">&quot;slot_id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;&lt;/s&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;Llama:&quot;</span><span class="p">,</span> <span class="s2">&quot;User:&quot;</span><span class="p">],</span>
         <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_prompt</span><span class="p">(),</span>
     <span class="p">}</span>
-
     <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">/completion&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">json</span><span class="o">=</span><span class="n">json_body</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
         <span class="n">stream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to summarise image: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to summarise image: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">&quot;choices&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="s2">&quot;content&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to summarise image: unknown response format: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -1197,8 +1394,6 @@ Returns:
 
 
   <div class="doc doc-contents ">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="video_sampler.integrations.llava_chat.PromptClient">PromptClient</span></code></p>
 
   
       <p>A client to interact with the LLaMA video summarisation API.
@@ -1229,45 +1424,45 @@ Summarise the video using the LLaMA API.</p>
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
-<span class="normal">157</span>
-<span class="normal">158</span>
-<span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">VideoSummary</span><span class="p">(</span><span class="n">PromptClient</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">VideoSummary</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A client to interact with the LLaMA video summarisation API.</span>
 <span class="sd">    The API is used to generate a summary of a video based on image descriptions.</span>
 
@@ -1340,13 +1535,13 @@ Args:
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/v1&quot;</span><span class="p">):</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080/v1&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialise the client with the base URL of the LLaMA API.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        url (str): The base URL of the LLaMA API.&quot;&quot;&quot;</span>
@@ -1380,24 +1575,24 @@ Returns:
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">159</span>
-<span class="normal">160</span>
-<span class="normal">161</span>
-<span class="normal">162</span>
-<span class="normal">163</span>
-<span class="normal">164</span>
-<span class="normal">165</span>
-<span class="normal">166</span>
-<span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summarise_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_descriptions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">summarise_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_descriptions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarise the video using the LLaMA API.</span>
 <span class="sd">    Args:</span>
 <span class="sd">        image_descriptions (list[str]): The descriptions of the images in the video.</span>
@@ -1448,16 +1643,16 @@ Returns:
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
 <span class="normal">41</span>
-<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">encode_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">encode_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the image to base64</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1486,12 +1681,12 @@ Returns:
 
   <div class="doc doc-contents ">
   
-      <p>Resize the image to max_side if any of the sides is greater than max_side</p>
+      <p>Resize the image to max_side if any of the sides is greater than max_side.
+If max_side is None, the image is returned as is.</p>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/integrations/llava_chat.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
-<span class="normal">15</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
@@ -1506,11 +1701,18 @@ Returns:
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">,</span> <span class="n">max_side</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">):</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="p">,</span> <span class="n">max_side</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Resize the image to max_side if any of the sides is greater than max_side</span>
+<span class="sd">    Resize the image to max_side if any of the sides is greater than max_side.</span>
+<span class="sd">    If max_side is None, the image is returned as is.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># get the image shape</span>
+    <span class="k">if</span> <span class="n">max_side</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">image</span>
     <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
     <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_side</span><span class="p">:</span>
         <span class="c1"># resize the image to max_side</span>
@@ -1558,7 +1760,7 @@ Returns:
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 6, 2024</span>
   </span>
 
     
@@ -1568,7 +1770,7 @@ Returns:
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 6, 2024</span>
   </span>
 
     
