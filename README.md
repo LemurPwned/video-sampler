@@ -14,7 +14,7 @@
 Video sampler allows you to efficiently sample video frames and summarize the videos.
 Currently, it uses keyframe decoding, frame interval gating and perceptual hashing to reduce duplicated samples.
 
-**Use case:** for sampling videos for later annotations used in machine learning.
+**Use case:** video data collection for machine learning, video summarisation, video frame analysis.
 
 </div>
 
@@ -68,10 +68,24 @@ Documentation is available at [https://lemurpwned.github.io/video-sampler/](http
 ## Installation and Usage
 
 ```bash
-pip install -U video_sampler
+python3 -m pip install -U video_sampler
 ```
 
-then you can run
+If you intend to use all the integrations, you need can with all dependencies:
+
+```bash
+python3 -m pip install -U video_sampler[all]
+```
+
+Available extras are:
+
+- `yt-dlp` - for YT-DLP integration
+- `clip` - for CLIP models integration
+- `language` - for language capture
+- `all` - for all dependencies
+- `dev` - for development dependencies
+
+To see all available options, run:
 
 ```bash
 python3 -m video_sampler --help
