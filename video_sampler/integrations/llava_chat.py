@@ -150,7 +150,8 @@ class ImageDescriptionDefault(ImageDescription):
         elif "content" in res:
             return res["content"].strip()
         raise ValueError(
-            "Failed to summarise image:" f" unknown response format: {res}"
+            f"Failed to summarise image: unknown response format: {res}"
+        )
         )
 
 
