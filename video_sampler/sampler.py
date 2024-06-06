@@ -245,13 +245,15 @@ class Worker:
         if self.cfg.summary_config:
             from concurrent.futures import ThreadPoolExecutor
 
-            from .integrations.llava_chat import ImageDescription
+            from .integrations.llava_chat import ImageDescriptionDefault
 
             console.print("Initialising summary pool...", style="bold yellow")
             self.pool = ThreadPoolExecutor(
                 max_workers=self.cfg.summary_config.get("max_workers", 2)
             )
-            self.desc_client = ImageDescription(url=self.cfg.summary_config.get("url"))
+            self.desc_client = ImageDescriptionDefault(
+                url=self.cfg.summary_config.get("url")
+            )
 
     def collect_summaries(self, savepath: str):
         if not self.pool:
