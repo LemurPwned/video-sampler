@@ -2,7 +2,7 @@ import glob
 import os
 import warnings
 from collections.abc import Generator, Iterable
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from tqdm import tqdm
 
@@ -12,7 +12,7 @@ from .utils import slugify
 
 
 def process_video(
-    video_info: str | tuple,
+    video_info: str | tuple[str, str, str | None],
     output_path: str,
     is_url: bool,
     worker_cfg: SamplerConfig,
@@ -28,22 +28,26 @@ def process_video(
         is_url (bool): Flag to indicate if the video is a URL.
     """
     worker = Worker(cfg=worker_cfg, sampler_cls=sampler_cls)
-    if is_url:
-        video_title, video_url, subs = video_info
-        video_filename = slugify(video_title)
-        video_subpath = os.path.join(output_path, video_filename)
-        worker.launch(
-            video_path=video_url,
-            output_path=video_subpath,
-            pretty_video_name=video_filename,
-            subs=subs,
-        )
-    else:
-        video = video_info
-        video_subpath = os.path.join(output_path, os.path.basename(video))
-        worker.launch(
-            video_path=video,
-            output_path=video_subpath,
+    try:
+        if is_url:
+            video_title, video_url, subs = video_info
+            video_filename = slugify(video_title)
+            video_subpath = os.path.join(output_path, video_filename)
+            worker.launch(
+                video_path=video_url,
+                output_path=video_subpath,
+                pretty_video_name=video_filename,
+                subs=subs,
+            )
+        else:
+            video_subpath = os.path.join(output_path, os.path.basename(video_info))
+            worker.launch(
+                video_path=video_info,
+                output_path=video_subpath,
+            )
+    except Exception as e:
+        console.print(
+            f"Error processing video {video_info}: {e}", style=f"bold {Color.red.value}"
         )
 
 
@@ -94,7 +98,7 @@ def parallel_video_processing(
                         sampler_cls=sampler_cls,
                     )
                 )
-            for future in tqdm(futures, desc="Processing videos..."):
+            for future in tqdm(as_completed(futures), desc="Processing videos..."):
                 future.result()
 
 

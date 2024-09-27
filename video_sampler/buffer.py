@@ -9,7 +9,7 @@ from typing import Any
 import yaml
 from imagehash import average_hash, phash
 from PIL import Image
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .logging import Color, console
 
@@ -44,9 +44,9 @@ class SamplerConfig(BaseModel):
 
     """
 
-    min_frame_interval_sec: float = 1
+    min_frame_interval_sec: float = Field(default=1, ge=0)
     keyframes_only: bool = True
-    queue_wait: float = 0.1
+    queue_wait: float = Field(default=0.1, ge=1e-3)
     debug: bool = False
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
