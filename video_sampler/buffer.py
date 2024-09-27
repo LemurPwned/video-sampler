@@ -3,17 +3,18 @@ import heapq
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from collections.abc import Iterable
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, field
 from typing import Any
 
+import yaml
 from imagehash import average_hash, phash
 from PIL import Image
+from pydantic import BaseModel
 
 from .logging import Color, console
 
 
-@dataclass
-class SamplerConfig:
+class SamplerConfig(BaseModel):
     """
     Configuration options for the video sampler.
 
@@ -67,6 +68,12 @@ class SamplerConfig:
 
     def __str__(self) -> str:
         return str(asdict(self))
+
+    @classmethod
+    def from_yaml(cls, file_path: str) -> "SamplerConfig":
+        with open(file_path) as file:
+            data = yaml.safe_load(file)
+        return cls(**data)
 
 
 class FrameBuffer(ABC):

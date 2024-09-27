@@ -93,17 +93,21 @@ To see all available options, run:
 python3 -m video_sampler --help
 ```
 
-or simply
-
-```bash
-video_sampler --help
-```
-
 ### Basic usage
+
+Plain:
 
 ```bash
 python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
+
+From the config file:
+
+```bash
+python3 -m video_sampler config ./configs/hash_base.yaml /my-video-folder/ ./my-output-folder
+```
+
+You can set the number of workers to use with the `n_workers` parameter. The default is 1.
 
 #### YT-DLP integration plugin
 

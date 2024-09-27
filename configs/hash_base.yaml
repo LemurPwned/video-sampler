@@ -1,0 +1,15 @@
+min_frame_interval_sec: 3.0
+keyframes_only: true
+queue_wait: 0.1
+debug: false
+print_stats: false
+buffer_config:
+  type: hash
+  hash_size: 8
+  size: 15
+  debug: true
+gate_config:
+  type: pass
+extractor_config: {}
+summary_config: {}
+n_workers: 3

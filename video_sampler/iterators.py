@@ -64,7 +64,8 @@ def parallel_video_processing(
         worker_cfg (SamplerConfig): Configuration for the worker.
         n_workers (int): Number of workers to use.
     """
-
+    if n_workers == -1:
+        n_workers = None
     if n_workers is not None and n_workers == 1:
         for video in tqdm(video_iterable, desc="Processing videos..."):
             process_video(
@@ -75,9 +76,13 @@ def parallel_video_processing(
                 sampler_cls=sampler_cls,
             )
     else:
-        print(f"Using {n_workers} workers")
         futures = []
         with ProcessPoolExecutor(max_workers=n_workers) as executor:
+            console.print(
+                f"Using {executor._max_workers} workers",
+                style=f"bold {Color.green.value}",
+            )
+            executor._max_workers
             for video in video_iterable:
                 futures.append(
                     executor.submit(
