@@ -4,10 +4,12 @@ repo_name: LemurPwned/video-sampler
 
 hooks:
   - scripts/readme_copy.py
+  - scripts/cli_help.py
 
 nav:
   - Home: index.md
   - Code Reference: reference/
+  - CLI Reference: cli_help.md
 theme:
   name: material
   palette:
