@@ -4,6 +4,11 @@
 
 Changelog for the `video-sampler`.
 
+### 0.11.0
+
+- added multiprocessing over multiple videos in the folder
+- new cli command & support reading from `.yaml` config files
+
 ### 0.10.0
 
 - added summary creation from sampled frames

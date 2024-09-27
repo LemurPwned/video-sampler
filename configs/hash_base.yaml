@@ -1,0 +1,26 @@
+# Minimum time interval between processed frames (in seconds)
+min_frame_interval_sec: 3.0
+# Whether to process only keyframes (it's way faster than processing all frames)
+keyframes_only: true
+# Read interval while processing video (in seconds) (when there's no frame yielded, when to check again)
+queue_wait: 0.1
+debug: false
+# Whether to print stats
+print_stats: false
+# Buffer configuration
+buffer_config:
+  type: hash
+  # the smaller the hash size, the greater chance of collision
+  # smaller hashsets are faster to process & reduce frames more aggressively
+  hash_size: 8
+  # size of the collision buffer. The larger the buffer, the more in time back the
+  # hashes are stored.
+  size: 15
+  debug: true
+# Gating configuration
+gate_config:
+  type: pass
+extractor_config: {}
+summary_config: {}
+# Number of workers (separate processes) to process the frames. Determines level of parallelism
+n_workers: 3

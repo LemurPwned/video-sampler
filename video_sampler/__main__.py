@@ -123,6 +123,9 @@ def main(
     summary_interval: int = typer.Option(
         -1, help="Interval in seconds to summarise the video."
     ),
+    n_workers: int = typer.Option(
+        1, help="Number of workers to use. Default is 1. Use -1 to use all CPUs."
+    ),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
     extractor_cfg = {}
@@ -169,6 +172,7 @@ def main(
             }
         ),
         extractor_config=extractor_cfg,
+        n_workers=n_workers,
     )
     if ytdlp:
         video_path = _ytdlp_plugin(yt_extra_args, video_path, get_subs=subs_enable)
@@ -210,6 +214,9 @@ def buffer(
     yt_extra_args: str = typer.Option(
         None, help="Extra arguments for YouTube-DLP extraction in classic format."
     ),
+    n_workers: int = typer.Option(
+        1, help="Number of workers to use. Default is 1. Use -1 to use all CPUs."
+    ),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
     cfg = SamplerConfig(
@@ -239,6 +246,7 @@ def buffer(
                 "type": "pass",
             }
         ),
+        n_workers=n_workers,
     )
     if ytdlp:
         video_path = _ytdlp_plugin(yt_extra_args, video_path)
@@ -278,6 +286,9 @@ def clip(
     yt_extra_args: str = typer.Option(
         None, help="Extra arguments for YouTube-DLP extraction in classic format."
     ),
+    n_workers: int = typer.Option(
+        1, help="Number of workers to use. Default is 1. Use -1 to use all CPUs."
+    ),
 ):
     """Buffer type can be only of type hash when using CLIP gating."""
     if pos_samples is not None:
@@ -309,7 +320,32 @@ def clip(
             "model_name": model_name,
             "batch_size": batch_size,
         },
+        n_workers=n_workers,
     )
+    if ytdlp:
+        video_path = _ytdlp_plugin(yt_extra_args, video_path)
+    _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
+
+
+@app.command(name="config")
+def from_config(
+    config_path: str = typer.Argument(..., help="Path to the configuration file."),
+    video_path: str = typer.Argument(
+        ..., help="Path to the video file or a glob pattern."
+    ),
+    output_path: str = typer.Argument(..., help="Path to the output folder."),
+    ytdlp: bool = typer.Option(
+        False,
+        help="Use yt-dlp to download videos from urls. Default is False."
+        " Enabling this will treat video_path as an input to ytdlp command.",
+    ),
+    yt_extra_args: str = typer.Option(
+        None, help="Extra arguments for YouTube-DLP extraction in classic format."
+    ),
+):
+    """Create a sampler from a configuration file."""
+
+    cfg = SamplerConfig.from_yaml(config_path)
     if ytdlp:
         video_path = _ytdlp_plugin(yt_extra_args, video_path)
     _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)

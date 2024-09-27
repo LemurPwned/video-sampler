@@ -3,17 +3,18 @@ import heapq
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from collections.abc import Iterable
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, field
 from typing import Any
 
+import yaml
 from imagehash import average_hash, phash
 from PIL import Image
+from pydantic import BaseModel, Field
 
 from .logging import Color, console
 
 
-@dataclass
-class SamplerConfig:
+class SamplerConfig(BaseModel):
     """
     Configuration options for the video sampler.
 
@@ -43,9 +44,9 @@ class SamplerConfig:
 
     """
 
-    min_frame_interval_sec: float = 1
+    min_frame_interval_sec: float = Field(default=1, ge=0)
     keyframes_only: bool = True
-    queue_wait: float = 0.1
+    queue_wait: float = Field(default=0.1, ge=1e-3)
     debug: bool = False
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
@@ -63,9 +64,16 @@ class SamplerConfig:
     )
     extractor_config: dict[str, Any] = field(default_factory=dict)
     summary_config: dict[str, Any] = field(default_factory=dict)
+    n_workers: int = 1
 
     def __str__(self) -> str:
         return str(asdict(self))
+
+    @classmethod
+    def from_yaml(cls, file_path: str) -> "SamplerConfig":
+        with open(file_path) as file:
+            data = yaml.safe_load(file)
+        return cls(**data)
 
 
 class FrameBuffer(ABC):

@@ -67,14 +67,16 @@ Documentation is available at [https://lemurpwned.github.io/video-sampler/](http
 
 ## Installation and Usage
 
-```bash
-python3 -m pip install -U video_sampler
-```
-
-If you intend to use all the integrations, you need can with all dependencies:
+If you intend to use all the integrations, you need all the dependencies:
 
 ```bash
 python3 -m pip install -U video_sampler[all]
+```
+
+for minimalist no-cli usage install:
+
+```bash
+python3 -m pip install -U video_sampler
 ```
 
 Available extras are:
@@ -91,17 +93,21 @@ To see all available options, run:
 python3 -m video_sampler --help
 ```
 
-or simply
-
-```bash
-video_sampler --help
-```
-
 ### Basic usage
+
+Plain:
 
 ```bash
 python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
+
+From the config file:
+
+```bash
+python3 -m video_sampler config ./configs/hash_base.yaml /my-video-folder/ ./my-output-folder
+```
+
+You can set the number of workers to use with the `n_workers` parameter. The default is 1.
 
 #### YT-DLP integration plugin
 
