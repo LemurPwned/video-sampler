@@ -67,14 +67,16 @@ Documentation is available at [https://lemurpwned.github.io/video-sampler/](http
 
 ## Installation and Usage
 
-```bash
-python3 -m pip install -U video_sampler
-```
-
-If you intend to use all the integrations, you need can with all dependencies:
+If you intend to use all the integrations, you need all dependencies:
 
 ```bash
 python3 -m pip install -U video_sampler[all]
+```
+
+for minimalist no-cli usage install:
+
+```bash
+python3 -m pip install -U video_sampler
 ```
 
 Available extras are:

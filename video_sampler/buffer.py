@@ -63,6 +63,7 @@ class SamplerConfig:
     )
     extractor_config: dict[str, Any] = field(default_factory=dict)
     summary_config: dict[str, Any] = field(default_factory=dict)
+    n_workers: int = 1
 
     def __str__(self) -> str:
         return str(asdict(self))
