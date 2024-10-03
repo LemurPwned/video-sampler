@@ -55,7 +55,10 @@ class KeywordExtractor:
     """
 
     def __init__(self, keywords: list[str]) -> None:
-        import spacy
+        try:
+            import spacy
+        except ImportError:
+            raise ImportError("To use this feature install install spacy by 'pip install spacy'")
 
         self.keywords = keywords
         self.nlp = spacy.load("en_core_web_sm", disable=["parser", "ner", "textcat"])
