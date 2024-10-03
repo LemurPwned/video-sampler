@@ -100,21 +100,13 @@ class VideoSampler:
                 stream.codec_context.skip_frame = "NONKEY"
             prev_time = -10
             
-            # Get processing interval from config and validate
-            start_frame = getattr(self.cfg, 'start_frame', 0)
-            if not isinstance(start_frame, int):
-                raise ValueError(f"Invalid start_frame: {start_frame}. Must be an integer")
-            if start_frame < 0:
-                raise ValueError(f"Invalid start_frame: {start_frame}. Must be greater than or equal to 0")
-            end_frame = getattr(self.cfg, 'end_frame', None)
-            if end_frame is not None:
-                if not isinstance(end_frame, int):
-                    raise ValueError(f"Invalid end_frame: {end_frame}. Must be an integer")
-                if end_frame <= start_frame:
-                    raise ValueError(f"Invalid end_frame: {end_frame}. Must be greater than start_frame")
+            # Confirm end_frame is greater than start_frame
+            if self.cfg.end_frame is not None:
+                if self.cfg.end_frame <= self.cfg.start_frame:
+                    raise ValueError(f"Invalid end_frame: {self.cfg.end_frame}. Must be greater than start_frame")
             
             # Seek the starting point of the processing interval
-            stream.seek(start_frame)
+            stream.seek(self.cfg.start_frame)
             
             for frame in container.decode(stream):
                 if frame is None:
@@ -123,7 +115,7 @@ class VideoSampler:
                 frame_indx = frame.index
                 
                 # Break if we've reached the ending point of the processing interval
-                if end_frame is not None and frame_indx >= end_frame:
+                if self.cfg.end_frame is not None and frame_indx >= self.cfg.end_frame:
                     break
                 try:
                     ftime = frame.time
