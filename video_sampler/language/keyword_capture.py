@@ -1,7 +1,6 @@
 from collections import namedtuple
 from collections.abc import Iterable
 
-import pysrt
 import requests
 from requests.exceptions import RequestException
 
@@ -26,6 +25,11 @@ def download_sub(sub_url: str, max_retries: int = 2):
 
 def parse_srt_subtitle(srt_content):
     """Parse a SRT subtitle file to a list of subtitle segments."""
+    try:
+        import pysrt
+    except ImportError:
+        raise ImportError("To use this feature install pysrt by 'pip install pysrt'")
+
     subtitle_list = []
     if not srt_content:
         return subtitle_list
