@@ -25,6 +25,10 @@ class SamplerConfig(BaseModel):
             sample only keyframes. Defaults to True.
         queue_wait (float, optional): The time to wait between checking
             the frame queue in seconds. Defaults to 0.1.
+        start_frame (int, optional): The starting frame index for processing.
+            Defaults to 0.
+        end_frame (int, optional): The ending frame index for processing.
+            Defaults to None.
         debug (bool, optional): Flag indicating whether to enable debug mode.
             Defaults to False.
         print_stats (bool, optional): Flag indicating whether to print
@@ -47,6 +51,8 @@ class SamplerConfig(BaseModel):
     min_frame_interval_sec: float = Field(default=1, ge=0)
     keyframes_only: bool = True
     queue_wait: float = Field(default=0.1, ge=1e-3)
+    start_frame: int = Field(default=0, ge=0)
+    end_frame: int | None = Field(default=None, ge=1)
     debug: bool = False
     print_stats: bool = False
     buffer_config: dict[str, Any] = field(
