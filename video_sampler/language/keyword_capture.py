@@ -3,7 +3,6 @@ from collections.abc import Iterable
 
 import pysrt
 import requests
-import spacy
 from requests.exceptions import RequestException
 
 from ..logging import Color, console
@@ -56,6 +55,8 @@ class KeywordExtractor:
     """
 
     def __init__(self, keywords: list[str]) -> None:
+        import spacy
+
         self.keywords = keywords
         self.nlp = spacy.load("en_core_web_sm", disable=["parser", "ner", "textcat"])
         self.lemmatized_keywords = {
