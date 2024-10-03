@@ -107,12 +107,13 @@ class VideoSampler:
             
             # Seek the starting point of the processing interval
             container.seek(self.cfg.start_frame, stream=stream)
+            frame_rate = stream.average_rate
             
             for frame in container.decode(stream):
                 if frame is None:
                     continue
                 
-                frame_indx = frame.index
+                frame_indx = int(frame.pts * frame_rate)
                 
                 # Break if we've reached the ending point of the processing interval
                 if self.cfg.end_frame is not None and frame_indx >= self.cfg.end_frame:
