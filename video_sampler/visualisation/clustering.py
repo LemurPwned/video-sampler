@@ -20,7 +20,10 @@ def build_feature_model(model_str: str):
     Returns:
         tuple: Tuple of (model, extractor).
     """
-    from transformers import AutoFeatureExtractor, ResNetModel
+    try:
+        from transformers import AutoFeatureExtractor, ResNetModel
+    except ImportError:
+        raise ImportError("To use this feature install transformers by 'pip install transformers'")
 
     extractor = AutoFeatureExtractor.from_pretrained(model_str)
     model = ResNetModel.from_pretrained(model_str)
