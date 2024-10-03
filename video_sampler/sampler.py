@@ -106,7 +106,7 @@ class VideoSampler:
                     raise ValueError(f"Invalid end_frame: {self.cfg.end_frame}. Must be greater than start_frame")
             
             # Seek the starting point of the processing interval
-            stream.seek(self.cfg.start_frame)
+            container.seek(start_frame, stream=stream)
             
             for frame in container.decode(stream):
                 if frame is None:
