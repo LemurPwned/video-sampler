@@ -1,12 +1,15 @@
+import contextlib
 from collections import namedtuple
 from collections.abc import Iterable
 
-import pysrt
 import requests
-import spacy
 from requests.exceptions import RequestException
 
 from ..logging import Color, console
+
+with contextlib.suppress(ImportError):
+    import pysrt
+    import spacy
 
 subtitle_line = namedtuple(
     "subtitle_line", ["start_time", "end_time", "keyword", "content"]
