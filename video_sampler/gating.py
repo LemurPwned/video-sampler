@@ -165,7 +165,7 @@ class ClipGate:
             image_embeds /= image_embeds.norm(dim=-1, keepdim=True)
         return image_embeds
 
-    def _get_margins(self, frame_embeds: torch.Tensor):
+    def _get_margins(self, frame_embeds: "torch.Tensor"):
         """Compute the margins for each frame."""
         org_indx = np.arange(frame_embeds.shape[0])
         neg_distance = frame_embeds @ self.neg_samples.T

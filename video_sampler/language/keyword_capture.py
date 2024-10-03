@@ -1,9 +1,7 @@
 from collections import namedtuple
 from collections.abc import Iterable
 
-import pysrt
 import requests
-import spacy
 from requests.exceptions import RequestException
 
 from ..logging import Color, console
@@ -27,6 +25,11 @@ def download_sub(sub_url: str, max_retries: int = 2):
 
 def parse_srt_subtitle(srt_content):
     """Parse a SRT subtitle file to a list of subtitle segments."""
+    try:
+        import pysrt
+    except ImportError:
+        raise ImportError("To use this feature install pysrt by 'pip install pysrt'")
+
     subtitle_list = []
     if not srt_content:
         return subtitle_list
@@ -56,6 +59,11 @@ class KeywordExtractor:
     """
 
     def __init__(self, keywords: list[str]) -> None:
+        try:
+            import spacy
+        except ImportError:
+            raise ImportError("To use this feature install spacy by 'pip install spacy'")
+
         self.keywords = keywords
         self.nlp = spacy.load("en_core_web_sm", disable=["parser", "ner", "textcat"])
         self.lemmatized_keywords = {
