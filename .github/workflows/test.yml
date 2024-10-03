@@ -19,6 +19,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Base docker build-minimal
+      uses: docker/build-push-action@v2
+      with:
+        push: false
+        tags: |
+          ghcr.io/lemurpwned/video-sampler:test-build-${{ github.sha }}
+        file: docker/Dockerfile.minimal
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
