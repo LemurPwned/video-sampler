@@ -125,6 +125,7 @@ class VideoSampler:
                 # Break if we've reached the ending point of the processing interval
                 if end_frame is not None and frame_indx >= end_frame:
                     break
+                try:
                     ftime = frame.time
                 except AttributeError:
                     continue
