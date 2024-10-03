@@ -7,7 +7,6 @@ from PIL import Image
 from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
 from tqdm import tqdm
-from transformers import AutoFeatureExtractor, ResNetModel
 
 from ..utils import batched
 
@@ -21,6 +20,8 @@ def build_feature_model(model_str: str):
     Returns:
         tuple: Tuple of (model, extractor).
     """
+    from transformers import AutoFeatureExtractor, ResNetModel
+
     extractor = AutoFeatureExtractor.from_pretrained(model_str)
     model = ResNetModel.from_pretrained(model_str)
     return model, extractor
