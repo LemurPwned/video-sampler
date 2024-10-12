@@ -6,8 +6,9 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from tqdm import tqdm
 
+from .config import SamplerConfig
 from .logging import Color, console
-from .sampler import SamplerConfig, VideoSampler, Worker
+from .sampler import VideoSampler, Worker
 from .utils import slugify
 
 

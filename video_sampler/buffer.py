@@ -3,83 +3,13 @@ import heapq
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from collections.abc import Iterable
-from dataclasses import asdict, field
 from typing import Any
 
-import yaml
 from imagehash import average_hash, phash
 from PIL import Image
-from pydantic import BaseModel, Field
 
+from .config import SamplerConfig
 from .logging import Color, console
-
-
-class SamplerConfig(BaseModel):
-    """
-    Configuration options for the video sampler.
-
-    Args:
-        min_frame_interval_sec (float, optional): The minimum time interval
-            between sampled frames in seconds. Defaults to 1.
-        keyframes_only (bool, optional): Flag indicating whether to
-            sample only keyframes. Defaults to True.
-        queue_wait (float, optional): The time to wait between checking
-            the frame queue in seconds. Defaults to 0.1.
-        start_frame (int, optional): The starting frame index for processing.
-            Defaults to 0.
-        end_frame (int, optional): The ending frame index for processing.
-            Defaults to None.
-        debug (bool, optional): Flag indicating whether to enable debug mode.
-            Defaults to False.
-        print_stats (bool, optional): Flag indicating whether to print
-            sampling statistics. Defaults to False.
-        buffer_config (dict[str, Any], optional): Configuration options for
-                the frame buffer. Defaults to {"type": "entropy", "size": 15,
-                "debug": True}.
-        gate_config (dict[str, Any], optional): Configuration options for
-                the frame gate. Defaults to {"type": "pass"}.
-        extractor_config (dict[str, Any], optional): Configuration options for
-                the extractor (keyword, audio). Defaults to None.
-        summary_config (dict[str, Any], optional): Configuration options for
-                the summary generator. Defaults to None.
-    Methods:
-        __str__() -> str:
-            Returns a string representation of the configuration.
-
-    """
-
-    min_frame_interval_sec: float = Field(default=1, ge=0)
-    keyframes_only: bool = True
-    queue_wait: float = Field(default=0.1, ge=1e-3)
-    start_frame: int = Field(default=0, ge=0)
-    end_frame: int | None = Field(default=None, ge=1)
-    debug: bool = False
-    print_stats: bool = False
-    buffer_config: dict[str, Any] = field(
-        default_factory=lambda: {
-            "type": "hash",
-            "hash_size": 8,
-            "size": 15,
-            "debug": True,
-        }
-    )
-    gate_config: dict[str, Any] = field(
-        default_factory=lambda: {
-            "type": "pass",
-        }
-    )
-    extractor_config: dict[str, Any] = field(default_factory=dict)
-    summary_config: dict[str, Any] = field(default_factory=dict)
-    n_workers: int = 1
-
-    def __str__(self) -> str:
-        return str(asdict(self))
-
-    @classmethod
-    def from_yaml(cls, file_path: str) -> "SamplerConfig":
-        with open(file_path) as file:
-            data = yaml.safe_load(file)
-        return cls(**data)
 
 
 class FrameBuffer(ABC):

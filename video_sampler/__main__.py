@@ -7,7 +7,8 @@ from typing import Annotated
 import typer
 
 from . import version
-from .buffer import SamplerConfig, check_args_validity
+from .buffer import check_args_validity
+from .config import SamplerConfig
 from .iterators import delegate_workers
 from .logging import Color, console
 from .sampler import SegmentSampler, VideoSampler
