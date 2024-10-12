@@ -23,3 +23,4 @@ jobs:
         tags: |
           ghcr.io/lemurpwned/video-sampler:latest
           ghcr.io/lemurpwned/video-sampler:${{github.sha}}
+        file: docker/Dockerfile

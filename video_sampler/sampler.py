@@ -99,9 +99,25 @@ class VideoSampler:
             if self.cfg.keyframes_only:
                 stream.codec_context.skip_frame = "NONKEY"
             prev_time = -10
-            for frame_indx, frame in enumerate(container.decode(stream)):
+            
+            # Confirm end_frame is greater than start_frame
+            if self.cfg.end_frame is not None:
+                if self.cfg.end_frame <= self.cfg.start_frame:
+                    raise ValueError(f"Invalid end_frame: {self.cfg.end_frame}. Must be greater than start_frame")
+            
+            # Seek the starting point of the processing interval
+            container.seek(self.cfg.start_frame, stream=stream)
+            frame_rate = stream.average_rate
+            
+            for frame in container.decode(stream):
                 if frame is None:
                     continue
+                
+                frame_indx = int(frame.pts * frame_rate)
+                
+                # Break if we've reached the ending point of the processing interval
+                if self.cfg.end_frame is not None and frame_indx >= self.cfg.end_frame:
+                    break
                 try:
                     ftime = frame.time
                 except AttributeError:
