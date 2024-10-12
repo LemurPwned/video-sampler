@@ -4,6 +4,12 @@
 
 Changelog for the `video-sampler`.
 
+### 0.11.1 - 0.11.2
+
+- added `start-time` and `end-time` options to the `video-sampler` command which allows to specify the start and end time of the video segment to be processed.
+- fixed optional imports
+- minimal docker builds added
+
 ### 0.11.0
 
 - added multiprocessing over multiple videos in the folder

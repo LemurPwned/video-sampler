@@ -22,8 +22,10 @@ def build_feature_model(model_str: str):
     """
     try:
         from transformers import AutoFeatureExtractor, ResNetModel
-    except ImportError:
-        raise ImportError("To use this feature install transformers by 'pip install transformers'")
+    except ImportError as e:
+        raise ImportError(
+            "To use this feature install transformers by 'pip install transformers'"
+        ) from e
 
     extractor = AutoFeatureExtractor.from_pretrained(model_str)
     model = ResNetModel.from_pretrained(model_str)

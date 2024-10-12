@@ -54,3 +54,59 @@ def test_grid(base_video: str):
         verify_frame_res(res)
         samples += len(res)
     assert samples > 1, f"Expected more than 1 sample, got {samples}"
+
+
+def test_start_end_av_seek(base_video: str):
+    start_time_s = 12
+    end_time_s = start_time_s + 1
+    config = SamplerConfig(
+        start_time_s=start_time_s,
+        end_time_s=end_time_s,
+        keyframes_only=False,
+        precise_seek=False,
+    )
+    sampler = VideoSampler(config)
+    samples = 0
+    for res in sampler.sample(base_video):
+        for frame_obj in res:
+            if frame_obj.frame:
+                assert isinstance(frame_obj.frame, Image.Image)
+                assert isinstance(frame_obj.metadata, dict)
+                assert "frame_time" in frame_obj.metadata
+
+                assert (
+                    frame_obj.metadata["frame_time"] >= start_time_s
+                    and frame_obj.metadata["frame_time"] <= end_time_s
+                )
+        samples += len(res)
+    assert samples > 1, f"Expected more than 1 sample, got {samples}"
+
+
+def test_start_end_prec_seek(base_video: str):
+    start_time_s = 12
+    end_time_s = start_time_s + 1
+    config = SamplerConfig(
+        start_time_s=start_time_s,
+        end_time_s=end_time_s,
+        keyframes_only=False,
+        precise_seek=True,
+    )
+    sampler = VideoSampler(config)
+    samples = 0
+    first_frame = True
+    for res in sampler.sample(base_video):
+        for frame_obj in res:
+            if frame_obj.frame:
+                assert isinstance(frame_obj.frame, Image.Image)
+                assert isinstance(frame_obj.metadata, dict)
+                assert "frame_time" in frame_obj.metadata
+
+                assert (
+                    frame_obj.metadata["frame_time"] >= start_time_s
+                    and frame_obj.metadata["frame_time"] <= end_time_s
+                )
+                if first_frame:
+                    assert abs(frame_obj.metadata["frame_time"] - start_time_s) < 0.5
+                    first_frame = False
+        samples += len(res)
+    assert samples > 1, f"Expected more than 1 sample, got {samples}"

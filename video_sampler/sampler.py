@@ -7,9 +7,11 @@ from queue import Queue
 from threading import Thread
 
 import av
+import av.enum
 from PIL import Image
 
-from .buffer import SamplerConfig, create_buffer
+from .buffer import create_buffer
+from .config import SamplerConfig
 from .gating import create_gate
 from .language.keyword_capture import create_extractor, subtitle_line
 from .logging import Color, console
@@ -99,13 +101,47 @@ class VideoSampler:
             if self.cfg.keyframes_only:
                 stream.codec_context.skip_frame = "NONKEY"
             prev_time = -10
-            for frame_indx, frame in enumerate(container.decode(stream)):
-                if frame is None:
+            if self.cfg.start_time_s > 0 and self.cfg.precise_seek is False:
+                """
+                This is an inaccurate seek, so you may get frames before
+                the start time or much later.
+                """
+                frame_container_pts = (
+                    int(self.cfg.start_time_s / float(stream.time_base))
+                    + stream.start_time
+                )
+                console.print(
+                    f"Seeking to {frame_container_pts} pts based of {stream.time_base} "
+                    f"with inbuilt video offset {stream.start_time}",
+                    style=f"bold {Color.yellow.value}",
+                )
+                try:
+                    container.seek(
+                        frame_container_pts,
+                        backward=True,
+                        any_frame=False,
+                        stream=stream,
+                    )
+                except av.AVError as e:
+                    console.print(
+                        f"Error seeking to {frame_container_pts} pts. Will default to precise seek.",
+                        f"\n\t{e}",
+                        style=f"bold {Color.red.value}",
+                    )
+            avg_fps = float(stream.average_rate)
+            for frame in container.decode(stream):
+                if frame is None or frame.is_corrupt:
                     continue
                 try:
                     ftime = frame.time
                 except AttributeError:
                     continue
+                if self.cfg.start_time_s > 0 and ftime < self.cfg.start_time_s:
+                    continue
+
+                if self.cfg.end_time_s is not None and ftime > self.cfg.end_time_s:
+                    break
+                frame_index = int(ftime * avg_fps)
                 # skip frames if keyframes_only is True
                 time_diff = ftime - prev_time
                 self.stats["total"] += 1
@@ -113,8 +149,7 @@ class VideoSampler:
                     continue
                 prev_time = ftime
 
-                yield from self._process_frame(frame_indx, frame, ftime)
-
+                yield from self._process_frame(frame_index, frame, ftime)
         # flush buffer
         yield from self.flush_buffer()
 

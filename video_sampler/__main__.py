@@ -7,7 +7,8 @@ from typing import Annotated
 import typer
 
 from . import version
-from .buffer import SamplerConfig, check_args_validity
+from .buffer import check_args_validity
+from .config import SamplerConfig
 from .iterators import delegate_workers
 from .logging import Color, console
 from .sampler import SegmentSampler, VideoSampler
@@ -99,6 +100,12 @@ def main(
     buffer_size: int = typer.Option(10, help="Size of the buffer."),
     hash_size: int = typer.Option(4, help="Size of the hash."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
+    start_time_s: int = typer.Option(
+        0, help="The starting time for sampling in seconds."
+    ),
+    end_time_s: int = typer.Option(
+        None, help="The ending time for sampling in seconds. None for no end."
+    ),
     debug: bool = typer.Option(False, help="Enable debug mode."),
     threshold: float = typer.Option(
         20.0, help="Threshold for the blur gate. If 0 then no blur gate is used."
@@ -152,6 +159,8 @@ def main(
         keyframes_only=keyframes_only,
         queue_wait=queue_wait,
         print_stats=stats,
+        start_time_s=start_time_s,
+        end_time_s=end_time_s,
         debug=debug,
         buffer_config={
             "type": "hash",
@@ -197,6 +206,12 @@ def buffer(
     hash_size: int = typer.Option(4, help="Size of the hash."),
     expiry: int = typer.Option(4, help="Expiry time for the buffer."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
+    start_time_s: int = typer.Option(
+        0, help="The starting time for sampling in seconds."
+    ),
+    end_time_s: int = typer.Option(
+        None, help="The ending time for sampling in seconds. None for no end."
+    ),
     debug: bool = typer.Option(False, help="Enable debug mode."),
     grid_size: int = typer.Option(4, help="Grid size for the grid buffer."),
     max_hits: int = typer.Option(2, help="Max hits for the grid buffer."),
@@ -224,6 +239,8 @@ def buffer(
         keyframes_only=keyframes_only,
         queue_wait=queue_wait,
         print_stats=stats,
+        start_time_s=start_time_s,
+        end_time_s=end_time_s,
         debug=debug,
         buffer_config={
             "type": buffer_type,
@@ -277,6 +294,12 @@ def clip(
     buffer_size: int = typer.Option(10, help="Size of the buffer."),
     hash_size: int = typer.Option(4, help="Size of the hash."),
     queue_wait: float = typer.Option(0.1, help="Time to wait for the queue."),
+    start_time_s: int = typer.Option(
+        0, help="The starting time for sampling in seconds."
+    ),
+    end_time_s: int = typer.Option(
+        None, help="The ending time for sampling in seconds. None for no end."
+    ),
     debug: bool = typer.Option(False, help="Enable debug mode."),
     ytdlp: bool = typer.Option(
         False,
@@ -304,6 +327,8 @@ def clip(
         keyframes_only=keyframes_only,
         queue_wait=queue_wait,
         print_stats=stats,
+        start_time_s=start_time_s,
+        end_time_s=end_time_s,
         debug=debug,
         buffer_config={
             "type": "hash",
