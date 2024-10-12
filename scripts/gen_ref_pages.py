@@ -6,7 +6,6 @@ import mkdocs_gen_files
 
 src = Path(__file__).parent.parent / "video_sampler"
 for path in sorted(src.rglob("*.py")):
-
     module_path = path.relative_to(src).with_suffix("")
     doc_path = path.relative_to(src).with_suffix(".md")
     full_doc_path = Path("reference", "video_sampler", doc_path)

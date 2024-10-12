@@ -115,9 +115,19 @@ class VideoSampler:
                     f"with inbuilt video offset {stream.start_time}",
                     style=f"bold {Color.yellow.value}",
                 )
-                container.seek(
-                    frame_container_pts, backward=True, any_frame=False, stream=stream
-                )
+                try:
+                    container.seek(
+                        frame_container_pts,
+                        backward=True,
+                        any_frame=False,
+                        stream=stream,
+                    )
+                except av.AVError as e:
+                    console.print(
+                        f"Error seeking to {frame_container_pts} pts. Will default to precise seek.",
+                        f"\n\t{e}",
+                        style=f"bold {Color.red.value}",
+                    )
             avg_fps = float(stream.average_rate)
             for frame in container.decode(stream):
                 if frame is None or frame.is_corrupt:

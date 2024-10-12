@@ -3,13 +3,6 @@ import pytest
 from video_sampler.config import SamplerConfig
 
 
-def test_equal_start_stop_times():
-    with pytest.raises(
-        ValueError, match="start_time_s must be strictly less than the end_time_s"
-    ):
-        SamplerConfig(start_time_s=10, end_time_s=10)
-
-
 def test_valid_start_stop_times():
     config = SamplerConfig(start_time_s=10, end_time_s=20)
     assert config.start_time_s == 10

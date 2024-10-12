@@ -1,5 +1,6 @@
 # type: ignore[attr-defined]
 """Video sampler allows you to efficiently sample video frames"""
+
 from importlib import metadata as importlib_metadata
 
 from .buffer import SamplerConfig
