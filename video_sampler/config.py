@@ -1,5 +1,5 @@
 from dataclasses import asdict, field
-from typing import Any, Self
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, Field, model_validator
@@ -83,6 +83,6 @@ class SamplerConfig(BaseModel):
         return cls(**data)
 
     @model_validator(mode="after")
-    def validate_start_end_times(self) -> Self:
+    def validate_start_end_times(self):
         if self.end_time_s is not None and self.start_time_s >= self.end_time_s:
             raise ValueError("start_time_s must be strictly less than the end_time_s")
