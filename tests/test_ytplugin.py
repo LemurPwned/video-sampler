@@ -20,6 +20,7 @@ def test_keyword_extractor(subtitles):
     assert c == 4
 
 
+@pytest.mark.skip(reason="This test requires log-in ")
 def test_segment_sampler(random_video):
     ytdlp = YTDLPPlugin()
     title, url, subs = next(ytdlp.generate_urls(random_video, get_subs=True))
@@ -41,6 +42,7 @@ def test_segment_sampler(random_video):
         assert len(os.listdir(tempdir)) > 0
 
 
+@pytest.mark.skip(reason="This test requires log-in ")
 def test_single_url_gen(random_video):
     ytdlp = YTDLPPlugin()
     title, url, subs = next(ytdlp.generate_urls(random_video, get_subs=True))
@@ -49,6 +51,7 @@ def test_single_url_gen(random_video):
     assert subs and len(subs) > 0, f"Expected subtitles, got {subs}"
 
 
+@pytest.mark.skip(reason="This test requires log-in ")
 def test_search_url_gen():
     ytdlp = YTDLPPlugin()
     expected_results, results = 5, 0
