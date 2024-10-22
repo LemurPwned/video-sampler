@@ -180,7 +180,7 @@ To replicate, run LLAVA model locally and set the `summary-url` to the address o
 video_sampler hash ./videos/FatCat.mp4 ./output-frames/ --hash-size 3 --buffer-size 20 --summary-url "http://localhost:8080/completion" --summary-interval 50
 ```
 
-Supported env in case you need those:\*\*\*\*
+Supported env in case you need those:
 
 - `OPENAI_API_KEY` - OpenAI API key
 - `OPENAI_MODEL` - OpenAI model name
