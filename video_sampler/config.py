@@ -73,6 +73,12 @@ class SamplerConfig(BaseModel):
     summary_config: dict[str, Any] = field(default_factory=dict)
     n_workers: int = 1
 
+    class SaveFormatConfig(BaseModel):
+        encode_time: bool = False
+        include_filename: bool = False
+
+    save_format: SaveFormatConfig = field(default_factory=SaveFormatConfig)
+
     def __str__(self) -> str:
         return str(asdict(self))
 

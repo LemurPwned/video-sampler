@@ -1,3 +1,4 @@
+import base64
 import os
 import time
 from collections import Counter
@@ -357,6 +358,18 @@ class Worker:
                 style=f"bold {Color.magenta.value}",
             )
 
+    def format_output_path(self, output_path: str, frame_time: float) -> str:
+        """Format the output path for a frame."""
+        ft = str(frame_time)
+        if self.cfg.save_format.encode_time:
+            ft = base64.encodebytes(ft.encode()).decode()
+        if self.cfg.save_format.include_filename:
+            vbsn = os.path.basename(output_path)
+            # remove extension
+            vbsn = os.path.splitext(vbsn)[0]
+            ft = f"{vbsn}_TIMEB64_{ft}"
+        return os.path.join(output_path, f"{ft}.jpg")
+
     def queue_reader(self, output_path, read_interval=0.1) -> None:
         """
         Reads frames from the queue and saves them as JPEG images.
@@ -378,9 +391,8 @@ class Worker:
                         not self.devnull and isinstance(frame_object.frame, Image.Image)
                     ):
                         frame_object.frame.save(
-                            os.path.join(
-                                output_path,
-                                f"{frame_object.metadata['frame_time']}.jpg",
+                            self.format_output_path(
+                                output_path, frame_object.metadata["frame_time"]
                             )
                         )
                         if self.pool:
