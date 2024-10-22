@@ -73,6 +73,22 @@ class SamplerConfig(BaseModel):
     summary_config: dict[str, Any] = field(default_factory=dict)
     n_workers: int = 1
 
+    class SaveFormatConfig(BaseModel):
+        """
+        Configuration options for the save format.
+
+        Args:
+            encode_time (bool, optional): Encode time as base64 string. Avoids `.`
+                in the filename. Defaults to False.
+            include_filename (bool, optional): Include filename in the output
+                path. Defaults to False.
+        """
+
+        encode_time: bool = False  # Encode time as base64 string
+        include_filename: bool = False  # Include filename in the output path
+
+    save_format: SaveFormatConfig = field(default_factory=SaveFormatConfig)
+
     def __str__(self) -> str:
         return str(asdict(self))
 
