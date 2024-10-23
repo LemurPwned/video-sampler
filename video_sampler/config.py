@@ -115,7 +115,7 @@ class SamplerConfig(BaseModel):
         return cls(**data)
 
     @model_validator(mode="after")
-    def validate_start_end_times(cls, values: "SamplerConfig"):
+    def validate_start_end_times(cls, values):
         if values.end_time_s is not None and values.start_time_s >= values.end_time_s:
             raise ValueError("start_time_s must be strictly less than the end_time_s")
         return values
