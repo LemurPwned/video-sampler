@@ -361,13 +361,17 @@ class Worker:
     def format_output_path(self, output_path: str, frame_time: float) -> str:
         """Format the output path for a frame."""
         ft = str(frame_time)
-        if self.cfg.save_format.encode_time:
-            ft = base64.encodebytes(ft.encode()).decode()
+        if self.cfg.save_format.encode_time_b64:
+            ft = base64.encodebytes(ft.encode()).decode().rstrip()
+            ft = f"TIMEB64_{ft}"
+        elif self.cfg.save_format.avoid_dot:
+            ft = ft.replace(".", "_")
+            ft = f"TIMESEC_{ft}"
         if self.cfg.save_format.include_filename:
             vbsn = os.path.basename(output_path)
             # remove extension
             vbsn = os.path.splitext(vbsn)[0]
-            ft = f"{vbsn}_TIMEB64_{ft}"
+            ft = f"{vbsn}_{ft}"
         return os.path.join(output_path, f"{ft}.jpg")
 
     def queue_reader(self, output_path, read_interval=0.1) -> None:
