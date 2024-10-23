@@ -25,5 +25,6 @@ summary_config: {}
 # Number of workers (separate processes) to process the frames. Determines level of parallelism
 n_workers: 3
 save_format:
-  encode_time: true
+  encode_time_b64: false
   include_filename: true
+  avoid_dot: true

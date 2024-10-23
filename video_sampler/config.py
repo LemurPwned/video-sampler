@@ -1,8 +1,38 @@
-from dataclasses import asdict, field
 from typing import Any
 
 import yaml
 from pydantic import BaseModel, Field, model_validator
+
+
+class SaveFormatConfig(BaseModel):
+    """
+    Configuration options for the save format.
+
+    Args:
+        encode_time_b64 (bool, optional): Encode time as base64 string. Avoids `.`
+            in the filename. Defaults to False.
+        avoid_dot (bool, optional): Avoid `.` in the filename by replacing
+            it with `_`. Defaults to False.
+        include_filename (bool, optional): Include filename in the output
+            path. Defaults to False.
+    """
+
+    encode_time_b64: bool = Field(default=False)
+    avoid_dot: bool = Field(default=False)
+    include_filename: bool = Field(default=False)
+
+    @model_validator(mode="after")
+    def validate_save_format(cls, values: "SaveFormatConfig"):
+        if values.encode_time_b64 and values.avoid_dot:
+            import warnings
+
+            warnings.warn(
+                "encode_time_b64 and avoid_dot are both True, "
+                "avoid_dot will be ignored",
+                UserWarning,
+                stacklevel=2,
+            )
+        return values
 
 
 class SamplerConfig(BaseModel):
@@ -43,7 +73,7 @@ class SamplerConfig(BaseModel):
     """
 
     min_frame_interval_sec: float = Field(default=1, ge=0)
-    keyframes_only: bool = True
+    keyframes_only: bool = Field(default=True)
     queue_wait: float = Field(default=0.1, ge=1e-3)
     start_time_s: int = Field(
         default=0, ge=0, description="The starting time for sampling in seconds."
@@ -54,9 +84,9 @@ class SamplerConfig(BaseModel):
         description="The ending time for sampling in seconds. None for no end.",
     )
     precise_seek: bool = Field(default=False, description="Use precise seeking.")
-    debug: bool = False
-    print_stats: bool = False
-    buffer_config: dict[str, Any] = field(
+    debug: bool = Field(default=False)
+    print_stats: bool = Field(default=False)
+    buffer_config: dict[str, Any] = Field(
         default_factory=lambda: {
             "type": "hash",
             "hash_size": 8,
@@ -64,33 +94,19 @@ class SamplerConfig(BaseModel):
             "debug": True,
         }
     )
-    gate_config: dict[str, Any] = field(
+    gate_config: dict[str, Any] = Field(
         default_factory=lambda: {
             "type": "pass",
         }
     )
-    extractor_config: dict[str, Any] = field(default_factory=dict)
-    summary_config: dict[str, Any] = field(default_factory=dict)
-    n_workers: int = 1
+    extractor_config: dict[str, Any] = Field(default_factory=dict)
+    summary_config: dict[str, Any] = Field(default_factory=dict)
+    n_workers: int = Field(default=1)
 
-    class SaveFormatConfig(BaseModel):
-        """
-        Configuration options for the save format.
-
-        Args:
-            encode_time (bool, optional): Encode time as base64 string. Avoids `.`
-                in the filename. Defaults to False.
-            include_filename (bool, optional): Include filename in the output
-                path. Defaults to False.
-        """
-
-        encode_time: bool = False  # Encode time as base64 string
-        include_filename: bool = False  # Include filename in the output path
-
-    save_format: SaveFormatConfig = field(default_factory=SaveFormatConfig)
+    save_format: SaveFormatConfig = Field(default_factory=SaveFormatConfig)
 
     def __str__(self) -> str:
-        return str(asdict(self))
+        return str(self.model_dump())
 
     @classmethod
     def from_yaml(cls, file_path: str) -> "SamplerConfig":
@@ -99,6 +115,7 @@ class SamplerConfig(BaseModel):
         return cls(**data)
 
     @model_validator(mode="after")
-    def validate_start_end_times(self):
-        if self.end_time_s is not None and self.start_time_s >= self.end_time_s:
+    def validate_start_end_times(cls, values):
+        if values.end_time_s is not None and values.start_time_s >= values.end_time_s:
             raise ValueError("start_time_s must be strictly less than the end_time_s")
+        return values
