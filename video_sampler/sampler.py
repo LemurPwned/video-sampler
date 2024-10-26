@@ -65,8 +65,7 @@ class VideoSampler:
         self.stats.clear()
         self.frame_buffer.clear()
 
-    def _process_frame(self, frame_indx, frame, ftime):
-        frame_pil: Image = frame.to_image()
+    def _process_frame(self, frame_indx: int, frame: Image, ftime: float):
         if self.cfg.debug:
             buf = self.frame_buffer.get_buffer_state()
             console.print(
@@ -77,7 +76,7 @@ class VideoSampler:
         frame_meta = {"frame_time": ftime, "frame_indx": frame_indx}
         self.stats["decoded"] += 1
         if res := self.frame_buffer.add(
-            frame_pil,
+            frame,
             metadata=frame_meta,
         ):
             gated_obj = self.gate(*res)
@@ -94,7 +93,8 @@ class VideoSampler:
             subs (str): Unused in video sampler
 
         Yields:
-            Iterable[list[FrameObject]]: A generator that yields a list of FrameObjects representing sampled frames.
+            Iterable[list[FrameObject]]: A generator that yields a list
+                    of FrameObjects representing sampled frames.
         """
         self._init_sampler()
         with av.open(video_path) as container:
@@ -149,12 +149,12 @@ class VideoSampler:
                 if time_diff < self.cfg.min_frame_interval_sec:
                     continue
                 prev_time = ftime
-
-                yield from self._process_frame(frame_index, frame, ftime)
+                frame_pil = frame.to_image()
+                yield from self._process_frame(frame_index, frame_pil, ftime)
         # flush buffer
         yield from self.flush_buffer()
 
-    def write_queue(self, video_path: str, q: Queue, subs: str = None):
+    def write_queue(self, video_path: str, q: Queue, subs: str = None) -> None:
         try:
             item: tuple[FrameObject, int]
             for item in self.sample(video_path=video_path, subs=subs):
@@ -265,7 +265,7 @@ class Worker:
         cfg: SamplerConfig,
         devnull: bool = False,
         sampler_cls: VideoSampler = VideoSampler,
-        extra_sampler_args: dict = None,
+        extra_sampler_args: dict | None = None,
     ) -> None:
         if extra_sampler_args is None:
             extra_sampler_args = {}

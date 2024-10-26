@@ -8,10 +8,11 @@ import typer
 
 from . import version
 from .buffer import check_args_validity
-from .config import SamplerConfig
+from .config import ImageSamplerConfig, SamplerConfig
 from .iterators import delegate_workers
 from .logging import Color, console
 from .sampler import SegmentSampler, VideoSampler
+from .samplers import ImageSampler
 from .schemas import BufferType
 
 app = typer.Typer(
@@ -54,7 +55,7 @@ def _ytdlp_plugin(
 
 
 def _create_from_config(
-    cfg: SamplerConfig,
+    cfg: SamplerConfig | ImageSamplerConfig,
     video_path: str | Generator,
     output_path: str,
     sampler_cls: VideoSampler = VideoSampler,
@@ -355,8 +356,8 @@ def clip(
 @app.command(name="config")
 def from_config(
     config_path: str = typer.Argument(..., help="Path to the configuration file."),
-    video_path: str = typer.Argument(
-        ..., help="Path to the video file or a glob pattern."
+    input_path: str = typer.Argument(
+        ..., help="Path to the video file, image folder or a glob pattern."
     ),
     output_path: str = typer.Argument(..., help="Path to the output folder."),
     ytdlp: bool = typer.Option(
@@ -367,13 +368,20 @@ def from_config(
     yt_extra_args: str = typer.Option(
         None, help="Extra arguments for YouTube-DLP extraction in classic format."
     ),
+    images: bool = typer.Option(False, help="Use image sampler."),
 ):
     """Create a sampler from a configuration file."""
-
-    cfg = SamplerConfig.from_yaml(config_path)
-    if ytdlp:
-        video_path = _ytdlp_plugin(yt_extra_args, video_path)
-    _create_from_config(cfg=cfg, video_path=video_path, output_path=output_path)
+    sampler_cls = ImageSampler if images else VideoSampler
+    cfg = (
+        ImageSamplerConfig.from_yaml(config_path)
+        if images
+        else SamplerConfig.from_yaml(config_path)
+    )
+    if ytdlp and isinstance(cfg, SamplerConfig):
+        input_path = _ytdlp_plugin(yt_extra_args, input_path)
+    _create_from_config(
+        cfg=cfg, video_path=input_path, output_path=output_path, sampler_cls=sampler_cls
+    )
 
 
 def main_loop():
