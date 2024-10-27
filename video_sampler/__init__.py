@@ -4,7 +4,8 @@
 from importlib import metadata as importlib_metadata
 
 from .buffer import SamplerConfig
-from .sampler import VideoSampler, Worker
+from .samplers import ImageSampler, VideoSampler
+from .worker import Worker
 
 
 def get_version() -> str:
@@ -16,4 +17,4 @@ def get_version() -> str:
 
 version: str = get_version()
 
-__all__ = ["SamplerConfig", "VideoSampler", "Worker", "version"]
+__all__ = ["SamplerConfig", "VideoSampler", "ImageSampler", "Worker", "version"]

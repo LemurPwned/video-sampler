@@ -8,9 +8,9 @@ from tqdm import tqdm
 
 from .config import ImageSamplerConfig, SamplerConfig
 from .logging import Color, console
-from .sampler import VideoSampler, Worker
-from .samplers import ImageSampler
+from .samplers import BaseSampler, VideoSampler
 from .utils import slugify
+from .worker import Worker
 
 
 def process_video(
@@ -18,7 +18,7 @@ def process_video(
     output_path: str,
     is_url: bool,
     worker_cfg: SamplerConfig | ImageSamplerConfig,
-    sampler_cls: VideoSampler | ImageSampler | None = VideoSampler,
+    sampler_cls: BaseSampler | None = VideoSampler,
 ):
     """Process a video file or URL.
 
@@ -61,7 +61,7 @@ def parallel_video_processing(
     output_path: str,
     is_url: bool,
     worker_cfg: SamplerConfig | ImageSamplerConfig,
-    sampler_cls: VideoSampler | ImageSampler | None = VideoSampler,
+    sampler_cls: BaseSampler | None = VideoSampler,
     n_workers: int = None,
 ):  # sourcery skip: for-append-to-extend
     """Process a list of local video files or video URLs in parallel.
@@ -111,7 +111,7 @@ def delegate_workers(
     video_path: str | Generator,
     output_path: str,
     cfg: SamplerConfig | ImageSamplerConfig,
-    sampler_cls: VideoSampler | ImageSampler | None = VideoSampler,
+    sampler_cls: BaseSampler | None = VideoSampler,
 ):
     """Delegate the processing of a list of videos to a worker instance.
 

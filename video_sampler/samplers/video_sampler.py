@@ -150,7 +150,7 @@ class SegmentSampler(VideoSampler):
         segment_generator: Iterable[subtitle_line] = self.extractor.generate_segments(
             subs
         )
-        self._init_sampler()
+        self.init_sampler()
         next_segment = next(segment_generator)
         segment_boundary_end_sec = next_segment.end_time / 1000
         segment_boundary_start_sec = next_segment.start_time / 1000
@@ -200,8 +200,8 @@ class SegmentSampler(VideoSampler):
                 if time_diff < self.cfg.min_frame_interval_sec:
                     continue
                 prev_time = ftime
-
-                yield from self._process_frame(frame_indx, frame, ftime)
+                frame_pil = frame.to_image()
+                yield from self.process_frame(frame_indx, frame_pil, ftime)
         # flush buffer
         yield from self.flush_buffer()
 

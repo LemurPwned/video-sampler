@@ -75,3 +75,10 @@ all = [
 [build-system]
 build-backend = "flit_core.buildapi"
 requires = ["flit_core >=3.2,<4"]
+
+[tool.coverage.run]
+omit = [
+    "config.py",
+    "config-3.py",
+    "*/_remote_module_non_scriptable.py"
+    ]

@@ -23,12 +23,14 @@ def download_sub(sub_url: str, max_retries: int = 2):
     return None
 
 
-def parse_srt_subtitle(srt_content):
+def parse_srt_subtitle(srt_content: str) -> list[tuple[tuple[int, int], str]]:
     """Parse a SRT subtitle file to a list of subtitle segments."""
     try:
         import pysrt
-    except ImportError:
-        raise ImportError("To use this feature install pysrt by 'pip install pysrt'")
+    except ImportError as e:
+        raise ImportError(
+            "To use this feature install pysrt by 'pip install pysrt'"
+        ) from e
 
     subtitle_list = []
     if not srt_content:
@@ -77,13 +79,13 @@ class KeywordExtractor:
         )
 
     def generate_segments(
-        self, subtitle_list: list[tuple[int, int, str]]
+        self, subtitle_list: list[tuple[tuple[int, int], str]]
     ) -> Iterable[subtitle_line]:
         """
         Captures keyword segments from a list of subtitles.
 
         Args:
-            subtitle_list (list[tuple[int, int, str]]): List of subtitles in the format
+            subtitle_list (list[tuple[tuple[int, int], str]]): List of subtitles in the format
                 (start_time, end_time, content).
 
         Yields:
