@@ -62,8 +62,12 @@ def fixed_img_pair():
 )
 def test_buffer_add_single_image(random_image, buffer_type, buffer_size):
     buffer = buffer_type(size=buffer_size)
-    buffer.add(random_image, {})
+    metadata = {"test_key": "test_value"}
+    buffer.add(random_image, metadata)
     assert len(buffer) == 1
+    _, (stored_image, stored_metadata) = buffer.popitem()
+    assert stored_image == random_image
+    assert stored_metadata == metadata
 
 
 @pytest.mark.parametrize(
@@ -126,9 +130,14 @@ def test_buffer_clear(buffer_type, buffer_size):
 def test_grid_buffer_same_image(fixed_img_pair, buffer_type, buffer_size):
     buffer = buffer_type(size=buffer_size)
     imgA, _ = fixed_img_pair
-    buffer.add(imgA, {})
-    buffer.add(imgA, {})
+    metadata1 = {"timestamp": 1}
+    metadata2 = {"timestamp": 2}
+    buffer.add(imgA, metadata1)
+    buffer.add(imgA, metadata2)
     assert len(buffer) == 1
+    _, (stored_image, stored_metadata) = buffer.popitem()
+    assert stored_image == imgA
+    assert stored_metadata == metadata1  # first is kept
 
 
 @pytest.mark.parametrize(

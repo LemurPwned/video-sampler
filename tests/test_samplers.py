@@ -75,6 +75,32 @@ def temp_images():
     os.rmdir(image_dir)
 
 
+def test_video_sampler_fine_grained(temp_video):
+    config = SamplerConfig(
+        min_frame_interval_sec=0.5,
+        keyframes_only=False,
+        buffer_config={"type": "hash", "hash_size": 8, "size": 5},
+    )
+    sampler = VideoSampler(config)
+
+    frames_list = list(sampler.sample(temp_video))
+    frame_times = [
+        frame.metadata["frame_time"]
+        for batch in frames_list
+        for frame in batch
+        if frame.frame
+    ]
+
+    assert all(
+        isinstance(frame.frame, Image.Image)
+        for batch in frames_list
+        for frame in batch
+        if frame.frame
+    )
+    assert all(t2 - t1 >= 0.5 for t1, t2 in zip(frame_times, frame_times[1:]))
+    assert len(frame_times) >= len(frames_list) // 2, "Too few frames sampled"
+
+
 def test_video_sampler(temp_video):
     config = SamplerConfig(
         min_frame_interval_sec=0.5,

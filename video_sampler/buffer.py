@@ -125,8 +125,11 @@ class HashBuffer(FrameBuffer):
     def __iter__(self):
         return iter(self.ordered_buffer)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         return self.ordered_buffer[key]
+
+    def popitem(self, last: bool = True):
+        return self.ordered_buffer.popitem(last=last)
 
 
 class GridBuffer(HashBuffer):
