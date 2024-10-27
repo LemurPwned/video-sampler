@@ -4,9 +4,11 @@ import tempfile
 
 import pytest
 
+from video_sampler.config import SamplerConfig
 from video_sampler.integrations.yt_dlp_plugin import YTDLPPlugin
 from video_sampler.language.keyword_capture import KeywordExtractor
-from video_sampler.sampler import SamplerConfig, SegmentSampler, Worker
+from video_sampler.sampler import Worker
+from video_sampler.samplers import SegmentSampler
 
 
 @pytest.fixture

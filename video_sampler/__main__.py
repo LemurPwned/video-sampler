@@ -11,8 +11,7 @@ from .buffer import check_args_validity
 from .config import ImageSamplerConfig, SamplerConfig
 from .iterators import delegate_workers
 from .logging import Color, console
-from .sampler import SegmentSampler, VideoSampler
-from .samplers import ImageSampler
+from .samplers import ImageSampler, SegmentSampler, VideoSampler
 from .schemas import BufferType
 
 app = typer.Typer(

@@ -13,6 +13,10 @@ from .base_sampler import BaseSampler
 
 
 class ImageSampler(BaseSampler):
+    """
+    Image sampler -- sample frames from a folder of images
+    """
+
     def __init__(self, cfg: ImageSamplerConfig):
         super().__init__(cfg)
         self.rgx = None
@@ -23,6 +27,9 @@ class ImageSampler(BaseSampler):
             self.rgx = re.compile(cfg.frame_time_regex)
 
     def extract_frame_time(self, image_path: str, default: str | None = None) -> str:
+        """
+        Extract frame time from image path
+        """
         if self.rgx:
             if match := self.rgx.search(image_path):
                 return float(match.group(1))
@@ -38,7 +45,11 @@ class ImageSampler(BaseSampler):
         return default
 
     def sample(self, image_folder: str) -> Iterable[list[FrameObject]]:
-        # check if image_folder is a glob pattern
+        """
+        Sample frames from image folder
+        :param image_folder: path to image folder or glob pattern
+        :return: iterable of frames
+        """
         self.init_sampler()
         if "*" in image_folder:
             image_paths = glob.iglob(image_folder)
