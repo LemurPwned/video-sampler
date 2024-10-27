@@ -62,7 +62,6 @@ def test_format_output_path_with_encode_time_b64(worker, base_video):
 def test_launch(mock_video_sampler, mock_thread, worker, base_video):
     # mock video sampler is needed because we check the calls
     with tempfile.TemporaryDirectory() as output_path:
-
         worker.queue_reader = Mock()
         worker.collect_summaries = Mock()
 

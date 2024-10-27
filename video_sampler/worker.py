@@ -3,7 +3,7 @@ import os
 import time
 from queue import Queue
 from threading import Thread
-
+import json
 from PIL import Image
 
 from .config import SamplerConfig
@@ -61,7 +61,6 @@ class Worker:
                         f"\t{summary}",
                         style="bold green",
                     )
-        import json
 
         # save as a jsonl
         try:
