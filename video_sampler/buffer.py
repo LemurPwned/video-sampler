@@ -406,7 +406,9 @@ def check_buffer_config(buffer_config: dict[str, Any]):
         "passthrough": (),
     }
     for arg in arg_check[buffer_config["type"]]:
-        assert arg in buffer_config, f"{arg} must be present in buffer config"
+        assert (
+            arg in buffer_config
+        ), f"{arg} must be present in buffer config of type {buffer_config['type']}"
         assert (
             buffer_config[arg] is not None and buffer_config[arg] > 0
         ), f"{arg} must be greater than 0 and must not be None"

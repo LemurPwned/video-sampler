@@ -1,12 +1,13 @@
 import base64
+import json
 import os
 import time
 from queue import Queue
 from threading import Thread
-import json
+
 from PIL import Image
 
-from .config import SamplerConfig
+from .config import ImageSamplerConfig, SamplerConfig
 from .logging import Color, console
 from .samplers.video_sampler import VideoSampler
 from .schemas import FrameObject
@@ -90,9 +91,10 @@ class Worker:
             pretty_video_name = os.path.basename(video_path)
         if output_path and self.devnull:
             raise ValueError("Cannot write to disk when devnull is True")
+        if isinstance(self.cfg, ImageSamplerConfig):
+            output_path = os.path.join(output_path, os.path.basename(video_path))
         if output_path:
             os.makedirs(output_path, exist_ok=True)
-
         proc_thread = Thread(
             target=self.sampler.write_queue, args=(video_path, self.q, subs)
         )
