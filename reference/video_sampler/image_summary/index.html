@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../ttl_counter/">
+        <link rel="prev" href="../gating/">
       
       
-        <link rel="next" href="../worker/">
+        <link rel="next" href="../iterators/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Utils - Video Sampler docs</title>
+        <title>Image summary - Video Sampler docs</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#video_sampler.utils" class="md-skip">
+        <a href="#video_sampler.image_summary" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Utils
+              Image summary
             
           </span>
         </div>
@@ -415,10 +415,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../image_summary/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Image summary
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -427,6 +445,33 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#video_sampler.image_summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      image_summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -520,28 +565,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Utils
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -550,51 +577,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils" class="md-nav__link">
-    <span class="md-ellipsis">
-      utils
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.batched" class="md-nav__link">
-    <span class="md-ellipsis">
-      batched
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.slugify" class="md-nav__link">
-    <span class="md-ellipsis">
-      slugify
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -888,27 +870,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#video_sampler.utils" class="md-nav__link">
+  <a href="#video_sampler.image_summary" class="md-nav__link">
     <span class="md-ellipsis">
-      utils
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.batched" class="md-nav__link">
-    <span class="md-ellipsis">
-      batched
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.slugify" class="md-nav__link">
-    <span class="md-ellipsis">
-      slugify
+      image_summary
     </span>
   </a>
   
@@ -932,13 +896,13 @@
   
 
 
-  <h1>Utils</h1>
+  <h1>Image summary</h1>
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="video_sampler.utils"></a>
+<a id="video_sampler.image_summary"></a>
   <div class="doc doc-contents first">
 
   
@@ -952,113 +916,6 @@
 
 
 
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h2 id="video_sampler.utils.batched" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">batched</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></code>
-
-</h2>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Batch data into tuples of length n. The last batch may be shorter.
-from https://docs.python.org/3/library/itertools.html#itertools-recipes</p>
-
-          <details class="quote">
-            <summary>Source code in <code>video_sampler/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">batched</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Batch data into tuples of length n. The last batch may be shorter.</span>
-<span class="sd">    from https://docs.python.org/3/library/itertools.html#itertools-recipes</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n must be at least one&quot;</span><span class="p">)</span>
-    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
-    <span class="k">while</span> <span class="n">batch</span> <span class="o">:=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">n</span><span class="p">)):</span>
-        <span class="k">yield</span> <span class="n">batch</span>
-</code></pre></div></td></tr></table></div>
-          </details>
-  </div>
-
-</div>
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h2 id="video_sampler.utils.slugify" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
-
-</h2>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Taken from https://github.com/django/django/blob/master/django/utils/text.py
-Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
-dashes to single dashes. Remove characters that aren't alphanumerics,
-underscores, or hyphens. Convert to lowercase. Also strip leading and
-trailing whitespace, dashes, and underscores.</p>
-
-          <details class="quote">
-            <summary>Source code in <code>video_sampler/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Taken from https://github.com/django/django/blob/master/django/utils/text.py</span>
-<span class="sd">    Convert to ASCII if &#39;allow_unicode&#39; is False. Convert spaces or repeated</span>
-<span class="sd">    dashes to single dashes. Remove characters that aren&#39;t alphanumerics,</span>
-<span class="sd">    underscores, or hyphens. Convert to lowercase. Also strip leading and</span>
-<span class="sd">    trailing whitespace, dashes, and underscores.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">allow_unicode</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKC&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKD&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
-        <span class="p">)</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\w\s-]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[-\s]+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;-_&quot;</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-          </details>
-  </div>
-
-</div>
 
 
 

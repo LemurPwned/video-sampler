@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../gating/">
+        <link rel="prev" href="../image_summary/">
       
       
         <link rel="next" href="../logging/">
@@ -415,6 +415,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../image_summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -532,27 +553,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../sampler/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Sampler
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../schemas/" class="md-nav__link">
         
   
@@ -615,6 +615,27 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../worker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Worker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -623,7 +644,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
         
           
           
@@ -639,14 +660,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_1_10">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
             <span class="md-nav__icon md-icon"></span>
             Integrations
           </label>
@@ -697,6 +718,99 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_13" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../samplers/base_sampler/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Samplers
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_13" id="__nav_2_1_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_13">
+            <span class="md-nav__icon md-icon"></span>
+            Samplers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/image_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/video_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Video sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -932,11 +1046,7 @@
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/iterators.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
@@ -973,11 +1083,15 @@
 <span class="normal">144</span>
 <span class="normal">145</span>
 <span class="normal">146</span>
-<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">delegate_workers</span><span class="p">(</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">delegate_workers</span><span class="p">(</span>
     <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Generator</span><span class="p">,</span>
     <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span><span class="p">,</span>
-    <span class="n">sampler_cls</span><span class="p">:</span> <span class="n">VideoSampler</span> <span class="o">=</span> <span class="n">VideoSampler</span><span class="p">,</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span> <span class="o">|</span> <span class="n">ImageSamplerConfig</span><span class="p">,</span>
+    <span class="n">sampler_cls</span><span class="p">:</span> <span class="n">BaseSampler</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">VideoSampler</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delegate the processing of a list of videos to a worker instance.</span>
 
@@ -992,7 +1106,7 @@
         <span class="n">videos</span> <span class="o">=</span> <span class="n">video_path</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Detected input as an URL generator&quot;</span>
         <span class="n">is_url</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">video_path</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">ImageSamplerConfig</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;*&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">video_path</span><span class="p">:</span>
             <span class="n">videos</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1124,11 +1238,7 @@
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/iterators.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 59</span>
 <span class="normal"> 60</span>
 <span class="normal"> 61</span>
 <span class="normal"> 62</span>
@@ -1172,12 +1282,16 @@
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
-<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parallel_video_processing</span><span class="p">(</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">parallel_video_processing</span><span class="p">(</span>
     <span class="n">video_iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">],</span>
     <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">is_url</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">worker_cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span><span class="p">,</span>
-    <span class="n">sampler_cls</span><span class="o">=</span><span class="n">VideoSampler</span><span class="p">,</span>
+    <span class="n">worker_cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span> <span class="o">|</span> <span class="n">ImageSamplerConfig</span><span class="p">,</span>
+    <span class="n">sampler_cls</span><span class="p">:</span> <span class="n">BaseSampler</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">VideoSampler</span><span class="p">,</span>
     <span class="n">n_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>  <span class="c1"># sourcery skip: for-append-to-extend</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a list of local video files or video URLs in parallel.</span>
@@ -1287,7 +1401,7 @@ URL and subtitles.</p>
         <tr>
           <td><code>worker</code></td>
           <td>
-                <code><a class="autorefs autorefs-internal" title="video_sampler.sampler.Worker" href="../sampler/#video_sampler.sampler.Worker">Worker</a></code>
+                <code><a class="autorefs autorefs-internal" title="video_sampler.worker.Worker" href="../worker/#video_sampler.worker.Worker">Worker</a></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1317,8 +1431,7 @@ URL and subtitles.</p>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/iterators.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
-<span class="normal">16</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
@@ -1354,12 +1467,16 @@ URL and subtitles.</p>
 <span class="normal">49</span>
 <span class="normal">50</span>
 <span class="normal">51</span>
-<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_video</span><span class="p">(</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">process_video</span><span class="p">(</span>
     <span class="n">video_info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">],</span>
     <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">is_url</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">worker_cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span><span class="p">,</span>
-    <span class="n">sampler_cls</span><span class="p">:</span> <span class="n">VideoSampler</span> <span class="o">=</span> <span class="n">VideoSampler</span><span class="p">,</span>
+    <span class="n">worker_cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span> <span class="o">|</span> <span class="n">ImageSamplerConfig</span><span class="p">,</span>
+    <span class="n">sampler_cls</span><span class="p">:</span> <span class="n">BaseSampler</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">VideoSampler</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a video file or URL.</span>
 
@@ -1383,7 +1500,10 @@ URL and subtitles.</p>
                 <span class="n">subs</span><span class="o">=</span><span class="n">subs</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">video_subpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">video_info</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">worker_cfg</span><span class="p">,</span> <span class="n">ImageSamplerConfig</span><span class="p">):</span>
+                <span class="n">video_subpath</span> <span class="o">=</span> <span class="n">output_path</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">video_subpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">video_info</span><span class="p">))</span>
             <span class="n">worker</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
                 <span class="n">video_path</span><span class="o">=</span><span class="n">video_info</span><span class="p">,</span>
                 <span class="n">output_path</span><span class="o">=</span><span class="n">video_subpath</span><span class="p">,</span>
@@ -1427,7 +1547,7 @@ URL and subtitles.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 12, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
   </span>
 
     
@@ -1437,7 +1557,7 @@ URL and subtitles.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 12, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
   </span>
 
     

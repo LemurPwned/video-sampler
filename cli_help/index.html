@@ -412,6 +412,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/video_sampler/image_summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/video_sampler/iterators/" class="md-nav__link">
         
   
@@ -438,27 +459,6 @@
   
   <span class="md-ellipsis">
     Logging
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/video_sampler/sampler/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Sampler
   </span>
   
 
@@ -537,6 +537,27 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../reference/video_sampler/worker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Worker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -545,7 +566,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
         
           
           
@@ -561,14 +582,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_1_10">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
             <span class="md-nav__icon md-icon"></span>
             Integrations
           </label>
@@ -619,6 +640,99 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_13" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../reference/video_sampler/samplers/base_sampler/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Samplers
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_13" id="__nav_2_1_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_13">
+            <span class="md-nav__icon md-icon"></span>
+            Samplers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/video_sampler/samplers/image_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/video_sampler/samplers/video_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Video sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -856,140 +970,141 @@
 
 <h1 id="cli-help">CLI Help</h1>
 <h2 id="main">Main</h2>
-<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler [OPTIONS] COMMAND [ARGS]...                                                                                                      
+<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler [OPTIONS] COMMAND [ARGS]...                                                                                                            
 
- Video sampler allows you to efficiently sample video frames from a video file or a list of video files or urls.                                                 
+ Video sampler allows you to efficiently sample video frames from a video file or a list of video files or urls.                                                       
 
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                                                                       │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                                                │
-│ --help                        Show this message and exit.                                                                                                     │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ buffer   Buffer type can be one of entropy, gzip, hash, passthrough                                                                                           │
-│ clip     Buffer type can be only of type hash when using CLIP gating.                                                                                         │
-│ config   Create a sampler from a configuration file.                                                                                                          │
-│ hash     Default buffer is the perceptual hash buffer                                                                                                         │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                                                             │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                                                      │
+│ --help                        Show this message and exit.                                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ buffer   Buffer type can be one of entropy, gzip, hash, passthrough                                                                                                 │
+│ clip     Buffer type can be only of type hash when using CLIP gating.                                                                                               │
+│ config   Create a sampler from a configuration file.                                                                                                                │
+│ hash     Default buffer is the perceptual hash buffer                                                                                                               │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 </code></pre></div>
 <h2 id="config">Config</h2>
-<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler config [OPTIONS] CONFIG_PATH VIDEO_PATH                                                                                          
-                                       OUTPUT_PATH                                                                                                               
+<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler config [OPTIONS] CONFIG_PATH INPUT_PATH                                                                                                
+                                       OUTPUT_PATH                                                                                                                     
 
- Create a sampler from a configuration file.                                                                                                                     
+ Create a sampler from a configuration file.                                                                                                                           
 
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    config_path      TEXT  Path to the configuration file. [default: None] [required]                                                                        │
-│ *    video_path       TEXT  Path to the video file or a glob pattern. [default: None] [required]                                                              │
-│ *    output_path      TEXT  Path to the output folder. [default: None] [required]                                                                             │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --ytdlp            --no-ytdlp          Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as an input to ytdlp    │
-│                                        command.                                                                                                               │
-│                                        [default: no-ytdlp]                                                                                                    │
-│ --yt-extra-args                  TEXT  Extra arguments for YouTube-DLP extraction in classic format. [default: None]                                          │
-│ --help                                 Show this message and exit.                                                                                            │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    config_path      TEXT  Path to the configuration file. [default: None] [required]                                                                              │
+│ *    input_path       TEXT  Path to the video file, image folder or a glob pattern. [default: None] [required]                                                      │
+│ *    output_path      TEXT  Path to the output folder. [default: None] [required]                                                                                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --ytdlp            --no-ytdlp           Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as an input to ytdlp         │
+│                                         command.                                                                                                                    │
+│                                         [default: no-ytdlp]                                                                                                         │
+│ --yt-extra-args                   TEXT  Extra arguments for YouTube-DLP extraction in classic format. [default: None]                                               │
+│ --images           --no-images          Use image sampler. [default: no-images]                                                                                     │
+│ --help                                  Show this message and exit.                                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 </code></pre></div>
 <h2 id="hash">Hash</h2>
-<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler hash [OPTIONS] VIDEO_PATH OUTPUT_PATH                                                                                            
+<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler hash [OPTIONS] VIDEO_PATH OUTPUT_PATH                                                                                                  
 
- Default buffer is the perceptual hash buffer                                                                                                                    
+ Default buffer is the perceptual hash buffer                                                                                                                          
 
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    video_path       TEXT  Path to the video file or a glob pattern. [default: None] [required]                                                              │
-│ *    output_path      TEXT  Path to the output folder. [default: None] [required]                                                                             │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --min-frame-interval-sec                           FLOAT    Minimum frame interval in seconds. [default: 1.0]                                                 │
-│ --stats                     --no-stats                      Print stats. [default: stats]                                                                     │
-│ --keyframes-only            --no-keyframes-only             Only sample keyframes. [default: keyframes-only]                                                  │
-│ --buffer-size                                      INTEGER  Size of the buffer. [default: 10]                                                                 │
-│ --hash-size                                        INTEGER  Size of the hash. [default: 4]                                                                    │
-│ --queue-wait                                       FLOAT    Time to wait for the queue. [default: 0.1]                                                        │
-│ --start-time-s                                     INTEGER  The starting time for sampling in seconds. [default: 0]                                           │
-│ --end-time-s                                       INTEGER  The ending time for sampling in seconds. None for no end. [default: None]                         │
-│ --debug                     --no-debug                      Enable debug mode. [default: no-debug]                                                            │
-│ --threshold                                        FLOAT    Threshold for the blur gate. If 0 then no blur gate is used. [default: 20.0]                      │
-│ --blur-method                                      TEXT     Method to use for blur gate. Can be fft or variance. [default: fft]                               │
-│ --ytdlp                     --no-ytdlp                      Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as │
-│                                                             an input to ytdlp command.                                                                        │
-│                                                             [default: no-ytdlp]                                                                               │
-│ --yt-extra-args                                    TEXT     Extra arguments for YouTube-DLP extraction in classic format. [default: None]                     │
-│ --keywords                                         TEXT     Comma separated positive keywords for text extraction. [default: None]                            │
-│ --summary-url                                      TEXT     URL to summarise the video using LLaMA. [default: None]                                           │
-│ --summary-interval                                 INTEGER  Interval in seconds to summarise the video. [default: -1]                                         │
-│ --n-workers                                        INTEGER  Number of workers to use. Default is 1. Use -1 to use all CPUs. [default: 1]                      │
-│ --help                                                      Show this message and exit.                                                                       │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    video_path       TEXT  Path to the video file or a glob pattern. [default: None] [required]                                                                    │
+│ *    output_path      TEXT  Path to the output folder. [default: None] [required]                                                                                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --min-frame-interval-sec                           FLOAT    Minimum frame interval in seconds. [default: 1.0]                                                       │
+│ --stats                     --no-stats                      Print stats. [default: stats]                                                                           │
+│ --keyframes-only            --no-keyframes-only             Only sample keyframes. [default: keyframes-only]                                                        │
+│ --buffer-size                                      INTEGER  Size of the buffer. [default: 10]                                                                       │
+│ --hash-size                                        INTEGER  Size of the hash. [default: 4]                                                                          │
+│ --queue-wait                                       FLOAT    Time to wait for the queue. [default: 0.1]                                                              │
+│ --start-time-s                                     INTEGER  The starting time for sampling in seconds. [default: 0]                                                 │
+│ --end-time-s                                       INTEGER  The ending time for sampling in seconds. None for no end. [default: None]                               │
+│ --debug                     --no-debug                      Enable debug mode. [default: no-debug]                                                                  │
+│ --threshold                                        FLOAT    Threshold for the blur gate. If 0 then no blur gate is used. [default: 20.0]                            │
+│ --blur-method                                      TEXT     Method to use for blur gate. Can be fft or variance. [default: fft]                                     │
+│ --ytdlp                     --no-ytdlp                      Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as an    │
+│                                                             input to ytdlp command.                                                                                 │
+│                                                             [default: no-ytdlp]                                                                                     │
+│ --yt-extra-args                                    TEXT     Extra arguments for YouTube-DLP extraction in classic format. [default: None]                           │
+│ --keywords                                         TEXT     Comma separated positive keywords for text extraction. [default: None]                                  │
+│ --summary-url                                      TEXT     URL to summarise the video using LLaMA. [default: None]                                                 │
+│ --summary-interval                                 INTEGER  Interval in seconds to summarise the video. [default: -1]                                               │
+│ --n-workers                                        INTEGER  Number of workers to use. Default is 1. Use -1 to use all CPUs. [default: 1]                            │
+│ --help                                                      Show this message and exit.                                                                             │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 </code></pre></div>
 <h2 id="buffer">Buffer</h2>
-<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler buffer [OPTIONS] BUFFER_TYPE:{entropy|gzip|hash                                                                                  
-                                       |passthrough|grid} VIDEO_PATH                                                                                             
-                                       OUTPUT_PATH                                                                                                               
+<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler buffer [OPTIONS] BUFFER_TYPE:{entropy|gzip|hash                                                                                        
+                                       |passthrough|grid} VIDEO_PATH                                                                                                   
+                                       OUTPUT_PATH                                                                                                                     
 
- Buffer type can be one of entropy, gzip, hash, passthrough                                                                                                      
+ Buffer type can be one of entropy, gzip, hash, passthrough                                                                                                            
 
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    buffer_type      BUFFER_TYPE:{entropy|gzip|hash|passthrough|grid}  [default: None] [required]                                                            │
-│ *    video_path       TEXT                                              Path to the video file or a glob pattern. [default: None] [required]                  │
-│ *    output_path      TEXT                                              Path to the output folder. [default: None] [required]                                 │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --min-frame-interval-sec                           FLOAT    Minimum frame interval in seconds. [default: 1.0]                                                 │
-│ --stats                     --no-stats                      Print stats. [default: stats]                                                                     │
-│ --keyframes-only            --no-keyframes-only             Only sample keyframes. [default: keyframes-only]                                                  │
-│ --buffer-size                                      INTEGER  Size of the buffer. [default: 10]                                                                 │
-│ --hash-size                                        INTEGER  Size of the hash. [default: 4]                                                                    │
-│ --expiry                                           INTEGER  Expiry time for the buffer. [default: 4]                                                          │
-│ --queue-wait                                       FLOAT    Time to wait for the queue. [default: 0.1]                                                        │
-│ --start-time-s                                     INTEGER  The starting time for sampling in seconds. [default: 0]                                           │
-│ --end-time-s                                       INTEGER  The ending time for sampling in seconds. None for no end. [default: None]                         │
-│ --debug                     --no-debug                      Enable debug mode. [default: no-debug]                                                            │
-│ --grid-size                                        INTEGER  Grid size for the grid buffer. [default: 4]                                                       │
-│ --max-hits                                         INTEGER  Max hits for the grid buffer. [default: 2]                                                        │
-│ --threshold                                        FLOAT    Threshold for the blur gate. If 0 then no blur gate is used. [default: 20.0]                      │
-│ --blur-method                                      TEXT     Method to use for blur gate. Can be fft or variance. [default: fft]                               │
-│ --ytdlp                     --no-ytdlp                      Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as │
-│                                                             an input to ytdlp command.                                                                        │
-│                                                             [default: no-ytdlp]                                                                               │
-│ --yt-extra-args                                    TEXT     Extra arguments for YouTube-DLP extraction in classic format. [default: None]                     │
-│ --n-workers                                        INTEGER  Number of workers to use. Default is 1. Use -1 to use all CPUs. [default: 1]                      │
-│ --help                                                      Show this message and exit.                                                                       │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    buffer_type      BUFFER_TYPE:{entropy|gzip|hash|passthrough|grid}  [default: None] [required]                                                                  │
+│ *    video_path       TEXT                                              Path to the video file or a glob pattern. [default: None] [required]                        │
+│ *    output_path      TEXT                                              Path to the output folder. [default: None] [required]                                       │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --min-frame-interval-sec                           FLOAT    Minimum frame interval in seconds. [default: 1.0]                                                       │
+│ --stats                     --no-stats                      Print stats. [default: stats]                                                                           │
+│ --keyframes-only            --no-keyframes-only             Only sample keyframes. [default: keyframes-only]                                                        │
+│ --buffer-size                                      INTEGER  Size of the buffer. [default: 10]                                                                       │
+│ --hash-size                                        INTEGER  Size of the hash. [default: 4]                                                                          │
+│ --expiry                                           INTEGER  Expiry time for the buffer. [default: 4]                                                                │
+│ --queue-wait                                       FLOAT    Time to wait for the queue. [default: 0.1]                                                              │
+│ --start-time-s                                     INTEGER  The starting time for sampling in seconds. [default: 0]                                                 │
+│ --end-time-s                                       INTEGER  The ending time for sampling in seconds. None for no end. [default: None]                               │
+│ --debug                     --no-debug                      Enable debug mode. [default: no-debug]                                                                  │
+│ --grid-size                                        INTEGER  Grid size for the grid buffer. [default: 4]                                                             │
+│ --max-hits                                         INTEGER  Max hits for the grid buffer. [default: 2]                                                              │
+│ --threshold                                        FLOAT    Threshold for the blur gate. If 0 then no blur gate is used. [default: 20.0]                            │
+│ --blur-method                                      TEXT     Method to use for blur gate. Can be fft or variance. [default: fft]                                     │
+│ --ytdlp                     --no-ytdlp                      Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as an    │
+│                                                             input to ytdlp command.                                                                                 │
+│                                                             [default: no-ytdlp]                                                                                     │
+│ --yt-extra-args                                    TEXT     Extra arguments for YouTube-DLP extraction in classic format. [default: None]                           │
+│ --n-workers                                        INTEGER  Number of workers to use. Default is 1. Use -1 to use all CPUs. [default: 1]                            │
+│ --help                                                      Show this message and exit.                                                                             │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 </code></pre></div>
 <h2 id="clip">Clip</h2>
-<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler clip [OPTIONS] VIDEO_PATH OUTPUT_PATH                                                                                            
+<div class="highlight"><pre><span></span><code> Usage: python -m video_sampler clip [OPTIONS] VIDEO_PATH OUTPUT_PATH                                                                                                  
 
- Buffer type can be only of type hash when using CLIP gating.                                                                                                    
+ Buffer type can be only of type hash when using CLIP gating.                                                                                                          
 
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    video_path       TEXT  Path to the video file or a glob pattern. [default: None] [required]                                                              │
-│ *    output_path      TEXT  Path to the output folder. [default: None] [required]                                                                             │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --pos-samples                                      TEXT     Comma separated positive samples to use for gating. [default: None]                               │
-│ --neg-samples                                      TEXT     Comma separated negative samples to use for gating. [default: None]                               │
-│ --pos-margin                                       FLOAT    Positive margin for gating. [default: 0.2]                                                        │
-│ --neg-margin                                       FLOAT    Negative margin for gating. [default: 0.3]                                                        │
-│ --batch-size                                       INTEGER  Batch size for CLIP. [default: 32]                                                                │
-│ --model-name                                       TEXT     Model name for CLIP. [default: ViT-B-32]                                                          │
-│ --min-frame-interval-sec                           FLOAT    Minimum frame interval in seconds. [default: 1.0]                                                 │
-│ --stats                     --no-stats                      Print stats. [default: stats]                                                                     │
-│ --keyframes-only            --no-keyframes-only             Only sample keyframes. [default: keyframes-only]                                                  │
-│ --buffer-size                                      INTEGER  Size of the buffer. [default: 10]                                                                 │
-│ --hash-size                                        INTEGER  Size of the hash. [default: 4]                                                                    │
-│ --queue-wait                                       FLOAT    Time to wait for the queue. [default: 0.1]                                                        │
-│ --start-time-s                                     INTEGER  The starting time for sampling in seconds. [default: 0]                                           │
-│ --end-time-s                                       INTEGER  The ending time for sampling in seconds. None for no end. [default: None]                         │
-│ --debug                     --no-debug                      Enable debug mode. [default: no-debug]                                                            │
-│ --ytdlp                     --no-ytdlp                      Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as │
-│                                                             an input to ytdlp command.                                                                        │
-│                                                             [default: no-ytdlp]                                                                               │
-│ --yt-extra-args                                    TEXT     Extra arguments for YouTube-DLP extraction in classic format. [default: None]                     │
-│ --n-workers                                        INTEGER  Number of workers to use. Default is 1. Use -1 to use all CPUs. [default: 1]                      │
-│ --help                                                      Show this message and exit.                                                                       │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    video_path       TEXT  Path to the video file or a glob pattern. [default: None] [required]                                                                    │
+│ *    output_path      TEXT  Path to the output folder. [default: None] [required]                                                                                   │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --pos-samples                                      TEXT     Comma separated positive samples to use for gating. [default: None]                                     │
+│ --neg-samples                                      TEXT     Comma separated negative samples to use for gating. [default: None]                                     │
+│ --pos-margin                                       FLOAT    Positive margin for gating. [default: 0.2]                                                              │
+│ --neg-margin                                       FLOAT    Negative margin for gating. [default: 0.3]                                                              │
+│ --batch-size                                       INTEGER  Batch size for CLIP. [default: 32]                                                                      │
+│ --model-name                                       TEXT     Model name for CLIP. [default: ViT-B-32]                                                                │
+│ --min-frame-interval-sec                           FLOAT    Minimum frame interval in seconds. [default: 1.0]                                                       │
+│ --stats                     --no-stats                      Print stats. [default: stats]                                                                           │
+│ --keyframes-only            --no-keyframes-only             Only sample keyframes. [default: keyframes-only]                                                        │
+│ --buffer-size                                      INTEGER  Size of the buffer. [default: 10]                                                                       │
+│ --hash-size                                        INTEGER  Size of the hash. [default: 4]                                                                          │
+│ --queue-wait                                       FLOAT    Time to wait for the queue. [default: 0.1]                                                              │
+│ --start-time-s                                     INTEGER  The starting time for sampling in seconds. [default: 0]                                                 │
+│ --end-time-s                                       INTEGER  The ending time for sampling in seconds. None for no end. [default: None]                               │
+│ --debug                     --no-debug                      Enable debug mode. [default: no-debug]                                                                  │
+│ --ytdlp                     --no-ytdlp                      Use yt-dlp to download videos from urls. Default is False. Enabling this will treat video_path as an    │
+│                                                             input to ytdlp command.                                                                                 │
+│                                                             [default: no-ytdlp]                                                                                     │
+│ --yt-extra-args                                    TEXT     Extra arguments for YouTube-DLP extraction in classic format. [default: None]                           │
+│ --n-workers                                        INTEGER  Number of workers to use. Default is 1. Use -1 to use all CPUs. [default: 1]                            │
+│ --help                                                      Show this message and exit.                                                                             │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 </code></pre></div>
 
 
@@ -1013,7 +1128,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 12, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
   </span>
 
     
@@ -1023,7 +1138,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 12, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
   </span>
 
     

@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../ttl_counter/">
+        <link rel="prev" href="../../language/keyword_capture/">
       
       
-        <link rel="next" href="../worker/">
+        <link rel="next" href="../image_sampler/">
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.9">
     
     
       
-        <title>Utils - Video Sampler docs</title>
+        <title>Samplers - Video Sampler docs</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.f2e4d321.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.f2e4d321.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#video_sampler.utils" class="md-skip">
+        <a href="#video_sampler.samplers.base_sampler" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +90,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Video Sampler docs" class="md-header__button md-logo" aria-label="Video Sampler docs" data-md-component="logo">
+    <a href="../../../.." title="Video Sampler docs" class="md-header__button md-logo" aria-label="Video Sampler docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Utils
+              Samplers
             
           </span>
         </div>
@@ -223,7 +223,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Video Sampler docs" class="md-nav__button md-logo" aria-label="Video Sampler docs" data-md-component="logo">
+    <a href="../../../.." title="Video Sampler docs" class="md-nav__button md-logo" aria-label="Video Sampler docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -253,7 +253,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -324,7 +324,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../buffer/" class="md-nav__link ">
+            <a href="../../buffer/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -355,7 +355,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../config/" class="md-nav__link">
+      <a href="../../config/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -376,7 +376,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../evaluation/" class="md-nav__link">
+      <a href="../../evaluation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -397,7 +397,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gating/" class="md-nav__link">
+      <a href="../../gating/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -418,7 +418,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../image_summary/" class="md-nav__link">
+      <a href="../../image_summary/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -439,7 +439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../iterators/" class="md-nav__link">
+      <a href="../../iterators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -460,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../logging/" class="md-nav__link">
+      <a href="../../logging/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -481,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../schemas/" class="md-nav__link">
+      <a href="../../schemas/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -502,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ttl_counter/" class="md-nav__link">
+      <a href="../../ttl_counter/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -520,28 +520,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Utils
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -550,51 +532,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils" class="md-nav__link">
-    <span class="md-ellipsis">
-      utils
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.batched" class="md-nav__link">
-    <span class="md-ellipsis">
-      batched
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.slugify" class="md-nav__link">
-    <span class="md-ellipsis">
-      slugify
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -607,7 +544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../worker/" class="md-nav__link">
+      <a href="../../worker/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -640,7 +577,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../integrations/llava_chat/" class="md-nav__link ">
+            <a href="../../integrations/llava_chat/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -671,7 +608,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../integrations/yt_dlp_plugin/" class="md-nav__link">
+      <a href="../../integrations/yt_dlp_plugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -700,7 +637,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/keyword_capture/" class="md-nav__link">
+      <a href="../../language/keyword_capture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -718,22 +655,24 @@
                 
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_13" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../samplers/base_sampler/" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   <span class="md-ellipsis">
@@ -744,13 +683,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_1_13" id="__nav_2_1_13_label" tabindex="0">
+              <label class="md-nav__link md-nav__link--active" for="__nav_2_1_13" id="__nav_2_1_13_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_13_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_13_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1_13">
             <span class="md-nav__icon md-icon"></span>
             Samplers
@@ -764,7 +703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../samplers/image_sampler/" class="md-nav__link">
+      <a href="../image_sampler/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -785,7 +724,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../samplers/video_sampler/" class="md-nav__link">
+      <a href="../video_sampler/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -814,7 +753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../visualisation/clustering/" class="md-nav__link">
+      <a href="../../visualisation/clustering/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -850,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../cli_help/" class="md-nav__link">
+      <a href="../../../../cli_help/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -888,29 +827,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#video_sampler.utils" class="md-nav__link">
+  <a href="#video_sampler.samplers.base_sampler" class="md-nav__link">
     <span class="md-ellipsis">
-      utils
+      base_sampler
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#video_sampler.utils.batched" class="md-nav__link">
+  <a href="#video_sampler.samplers.base_sampler.BaseSampler" class="md-nav__link">
     <span class="md-ellipsis">
-      batched
+      BaseSampler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseSampler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#video_sampler.samplers.base_sampler.BaseSampler.flush_buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      flush_buffer
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#video_sampler.utils.slugify" class="md-nav__link">
-    <span class="md-ellipsis">
-      slugify
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -932,14 +877,149 @@
   
 
 
-  <h1>Utils</h1>
+  <h1>Samplers</h1>
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="video_sampler.utils"></a>
+<a id="video_sampler.samplers.base_sampler"></a>
   <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="video_sampler.samplers.base_sampler.BaseSampler" class="doc doc-heading">
+          <code>BaseSampler</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+
+            <details class="quote">
+              <summary>Source code in <code>video_sampler/samplers/base_sampler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BaseSampler</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">:</span> <span class="n">SamplerConfig</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffer</span><span class="p">:</span> <span class="n">FrameBuffer</span> <span class="o">=</span> <span class="n">create_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">buffer_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="p">:</span> <span class="n">BlurGate</span> <span class="o">|</span> <span class="n">ClipGate</span> <span class="o">|</span> <span class="n">PassGate</span> <span class="o">=</span> <span class="n">create_gate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">gate_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameObject</span><span class="p">]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;sample method must be implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">subs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;write_queue method must be implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">init_sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">flush_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameObject</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Flushes the frame buffer and yields gated frames&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffer</span><span class="o">.</span><span class="n">final_flush</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;produced&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">gated_obj</span><span class="p">:</span> <span class="n">GatedObject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;gated&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">N</span>
+                <span class="k">if</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span>
+        <span class="n">gated_obj</span><span class="p">:</span> <span class="n">GatedObject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;gated&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">N</span>
+        <span class="k">if</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span>
+        <span class="k">yield</span> <span class="n">PROCESSING_DONE_ITERABLE</span>
+
+    <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">frame_indx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ftime</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameObject</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffer</span><span class="o">.</span><span class="n">get_buffer_state</span><span class="p">()</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">frame_indx</span><span class="si">}</span><span class="se">\t</span><span class="s2">time: </span><span class="si">{</span><span class="n">ftime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Buffer (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">buf</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">frame_meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;frame_time&quot;</span><span class="p">:</span> <span class="n">ftime</span><span class="p">,</span> <span class="s2">&quot;frame_indx&quot;</span><span class="p">:</span> <span class="n">frame_indx</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;decoded&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">res</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span>
+            <span class="n">metadata</span><span class="o">=</span><span class="n">frame_meta</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">gated_obj</span><span class="p">:</span> <span class="n">GatedObject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;produced&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;gated&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">N</span>
+            <span class="k">if</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span>
+</code></pre></div></td></tr></table></div>
+            </details>
 
   
 
@@ -958,38 +1038,45 @@
 
 
 
-<h2 id="video_sampler.utils.batched" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">batched</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></code>
+<h3 id="video_sampler.samplers.base_sampler.BaseSampler.flush_buffer" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">flush_buffer</span><span class="p">()</span></code>
 
-</h2>
+</h3>
 
 
   <div class="doc doc-contents ">
   
-      <p>Batch data into tuples of length n. The last batch may be shorter.
-from https://docs.python.org/3/library/itertools.html#itertools-recipes</p>
+      <p>Flushes the frame buffer and yields gated frames</p>
 
           <details class="quote">
-            <summary>Source code in <code>video_sampler/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
+            <summary>Source code in <code>video_sampler/samplers/base_sampler.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">batched</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Batch data into tuples of length n. The last batch may be shorter.</span>
-<span class="sd">    from https://docs.python.org/3/library/itertools.html#itertools-recipes</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n must be at least one&quot;</span><span class="p">)</span>
-    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
-    <span class="k">while</span> <span class="n">batch</span> <span class="o">:=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">n</span><span class="p">)):</span>
-        <span class="k">yield</span> <span class="n">batch</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">flush_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameObject</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Flushes the frame buffer and yields gated frames&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_buffer</span><span class="o">.</span><span class="n">final_flush</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;produced&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">gated_obj</span><span class="p">:</span> <span class="n">GatedObject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;gated&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">N</span>
+            <span class="k">if</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span>
+    <span class="n">gated_obj</span><span class="p">:</span> <span class="n">GatedObject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;gated&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">N</span>
+    <span class="k">if</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">gated_obj</span><span class="o">.</span><span class="n">frames</span>
+    <span class="k">yield</span> <span class="n">PROCESSING_DONE_ITERABLE</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -997,68 +1084,14 @@ from https://docs.python.org/3/library/itertools.html#itertools-recipes</p>
 </div>
 
 
-<div class="doc doc-object doc-function">
 
-
-
-<h2 id="video_sampler.utils.slugify" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
-
-</h2>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Taken from https://github.com/django/django/blob/master/django/utils/text.py
-Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
-dashes to single dashes. Remove characters that aren't alphanumerics,
-underscores, or hyphens. Convert to lowercase. Also strip leading and
-trailing whitespace, dashes, and underscores.</p>
-
-          <details class="quote">
-            <summary>Source code in <code>video_sampler/utils.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">slugify</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Taken from https://github.com/django/django/blob/master/django/utils/text.py</span>
-<span class="sd">    Convert to ASCII if &#39;allow_unicode&#39; is False. Convert spaces or repeated</span>
-<span class="sd">    dashes to single dashes. Remove characters that aren&#39;t alphanumerics,</span>
-<span class="sd">    underscores, or hyphens. Convert to lowercase. Also strip leading and</span>
-<span class="sd">    trailing whitespace, dashes, and underscores.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">allow_unicode</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKC&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKD&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-            <span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
-        <span class="p">)</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\w\s-]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[-\s]+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;-_&quot;</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-          </details>
   </div>
 
+  </div>
+
+
 </div>
+
 
 
 
@@ -1145,10 +1178,10 @@ trailing whitespace, dashes, and underscores.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.8fd75fb4.min.js"></script>
       
     
   </body>

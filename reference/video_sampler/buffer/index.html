@@ -418,6 +418,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../image_summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../iterators/" class="md-nav__link">
         
   
@@ -444,27 +465,6 @@
   
   <span class="md-ellipsis">
     Logging
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../sampler/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Sampler
   </span>
   
 
@@ -543,6 +543,27 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../worker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Worker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -551,7 +572,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
         
           
           
@@ -567,14 +588,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_1_10">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
             <span class="md-nav__icon md-icon"></span>
             Integrations
           </label>
@@ -625,6 +646,99 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_13" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../samplers/base_sampler/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Samplers
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_13" id="__nav_2_1_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_13">
+            <span class="md-nav__icon md-icon"></span>
+            Samplers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/image_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../samplers/video_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Video sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -888,19 +1002,7 @@
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/buffer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span>
-<span class="normal">358</span>
-<span class="normal">359</span>
-<span class="normal">360</span>
-<span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">365</span>
 <span class="normal">366</span>
 <span class="normal">367</span>
 <span class="normal">368</span>
@@ -910,7 +1012,19 @@
 <span class="normal">372</span>
 <span class="normal">373</span>
 <span class="normal">374</span>
-<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">EntropyByffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">EntropyByffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Measure image entropy as a function of the image usability&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1356,19 +1470,7 @@ Splits the image into a grid and stores the hashes of the grid cells in a mosaic
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/buffer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">135</span>
 <span class="normal">136</span>
 <span class="normal">137</span>
 <span class="normal">138</span>
@@ -1466,7 +1568,19 @@ Splits the image into a grid and stores the hashes of the grid cells in a mosaic
 <span class="normal">230</span>
 <span class="normal">231</span>
 <span class="normal">232</span>
-<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">GridBuffer</span><span class="p">(</span><span class="n">HashBuffer</span><span class="p">):</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">GridBuffer</span><span class="p">(</span><span class="n">HashBuffer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class representing a grid-based buffer for images.</span>
 <span class="sd">    Splits the image into a grid and stores the hashes of the grid cells in a mosaic buffer.</span>
@@ -1533,7 +1647,7 @@ Splits the image into a grid and stores the hashes of the grid cells in a mosaic
 
     <span class="k">def</span> <span class="nf">update_ttl_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># expire the images that are not in the grid</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
             <span class="n">to_return_hash</span><span class="p">,</span> <span class="n">return_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">to_return_hash</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">removal_keys</span> <span class="o">=</span> <span class="p">[</span>
@@ -1609,23 +1723,23 @@ Splits the image into a grid and stores the hashes of the grid cells in a mosaic
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/buffer.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">167</span>
-<span class="normal">168</span>
-<span class="normal">169</span>
-<span class="normal">170</span>
-<span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
 <span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span>
-<span class="normal">183</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">__get_grid_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">__get_grid_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute grid hashes for a given image&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_x</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_y</span><span class="p">):</span>
@@ -1677,19 +1791,7 @@ Splits the image into a grid and stores the hashes of the grid cells in a mosaic
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/buffer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
-<span class="normal">337</span>
-<span class="normal">338</span>
-<span class="normal">339</span>
-<span class="normal">340</span>
-<span class="normal">341</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">341</span>
 <span class="normal">342</span>
 <span class="normal">343</span>
 <span class="normal">344</span>
@@ -1698,7 +1800,19 @@ Splits the image into a grid and stores the hashes of the grid cells in a mosaic
 <span class="normal">347</span>
 <span class="normal">348</span>
 <span class="normal">349</span>
-<span class="normal">350</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">GzipBuffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">GzipBuffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Measure compression size as a function of the image usability&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1883,7 +1997,19 @@ Adds an item to the buffer along with its metadata.</p>
 <span class="normal">117</span>
 <span class="normal">118</span>
 <span class="normal">119</span>
-<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">HashBuffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">HashBuffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A buffer that stores frames with their corresponding metadata and</span>
 <span class="sd">    checks for duplicates based on image hashes.</span>
@@ -1931,7 +2057,7 @@ Adds an item to the buffer along with its metadata.</p>
 
     <span class="k">def</span> <span class="nf">__add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hash_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">[</span><span class="n">hash_</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span>
 
@@ -1952,6 +2078,18 @@ Adds an item to the buffer along with its metadata.</p>
 
     <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">popitem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordered_buffer</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="n">last</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
 
@@ -2184,19 +2322,7 @@ Adds an item to the buffer along with its metadata.</p>
 
             <details class="quote">
               <summary>Source code in <code>video_sampler/buffer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">236</span>
-<span class="normal">237</span>
-<span class="normal">238</span>
-<span class="normal">239</span>
-<span class="normal">240</span>
-<span class="normal">241</span>
-<span class="normal">242</span>
-<span class="normal">243</span>
-<span class="normal">244</span>
-<span class="normal">245</span>
-<span class="normal">246</span>
-<span class="normal">247</span>
-<span class="normal">248</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span>
 <span class="normal">251</span>
@@ -2274,7 +2400,19 @@ Adds an item to the buffer along with its metadata.</p>
 <span class="normal">323</span>
 <span class="normal">324</span>
 <span class="normal">325</span>
-<span class="normal">326</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SlidingTopKBuffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SlidingTopKBuffer</span><span class="p">(</span><span class="n">FrameBuffer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class representing a sliding top-k buffer for frames.</span>
 
@@ -2407,35 +2545,7 @@ Adds an item to the buffer along with its metadata.</p>
 
           <details class="quote">
             <summary>Source code in <code>video_sampler/buffer.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span>
-<span class="normal">410</span>
-<span class="normal">411</span>
-<span class="normal">412</span>
-<span class="normal">413</span>
-<span class="normal">414</span>
-<span class="normal">415</span>
-<span class="normal">416</span>
-<span class="normal">417</span>
-<span class="normal">418</span>
-<span class="normal">419</span>
-<span class="normal">420</span>
-<span class="normal">421</span>
-<span class="normal">422</span>
-<span class="normal">423</span>
-<span class="normal">424</span>
-<span class="normal">425</span>
-<span class="normal">426</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">426</span>
 <span class="normal">427</span>
 <span class="normal">428</span>
 <span class="normal">429</span>
@@ -2451,8 +2561,38 @@ Adds an item to the buffer along with its metadata.</p>
 <span class="normal">439</span>
 <span class="normal">440</span>
 <span class="normal">441</span>
-<span class="normal">442</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_buffer</span><span class="p">(</span><span class="n">buffer_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">create_buffer</span><span class="p">(</span><span class="n">buffer_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">FrameBuffer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a buffer based on the config&quot;&quot;&quot;</span>
+    <span class="n">check_buffer_config</span><span class="p">(</span><span class="n">buffer_config</span><span class="p">)</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;Creating buffer of type </span><span class="si">{</span><span class="n">buffer_config</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">style</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bold </span><span class="si">{</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -2460,13 +2600,13 @@ Adds an item to the buffer along with its metadata.</p>
     <span class="k">if</span> <span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hash&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">HashBuffer</span><span class="p">(</span>
             <span class="n">size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span>
-            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
             <span class="n">hash_size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;hash_size&quot;</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">GridBuffer</span><span class="p">(</span>
             <span class="n">size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span>
-            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
             <span class="n">hash_size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;hash_size&quot;</span><span class="p">],</span>
             <span class="n">grid_x</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;grid_x&quot;</span><span class="p">],</span>
             <span class="n">grid_y</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;grid_y&quot;</span><span class="p">],</span>
@@ -2475,7 +2615,7 @@ Adds an item to the buffer along with its metadata.</p>
     <span class="k">elif</span> <span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;sliding_top_k&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SlidingTopKBuffer</span><span class="p">(</span>
             <span class="n">size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span>
-            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
             <span class="n">expiry</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;expiry&quot;</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;passthrough&quot;</span><span class="p">:</span>
@@ -2483,14 +2623,14 @@ Adds an item to the buffer along with its metadata.</p>
     <span class="k">elif</span> <span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">GzipBuffer</span><span class="p">(</span>
             <span class="n">size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span>
-            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
             <span class="n">hash_size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;hash_size&quot;</span><span class="p">],</span>
             <span class="n">expiry</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;expiry&quot;</span><span class="p">],</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;entropy&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">EntropyByffer</span><span class="p">(</span>
             <span class="n">size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span>
-            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;debug&quot;</span><span class="p">],</span>
+            <span class="n">debug_flag</span><span class="o">=</span><span class="n">buffer_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
             <span class="n">hash_size</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;hash_size&quot;</span><span class="p">],</span>
             <span class="n">expiry</span><span class="o">=</span><span class="n">buffer_config</span><span class="p">[</span><span class="s2">&quot;expiry&quot;</span><span class="p">],</span>
         <span class="p">)</span>
@@ -2531,7 +2671,7 @@ Adds an item to the buffer along with its metadata.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 12, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
   </span>
 
     
@@ -2541,7 +2681,7 @@ Adds an item to the buffer along with its metadata.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 12, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
   </span>
 
     
