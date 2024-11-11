@@ -110,6 +110,7 @@ def test_video_sampler(temp_video):
     sampler = VideoSampler(config)
 
     frame_count = 0
+    frame_times = []
     for frames in sampler.sample(temp_video):
         frame_obj: FrameObject
         for frame_obj in frames:
@@ -121,8 +122,9 @@ def test_video_sampler(temp_video):
                     "frame_time" in frame_obj.metadata
                 ), "Expected frame_time in metadata"
                 frame_count += 1
-
+                frame_times.append(frame_obj.metadata["frame_time"])
     assert frame_count > 0, "No frames were sampled"
+    assert frame_times == sorted(frame_times), "Frames not in chronological order"
     assert frame_count < 150, "Too many frames were sampled"
 
 

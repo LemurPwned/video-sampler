@@ -108,3 +108,25 @@ def test_queue_reader(worker):
 
         expected_save_path = worker.format_output_path(temp_dir, 1.0)
         mock_image.save.assert_called_once_with(expected_save_path)
+
+
+def test_queue_reader_parallel(worker):
+    import threading
+
+    mock_images = [Mock(spec=Image.Image) for _ in range(3)]
+    frame_objects = [
+        FrameObject(frame=img, metadata={"frame_time": i})
+        for i, img in enumerate(mock_images)
+    ]
+    end_object = FrameObject(frame=None, metadata={"end": True})
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        threading.Thread(
+            target=lambda: [worker.q.put([fo]) for fo in frame_objects + [end_object]]
+        ).start()
+        worker.queue_reader(temp_dir, read_interval=0.01)
+
+        for i, mock_image in enumerate(mock_images):
+            mock_image.save.assert_called_once_with(
+                worker.format_output_path(temp_dir, int(i))
+            )
