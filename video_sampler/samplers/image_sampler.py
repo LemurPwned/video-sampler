@@ -15,6 +15,13 @@ from .base_sampler import BaseSampler
 class ImageSampler(BaseSampler):
     """
     Image sampler -- sample frames from a folder of images
+
+    Args:
+        cfg (ImageSamplerConfig): Image sampler config
+
+    Methods:
+        sample(image_folder: str) -> Iterable[list[FrameObject]]: Sample frames from image folder
+        write_queue(image_path: str, q: Queue, _: str = None): Write frames to queue
     """
 
     def __init__(self, cfg: ImageSamplerConfig):
@@ -29,6 +36,12 @@ class ImageSampler(BaseSampler):
     def extract_frame_time(self, image_path: str, default: str | None = None) -> str:
         """
         Extract frame time from image path
+        Args:
+            image_path (str): Path to image
+            default (str | None): Default frame time to return if no regex is set
+
+        Returns:
+            str: Frame time
         """
         if self.rgx:
             if match := self.rgx.search(image_path):
@@ -47,8 +60,11 @@ class ImageSampler(BaseSampler):
     def sample(self, image_folder: str) -> Iterable[list[FrameObject]]:
         """
         Sample frames from image folder
-        :param image_folder: path to image folder or glob pattern
-        :return: iterable of frames
+        Args:
+            image_folder (str): Path to image folder or glob pattern
+
+        Returns:
+            Iterable[list[FrameObject]]: Iterable of frames
         """
         self.init_sampler()
         if "*" in image_folder:
@@ -73,6 +89,12 @@ class ImageSampler(BaseSampler):
         yield from self.flush_buffer()
 
     def write_queue(self, image_path: str, q: Queue, _: str = None):
+        """
+        Write frames to queue.
+        Args:
+            image_path (str): Path to image
+            q (Queue): Queue to write frames to
+        """
         try:
             for item in self.sample(image_path):
                 q.put(item)

@@ -47,7 +47,10 @@ class VideoSampler(BaseSampler):
                     of FrameObjects representing sampled frames.
         """
         self.init_sampler()
-        with av.open(video_path) as container:
+        with av.open(
+            video_path,
+            metadata_errors="ignore",
+        ) as container:
             stream = container.streams.video[0]
             if self.cfg.keyframes_only:
                 stream.codec_context.skip_frame = "NONKEY"
@@ -79,24 +82,57 @@ class VideoSampler(BaseSampler):
                         f"\n\t{e}",
                         style=f"bold {Color.red.value}",
                     )
-            avg_fps = float(stream.average_rate)
+            try:
+                avg_fps = float(stream.average_rate)
+            except (AttributeError, TypeError):
+                console.print(
+                    "Failed to get average FPS, defaulting to 1. If you are using a URL handle, this is expected.",
+                    style=f"bold {Color.yellow.value}",
+                )
+                avg_fps = 1
             for frame in container.decode(stream):
+                console.print(f"Frame: {frame}")
                 if frame is None or frame.is_corrupt:
+                    if self.cfg.debug:
+                        console.print(
+                            "Frame is None or corrupt, skipping.",
+                            style=f"bold {Color.red.value}",
+                        )
                     continue
                 try:
                     ftime = frame.time
                 except AttributeError:
+                    if self.cfg.debug:
+                        console.print(
+                            "Failed to get frame time, skipping frame.",
+                            style=f"bold {Color.red.value}",
+                        )
                     continue
                 if self.cfg.start_time_s > 0 and ftime < self.cfg.start_time_s:
+                    if self.cfg.debug:
+                        console.print(
+                            f"Frame time {ftime} is before start time {self.cfg.start_time_s}, skipping.",
+                            style=f"bold {Color.red.value}",
+                        )
                     continue
 
                 if self.cfg.end_time_s is not None and ftime > self.cfg.end_time_s:
+                    if self.cfg.debug:
+                        console.print(
+                            f"Frame time {ftime} is after end time {self.cfg.end_time_s}, stopping.",
+                            style=f"bold {Color.red.value}",
+                        )
                     break
                 frame_index = int(ftime * avg_fps)
                 # skip frames if keyframes_only is True
                 time_diff = ftime - prev_time
                 self.stats["total"] += 1
                 if time_diff < self.cfg.min_frame_interval_sec:
+                    if self.cfg.debug:
+                        console.print(
+                            f"Frame time {ftime} is too close to previous frame {prev_time}, skipping.",
+                            style=f"bold {Color.red.value}",
+                        )
                     continue
                 prev_time = ftime
                 frame_pil = frame.to_image()
@@ -108,6 +144,7 @@ class VideoSampler(BaseSampler):
         try:
             item: tuple[FrameObject, int]
             for item in self.sample(video_path=video_path, subs=subs):
+                console.print(f"Writing item to queue: {item}")
                 q.put(item)
         except (av.IsADirectoryError, av.InvalidDataError) as e:
             console.print(
