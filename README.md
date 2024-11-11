@@ -39,9 +39,9 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Benchmarks](#benchmarks)
   - [Benchmark videos](#benchmark-videos)
   - [Flit commands](#flit-commands)
-    - [Build](#build)
-    - [Install](#install)
-    - [Publish](#publish)
+      - [Build](#build)
+      - [Install](#install)
+      - [Publish](#publish)
   - [🛡 License](#-license)
   - [📃 Citation](#-citation)
 
@@ -119,6 +119,7 @@ You can test out the RTSP support by running the following command:
 ```bash
 python3 -m video_sampler config ./configs/hash_base.yaml rtsp://localhost:8554/some-stream ./sampled-stream/
 ```
+[RTSP simple server](https://github.com/bhaney/rtsp-simple-server) is a good way to test RTSP streams.
 
 Other streams (MJPEG) also work, e.g.
 
