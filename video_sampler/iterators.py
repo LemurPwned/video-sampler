@@ -107,6 +107,14 @@ def parallel_video_processing(
                 future.result()
 
 
+def is_video_path_url(video_path: str) -> bool:
+    return (
+        video_path.startswith("http")
+        or video_path.startswith("https")
+        or video_path.startswith("rtsp")
+    )
+
+
 def delegate_workers(
     video_path: str | Generator,
     output_path: str,
@@ -126,6 +134,9 @@ def delegate_workers(
         videos = video_path
         msg = "Detected input as an URL generator"
         is_url = True
+    elif is_video_path_url(video_path):
+        videos = iter([video_path])
+        msg = "Detected input as an URL"
     elif not os.path.isfile(video_path) and not isinstance(cfg, ImageSamplerConfig):
         if "*" not in video_path:
             videos = glob.glob(os.path.join(video_path, "*"))

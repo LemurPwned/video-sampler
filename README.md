@@ -26,6 +26,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Features](#features)
   - [Installation and Usage](#installation-and-usage)
     - [Basic usage](#basic-usage)
+      - [Streaming and RTSP support](#streaming-and-rtsp-support)
       - [Image sampling](#image-sampling)
       - [YT-DLP integration plugin](#yt-dlp-integration-plugin)
         - [Extra YT-DLP options](#extra-yt-dlp-options)
@@ -38,9 +39,9 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Benchmarks](#benchmarks)
   - [Benchmark videos](#benchmark-videos)
   - [Flit commands](#flit-commands)
-    - [Build](#build)
-    - [Install](#install)
-    - [Publish](#publish)
+      - [Build](#build)
+      - [Install](#install)
+      - [Publish](#publish)
   - [🛡 License](#-license)
   - [📃 Citation](#-citation)
 
@@ -109,6 +110,24 @@ python3 -m video_sampler config ./configs/hash_base.yaml /my-video-folder/ ./my-
 ```
 
 You can set the number of workers to use with the `n_workers` parameter. The default is 1.
+
+#### Streaming and RTSP support
+
+RTSP support is experimental and may not work for all RTSP servers, but it should work for most of them.
+You can test out the RTSP support by running the following command:
+
+```bash
+python3 -m video_sampler config ./configs/hash_base.yaml rtsp://localhost:8554/some-stream ./sampled-stream/
+```
+[RTSP simple server](https://github.com/bhaney/rtsp-simple-server) is a good way to test RTSP streams.
+
+Other streams (MJPEG) also work, e.g.
+
+```bash
+python3 -m video_sampler config ./configs/hash_base.yaml "http://honjin1.miemasu.net/nphMotionJpeg?Resolution=640x480&Quality=Standard" ./sampled-stream/
+```
+
+For proper streaming, you may want to adjust `min_frame_interval_sec` and buffer sizes to have a shorter flush time. Keep in mind that streaming will be sampled until interrupted, so you may want to specify the end time of the stream with [`end_time_s` parameter](./video_sampler/config.py#L81). If the stream is a looped video, this is especially important -- otherwise, you'll end up overwriting the same frames over and over again.
 
 #### Image sampling
 

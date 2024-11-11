@@ -2,7 +2,7 @@
 name = "video_sampler"
 description = "Video Sampler -- sample frames from a video file"
 url = "https://github.com/LemurPwned/video-sampler"
-version = "0.12.0"
+version = "0.12.1"
 authors = [
     { name = "LemurPwned", email = "lemurpwned@gmail.com" }
 ]
@@ -27,7 +27,7 @@ keywords = [
 ]
 
 dependencies = [
-  "av >=10.0.0",
+  "av >=13.0.0",
   "ImageHash >=4.3.1",
   "Pillow >=10.0.0",
   "rich >= 13.5.3",

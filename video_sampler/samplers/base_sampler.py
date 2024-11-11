@@ -65,3 +65,7 @@ class BaseSampler:
             self.stats["gated"] += gated_obj.N
             if gated_obj.frames:
                 yield gated_obj.frames
+
+    def debug_print(self, message: str):
+        if self.cfg.debug:
+            console.print(message, style=f"bold {Color.red.value}")
