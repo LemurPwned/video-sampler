@@ -344,6 +344,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#streaming-and-rtsp-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streaming and RTSP support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#image-sampling" class="md-nav__link">
     <span class="md-ellipsis">
       Image sampling
@@ -1136,6 +1145,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#streaming-and-rtsp-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streaming and RTSP support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#image-sampling" class="md-nav__link">
     <span class="md-ellipsis">
       Image sampling
@@ -1352,6 +1370,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 <li><a href="#features">Features</a></li>
 <li><a href="#installation-and-usage">Installation and Usage</a><ul>
 <li><a href="#basic-usage">Basic usage</a></li>
+<li><a href="#streaming-and-rtsp-support">Streaming and RTSP support</a></li>
 <li><a href="#image-sampling">Image sampling</a></li>
 <li><a href="#yt-dlp-integration-plugin">YT-DLP integration plugin</a><ul>
 <li><a href="#extra-yt-dlp-options">Extra YT-DLP options</a></li>
@@ -1422,6 +1441,16 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span>/my-video-folder/<span class="w"> </span>./my-output-folder
 </code></pre></div>
 <p>You can set the number of workers to use with the <code>n_workers</code> parameter. The default is 1.</p>
+<h4 id="streaming-and-rtsp-support">Streaming and RTSP support</h4>
+<p>RTSP support is experimental and may not work for all RTSP servers, but it should work for most of them.
+You can test out the RTSP support by running the following command:</p>
+<p><div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span>rtsp://localhost:8554/some-stream<span class="w"> </span>./sampled-stream/
+</code></pre></div>
+<a href="https://github.com/bhaney/rtsp-simple-server">RTSP simple server</a> is a good way to test RTSP streams.</p>
+<p>Other streams (MJPEG) also work, e.g.</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span><span class="s2">&quot;http://honjin1.miemasu.net/nphMotionJpeg?Resolution=640x480&amp;Quality=Standard&quot;</span><span class="w"> </span>./sampled-stream/
+</code></pre></div>
+<p>For proper streaming, you may want to adjust <code>min_frame_interval_sec</code> and buffer sizes to have a shorter flush time. Keep in mind that streaming will be sampled until interrupted, so you may want to specify the end time of the stream with <a href="./video_sampler/config.py#L81"><code>end_time_s</code> parameter</a>. If the stream is a looped video, this is especially important -- otherwise, you'll end up overwriting the same frames over and over again.</p>
 <h4 id="image-sampling">Image sampling</h4>
 <p>If your frames are ordered, then you can use the <code>image_sampler</code> module to sample them. The images should have some concept of ordering, e.g. they should be named in a way that allows for sorting, e.g. <code>image_001.png</code>, <code>image_002.png</code>, etc, because the sampler will deduplicate based on the circular buffer of hashes.
 An example of a config for <code>image_sampler</code> is given in <a href="./configs/image_base.yaml">./configs/image_base.yaml</a>.
