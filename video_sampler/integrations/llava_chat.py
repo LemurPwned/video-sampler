@@ -183,7 +183,9 @@ class ImageDescriptionOpenAI(ImageDescription):
             max_tokens=300,
             stream=False,
         )
-        return completion["choices"][0]["message"]["content"]
+        if isinstance(completion, dict):
+            return completion["choices"][0]["message"]["content"]
+        return completion.choices[0].message.content
 
 
 class VideoSummary:
@@ -195,13 +197,12 @@ class VideoSummary:
             Summarise the video using the LLaMA API.
     """
 
-    def __init__(self, url: str = "http://localhost:8080/v1"):
+    def __init__(self, url: str | None = "http://localhost:8080/v1"):
         """Initialise the client with the base URL of the LLaMA API.
         Args:
             url (str): The base URL of the LLaMA API."""
-        if url is None:
-            url = "http://localhost:8080/v1"
-        super().__init__(url)
+        self.url = url if url is not None else "http://localhost:8080/v1"
+        self.client = OpenAI(base_url=self.url)
 
     def get_prompt(self):
         return """You're an AI assistant that summarises videos based on image descriptions.

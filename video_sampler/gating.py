@@ -200,7 +200,7 @@ class ClipGate:
         return GatedObject(to_return, len(selected_frames))
 
 
-def create_gate(gate_config: dict):
+def create_gate(gate_config: dict) -> BlurGate | ClipGate | PassGate:
     """Create a gate from a configuration."""
     gate_type = gate_config["type"]
     del gate_config["type"]

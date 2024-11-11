@@ -6,18 +6,19 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from tqdm import tqdm
 
-from .config import SamplerConfig
+from .config import ImageSamplerConfig, SamplerConfig
 from .logging import Color, console
-from .sampler import VideoSampler, Worker
+from .samplers import BaseSampler, VideoSampler
 from .utils import slugify
+from .worker import Worker
 
 
 def process_video(
     video_info: str | tuple[str, str, str | None],
     output_path: str,
     is_url: bool,
-    worker_cfg: SamplerConfig,
-    sampler_cls: VideoSampler = VideoSampler,
+    worker_cfg: SamplerConfig | ImageSamplerConfig,
+    sampler_cls: BaseSampler | None = VideoSampler,
 ):
     """Process a video file or URL.
 
@@ -41,7 +42,10 @@ def process_video(
                 subs=subs,
             )
         else:
-            video_subpath = os.path.join(output_path, os.path.basename(video_info))
+            if isinstance(worker_cfg, ImageSamplerConfig):
+                video_subpath = output_path
+            else:
+                video_subpath = os.path.join(output_path, os.path.basename(video_info))
             worker.launch(
                 video_path=video_info,
                 output_path=video_subpath,
@@ -56,8 +60,8 @@ def parallel_video_processing(
     video_iterable: Iterable[str | tuple],
     output_path: str,
     is_url: bool,
-    worker_cfg: SamplerConfig,
-    sampler_cls=VideoSampler,
+    worker_cfg: SamplerConfig | ImageSamplerConfig,
+    sampler_cls: BaseSampler | None = VideoSampler,
     n_workers: int = None,
 ):  # sourcery skip: for-append-to-extend
     """Process a list of local video files or video URLs in parallel.
@@ -106,8 +110,8 @@ def parallel_video_processing(
 def delegate_workers(
     video_path: str | Generator,
     output_path: str,
-    cfg: SamplerConfig,
-    sampler_cls: VideoSampler = VideoSampler,
+    cfg: SamplerConfig | ImageSamplerConfig,
+    sampler_cls: BaseSampler | None = VideoSampler,
 ):
     """Delegate the processing of a list of videos to a worker instance.
 
@@ -122,7 +126,7 @@ def delegate_workers(
         videos = video_path
         msg = "Detected input as an URL generator"
         is_url = True
-    elif not os.path.isfile(video_path):
+    elif not os.path.isfile(video_path) and not isinstance(cfg, ImageSamplerConfig):
         if "*" not in video_path:
             videos = glob.glob(os.path.join(video_path, "*"))
         else:

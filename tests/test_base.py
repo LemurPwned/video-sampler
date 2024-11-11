@@ -1,6 +1,7 @@
 from PIL import Image
 
-from video_sampler.sampler import SamplerConfig, VideoSampler
+from video_sampler.config import SamplerConfig
+from video_sampler.samplers import VideoSampler
 from video_sampler.schemas import FrameObject
 
 

@@ -119,3 +119,11 @@ class SamplerConfig(BaseModel):
         if values.end_time_s is not None and values.start_time_s >= values.end_time_s:
             raise ValueError("start_time_s must be strictly less than the end_time_s")
         return values
+
+
+class ImageSamplerConfig(SamplerConfig):
+    """
+    Configuration options for the image sampler.
+    """
+
+    frame_time_regex: str = Field(default="")

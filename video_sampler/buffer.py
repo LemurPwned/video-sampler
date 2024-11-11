@@ -97,7 +97,7 @@ class HashBuffer(FrameBuffer):
 
     def __add(self, hash_: str, item: Image.Image, metadata: dict):
         self.ordered_buffer[hash_] = (item, metadata)
-        if len(self.ordered_buffer) >= self.max_size:
+        if len(self.ordered_buffer) > self.max_size:
             return self.ordered_buffer.popitem(last=False)[1]
         return None
 
@@ -118,6 +118,18 @@ class HashBuffer(FrameBuffer):
 
     def clear(self):
         self.ordered_buffer.clear()
+
+    def __len__(self):
+        return len(self.ordered_buffer)
+
+    def __iter__(self):
+        return iter(self.ordered_buffer)
+
+    def __getitem__(self, key: str):
+        return self.ordered_buffer[key]
+
+    def popitem(self, last: bool = True):
+        return self.ordered_buffer.popitem(last=last)
 
 
 class GridBuffer(HashBuffer):
@@ -187,7 +199,7 @@ class GridBuffer(HashBuffer):
 
     def update_ttl_buffer(self):
         # expire the images that are not in the grid
-        if len(self.ordered_buffer) >= self.max_size:
+        if len(self.ordered_buffer) > self.max_size:
             to_return_hash, return_data = self.ordered_buffer.popitem(last=False)
             if to_return_hash is not None:
                 removal_keys = [
@@ -375,11 +387,16 @@ class EntropyByffer(FrameBuffer):
         self.sliding_top_k_buffer.clear()
 
 
-def check_args_validity(cfg: SamplerConfig):
-    assert (
-        cfg.min_frame_interval_sec > 0
-    ), "min_frame_interval_sec must be greater than 0"
-    assert cfg.buffer_config["size"] > 0, "buffer size must be greater than 0"
+def check_buffer_config(buffer_config: dict[str, Any]):
+    assert "type" in buffer_config, "buffer type must be present in buffer config"
+    assert buffer_config["type"] in [
+        "hash",
+        "gzip",
+        "entropy",
+        "gating",
+        "grid",
+        "passthrough",
+    ], "unknown buffer type"
     arg_check = {
         "hash": ("hash_size", "size"),
         "gzip": ("hash_size", "size", "expiry"),
@@ -388,15 +405,27 @@ def check_args_validity(cfg: SamplerConfig):
         "grid": ("hash_size", "size", "grid_x", "grid_y", "max_hits"),
         "passthrough": (),
     }
-    for arg in arg_check[cfg.buffer_config["type"]]:
-        assert arg in cfg.buffer_config, f"{arg} must be present in buffer config"
+    for arg in arg_check[buffer_config["type"]]:
         assert (
-            cfg.buffer_config[arg] is not None and cfg.buffer_config[arg] > 0
+            arg in buffer_config
+        ), f"{arg} must be present in buffer config of type {buffer_config['type']}"
+        assert (
+            buffer_config[arg] is not None and buffer_config[arg] > 0
         ), f"{arg} must be greater than 0 and must not be None"
+        if arg == "size":
+            assert buffer_config["size"] > 0, "buffer size must be greater than 0"
 
 
-def create_buffer(buffer_config: dict[str, Any]):
+def check_args_validity(cfg: SamplerConfig):
+    assert (
+        cfg.min_frame_interval_sec > 0
+    ), "min_frame_interval_sec must be greater than 0"
+    check_buffer_config(cfg.buffer_config)
+
+
+def create_buffer(buffer_config: dict[str, Any]) -> FrameBuffer:
     """Create a buffer based on the config"""
+    check_buffer_config(buffer_config)
     console.print(
         f"Creating buffer of type {buffer_config['type']}",
         style=f"bold {Color.red.value}",
@@ -404,13 +433,13 @@ def create_buffer(buffer_config: dict[str, Any]):
     if buffer_config["type"] == "hash":
         return HashBuffer(
             size=buffer_config["size"],
-            debug_flag=buffer_config["debug"],
+            debug_flag=buffer_config.get("debug", False),
             hash_size=buffer_config["hash_size"],
         )
     elif buffer_config["type"] == "grid":
         return GridBuffer(
             size=buffer_config["size"],
-            debug_flag=buffer_config["debug"],
+            debug_flag=buffer_config.get("debug", False),
             hash_size=buffer_config["hash_size"],
             grid_x=buffer_config["grid_x"],
             grid_y=buffer_config["grid_y"],
@@ -419,7 +448,7 @@ def create_buffer(buffer_config: dict[str, Any]):
     elif buffer_config["type"] == "sliding_top_k":
         return SlidingTopKBuffer(
             size=buffer_config["size"],
-            debug_flag=buffer_config["debug"],
+            debug_flag=buffer_config.get("debug", False),
             expiry=buffer_config["expiry"],
         )
     elif buffer_config["type"] == "passthrough":
@@ -427,14 +456,14 @@ def create_buffer(buffer_config: dict[str, Any]):
     elif buffer_config["type"] == "gzip":
         return GzipBuffer(
             size=buffer_config["size"],
-            debug_flag=buffer_config["debug"],
+            debug_flag=buffer_config.get("debug", False),
             hash_size=buffer_config["hash_size"],
             expiry=buffer_config["expiry"],
         )
     elif buffer_config["type"] == "entropy":
         return EntropyByffer(
             size=buffer_config["size"],
-            debug_flag=buffer_config["debug"],
+            debug_flag=buffer_config.get("debug", False),
             hash_size=buffer_config["hash_size"],
             expiry=buffer_config["expiry"],
         )
