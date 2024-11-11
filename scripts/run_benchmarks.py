@@ -4,7 +4,7 @@ import os
 from tabulate import tabulate
 from tqdm import tqdm
 
-from video_sampler.worker import SamplerConfig, VideoSampler
+from video_sampler.sampler import SamplerConfig, VideoSampler
 
 clip_gate = dict(
     type="clip",
