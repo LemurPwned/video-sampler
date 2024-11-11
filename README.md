@@ -26,6 +26,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Features](#features)
   - [Installation and Usage](#installation-and-usage)
     - [Basic usage](#basic-usage)
+      - [Image sampling](#image-sampling)
       - [YT-DLP integration plugin](#yt-dlp-integration-plugin)
         - [Extra YT-DLP options](#extra-yt-dlp-options)
       - [OpenAI summary](#openai-summary)
@@ -101,13 +102,28 @@ Plain:
 python3 -m video_sampler hash FatCat.mp4 ./dataset-frames/ --hash-size 3 --buffer-size 20
 ```
 
-From the config file:
+From the config file (this is the recommended way if you plan to re-use the same config for different videos):
 
 ```bash
 python3 -m video_sampler config ./configs/hash_base.yaml /my-video-folder/ ./my-output-folder
 ```
 
 You can set the number of workers to use with the `n_workers` parameter. The default is 1.
+
+#### Image sampling
+
+If your frames are ordered, then you can use the `image_sampler` module to sample them. The images should have some concept of ordering, e.g. they should be named in a way that allows for sorting, e.g. `image_001.png`, `image_002.png`, etc, because the sampler will deduplicate based on the circular buffer of hashes.
+An example of a config for `image_sampler` is given in [./configs/image_base.yaml](./configs/image_base.yaml).
+Key changes respective to `video_sampler` are:
+
+- `frame_time_regex` - regex to extract frame time from the filename. If not provided, the frames will be lexiographically ordered.
+- any video sampling params such as `min_frame_interval_sec`, `keyframes_only` will be disregarded.
+
+You can run the image sampler with -- you need to specify the `images` flag.
+
+```bash
+python3 -m video_sampler config ./configs/image_base.yaml "./folder-frames/worlds-smallest-cat-bbc" ./sampled-output/ --images
+```
 
 #### YT-DLP integration plugin
 
