@@ -4,6 +4,14 @@
 
 Changelog for the `video-sampler`.
 
+### 0.11.2 - 0.12.2
+
+- added GPUVideoSampler
+- added `use-gpu-decoder` option to the `video-sampler` command which allows to use a GPU decoder.
+- major code refactoring
+- added support for streaming and RTSP
+- tests added
+
 ### 0.11.1 - 0.11.2
 
 - added `start-time` and `end-time` options to the `video-sampler` command which allows to specify the start and end time of the video segment to be processed.
