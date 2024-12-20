@@ -102,7 +102,7 @@ class SamplerConfig(BaseModel):
     extractor_config: dict[str, Any] = Field(default_factory=dict)
     summary_config: dict[str, Any] = Field(default_factory=dict)
     n_workers: int = Field(default=1)
-
+    use_gpu_decoder: bool = Field(default=False)
     save_format: SaveFormatConfig = Field(default_factory=SaveFormatConfig)
 
     def __str__(self) -> str:

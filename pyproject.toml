@@ -63,6 +63,11 @@ dev = [
     "tabulate",
     "pytest"
 ]
+gpu = [
+  "pycuda >= 2024.1.2",
+  "PyNvVideoCodec >= 1.0.2"
+]
+
 all = [
   "open_clip_torch >= 2.23.0",
   "torch >= 2.1.0",

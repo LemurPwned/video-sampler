@@ -2,7 +2,6 @@ from collections.abc import Iterable
 from queue import Queue
 
 import av
-import av.enum
 
 from ..config import SamplerConfig
 from ..language.keyword_capture import create_extractor, subtitle_line
@@ -35,7 +34,9 @@ class VideoSampler(BaseSampler):
     def __init__(self, cfg: SamplerConfig) -> None:
         super().__init__(cfg)
 
-    def sample(self, video_path: str, subs: str = None) -> Iterable[list[FrameObject]]:
+    def sample(
+        self, video_path: str, subs: str | None = None
+    ) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video.
 
         Args:
@@ -125,7 +126,7 @@ class VideoSampler(BaseSampler):
         # flush buffer
         yield from self.flush_buffer()
 
-    def write_queue(self, video_path: str, q: Queue, subs: str = None) -> None:
+    def write_queue(self, video_path: str, q: Queue, subs: str | None = None) -> None:
         try:
             item: tuple[FrameObject, int]
             for item in self.sample(video_path=video_path, subs=subs):
@@ -158,7 +159,9 @@ class SegmentSampler(VideoSampler):
         super().__init__(cfg)
         self.extractor = create_extractor(cfg.extractor_config)
 
-    def sample(self, video_path: str, subs: str = None) -> Iterable[list[FrameObject]]:
+    def sample(
+        self, video_path: str, subs: str | None = None
+    ) -> Iterable[list[FrameObject]]:
         """Generate sample frames from a video.
 
         Args:
@@ -226,5 +229,5 @@ class SegmentSampler(VideoSampler):
         # flush buffer
         yield from self.flush_buffer()
 
-    def write_queue(self, video_path: str, q: Queue, subs: str = None):
+    def write_queue(self, video_path: str, q: Queue, subs: str | None = None):
         super().write_queue(video_path, q, subs=subs)
