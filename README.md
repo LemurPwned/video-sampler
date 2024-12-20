@@ -26,6 +26,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Features](#features)
   - [Installation and Usage](#installation-and-usage)
     - [Basic usage](#basic-usage)
+      - [GPU support](#gpu-support)
       - [Streaming and RTSP support](#streaming-and-rtsp-support)
       - [Image sampling](#image-sampling)
       - [YT-DLP integration plugin](#yt-dlp-integration-plugin)
@@ -39,9 +40,9 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
   - [Benchmarks](#benchmarks)
   - [Benchmark videos](#benchmark-videos)
   - [Flit commands](#flit-commands)
-      - [Build](#build)
-      - [Install](#install)
-      - [Publish](#publish)
+    - [Build](#build)
+    - [Install](#install)
+    - [Publish](#publish)
   - [🛡 License](#-license)
   - [📃 Citation](#-citation)
 
@@ -111,6 +112,45 @@ python3 -m video_sampler config ./configs/hash_base.yaml /my-video-folder/ ./my-
 
 You can set the number of workers to use with the `n_workers` parameter. The default is 1.
 
+#### GPU support
+
+GPU support is experimental and may not work for all GPUs. Definitely, only NVIDIA GPUs are supported for now.
+
+To use the GPU sampler, you need to install the `gpu` extra:
+
+```bash
+python3 -m pip install -U video_sampler[gpu]
+```
+
+If you have some installation issues with `pycuda`, make sure your PATH is set correctly.
+For example, on Linux, you may need to add the following to your `.bashrc` or `.zshrc`:
+
+```bash
+export PATH=/usr/local/cuda/bin:$PATH
+```
+
+You can use the GPU sampler by running the following command:
+
+```bash
+python3 -m video_sampler hash ./videos/FatCat.mp4 ./output-frames/ --use-gpu-decoder
+```
+
+The `--use-gpu-decoder` flag can be used with all main commands:
+
+- `hash` - Generate frame hashes
+- `buffer` - Extract frames from video
+- `clip` - Extract frames from video
+
+For a complete list of commands and their options, run `python3 -m video_sampler --help`.
+
+For configuration, you simply add `use_gpu_decoder: true` to the config file. See [./configs/hash_gpu.yaml](./configs/hash_gpu.yaml) for an example.
+
+Known limitations due to PyNvVideoCodec library:
+
+- Keyframes only mode is not supported with GPU decoder.
+- Timestamps are estimated from the FPS, so they may not be 100% accurate.
+- Only NVIDIA GPUs are supported.
+
 #### Streaming and RTSP support
 
 RTSP support is experimental and may not work for all RTSP servers, but it should work for most of them.
@@ -119,6 +159,7 @@ You can test out the RTSP support by running the following command:
 ```bash
 python3 -m video_sampler config ./configs/hash_base.yaml rtsp://localhost:8554/some-stream ./sampled-stream/
 ```
+
 [RTSP simple server](https://github.com/bhaney/rtsp-simple-server) is a good way to test RTSP streams.
 
 Other streams (MJPEG) also work, e.g.

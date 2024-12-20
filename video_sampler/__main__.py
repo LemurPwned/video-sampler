@@ -11,7 +11,7 @@ from .buffer import check_args_validity
 from .config import ImageSamplerConfig, SamplerConfig
 from .iterators import delegate_workers
 from .logging import Color, console
-from .samplers import ImageSampler, SegmentSampler, VideoSampler
+from .samplers import GPUVideoSampler, ImageSampler, SegmentSampler, VideoSampler
 from .schemas import BufferType
 
 app = typer.Typer(
@@ -60,6 +60,8 @@ def _create_from_config(
     sampler_cls: VideoSampler = VideoSampler,
 ):
     # create a test buffer
+    if cfg.use_gpu_decoder:
+        sampler_cls = GPUVideoSampler
     try:
         check_args_validity(cfg)
     except AssertionError as e:
@@ -133,6 +135,7 @@ def main(
     n_workers: int = typer.Option(
         1, help="Number of workers to use. Default is 1. Use -1 to use all CPUs."
     ),
+    use_gpu_decoder: bool = typer.Option(False, help="Use GPU decoder."),
 ) -> None:
     """Default buffer is the perceptual hash buffer"""
     extractor_cfg = {}
@@ -182,6 +185,7 @@ def main(
         ),
         extractor_config=extractor_cfg,
         n_workers=n_workers,
+        use_gpu_decoder=use_gpu_decoder,
     )
     if ytdlp:
         video_path = _ytdlp_plugin(yt_extra_args, video_path, get_subs=subs_enable)
@@ -232,6 +236,7 @@ def buffer(
     n_workers: int = typer.Option(
         1, help="Number of workers to use. Default is 1. Use -1 to use all CPUs."
     ),
+    use_gpu_decoder: bool = typer.Option(False, help="Use GPU decoder."),
 ):
     """Buffer type can be one of entropy, gzip, hash, passthrough"""
     cfg = SamplerConfig(
@@ -264,6 +269,7 @@ def buffer(
             }
         ),
         n_workers=n_workers,
+        use_gpu_decoder=use_gpu_decoder,
     )
     if ytdlp:
         video_path = _ytdlp_plugin(yt_extra_args, video_path)
@@ -312,6 +318,7 @@ def clip(
     n_workers: int = typer.Option(
         1, help="Number of workers to use. Default is 1. Use -1 to use all CPUs."
     ),
+    use_gpu_decoder: bool = typer.Option(False, help="Use GPU decoder."),
 ):
     """Buffer type can be only of type hash when using CLIP gating."""
     if pos_samples is not None:
@@ -346,6 +353,7 @@ def clip(
             "batch_size": batch_size,
         },
         n_workers=n_workers,
+        use_gpu_decoder=use_gpu_decoder,
     )
     if ytdlp:
         video_path = _ytdlp_plugin(yt_extra_args, video_path)

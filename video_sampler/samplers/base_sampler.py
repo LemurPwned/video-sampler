@@ -22,7 +22,7 @@ class BaseSampler:
     def sample(self, _: str) -> Iterable[list[FrameObject]]:
         raise NotImplementedError("sample method must be implemented")
 
-    def write_queue(self, _: str, q: Queue, subs: str = None):
+    def write_queue(self, _: str, q: Queue, subs: str | None = None):
         raise NotImplementedError("write_queue method must be implemented")
 
     def init_sampler(self):
