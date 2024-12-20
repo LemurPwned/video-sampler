@@ -122,13 +122,26 @@ To use the GPU sampler, you need to install the `gpu` extra:
 python3 -m pip install -U video_sampler[gpu]
 ```
 
-You can also use the GPU sampler by running the following command:
+If you have some installation issues with `pycuda`, make sure your PATH is set correctly.
+For example, on Linux, you may need to add the following to your `.bashrc` or `.zshrc`:
+
+```bash
+export PATH=/usr/local/cuda/bin:$PATH
+```
+
+You can use the GPU sampler by running the following command:
 
 ```bash
 python3 -m video_sampler hash ./videos/FatCat.mp4 ./output-frames/ --use-gpu-decoder
 ```
 
-and any other main command also uses `--use-gpu-decoder` flag.
+The `--use-gpu-decoder` flag can be used with all main commands:
+
+- `hash` - Generate frame hashes
+- `buffer` - Extract frames from video
+- `clip` - Extract frames from video
+
+For a complete list of commands and their options, run `python3 -m video_sampler --help`.
 
 For configuration, you simply add `use_gpu_decoder: true` to the config file. See [./configs/hash_gpu.yaml](./configs/hash_gpu.yaml) for an example.
 
