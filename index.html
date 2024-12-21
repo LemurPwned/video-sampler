@@ -344,6 +344,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#gpu-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      GPU support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#streaming-and-rtsp-support" class="md-nav__link">
     <span class="md-ellipsis">
       Streaming and RTSP support
@@ -972,6 +981,27 @@
   
   
     <li class="md-nav__item">
+      <a href="reference/video_sampler/samplers/gpu_sampler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gpu sampler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="reference/video_sampler/samplers/image_sampler/" class="md-nav__link">
         
   
@@ -1143,6 +1173,15 @@
   
     <nav class="md-nav" aria-label="Basic usage">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gpu-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      GPU support
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#streaming-and-rtsp-support" class="md-nav__link">
@@ -1370,6 +1409,7 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 <li><a href="#features">Features</a></li>
 <li><a href="#installation-and-usage">Installation and Usage</a><ul>
 <li><a href="#basic-usage">Basic usage</a></li>
+<li><a href="#gpu-support">GPU support</a></li>
 <li><a href="#streaming-and-rtsp-support">Streaming and RTSP support</a></li>
 <li><a href="#image-sampling">Image sampling</a></li>
 <li><a href="#yt-dlp-integration-plugin">YT-DLP integration plugin</a><ul>
@@ -1441,12 +1481,38 @@ Currently, it uses keyframe decoding, frame interval gating and perceptual hashi
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span>/my-video-folder/<span class="w"> </span>./my-output-folder
 </code></pre></div>
 <p>You can set the number of workers to use with the <code>n_workers</code> parameter. The default is 1.</p>
+<h4 id="gpu-support">GPU support</h4>
+<p>GPU support is experimental and may not work for all GPUs. Definitely, only NVIDIA GPUs are supported for now.</p>
+<p>To use the GPU sampler, you need to install the <code>gpu</code> extra:</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>video_sampler<span class="o">[</span>gpu<span class="o">]</span>
+</code></pre></div>
+<p>If you have some installation issues with <code>pycuda</code>, make sure your PATH is set correctly.
+For example, on Linux, you may need to add the following to your <code>.bashrc</code> or <code>.zshrc</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin:<span class="nv">$PATH</span>
+</code></pre></div>
+<p>You can use the GPU sampler by running the following command:</p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>./videos/FatCat.mp4<span class="w"> </span>./output-frames/<span class="w"> </span>--use-gpu-decoder
+</code></pre></div>
+<p>The <code>--use-gpu-decoder</code> flag can be used with all main commands:</p>
+<ul>
+<li><code>hash</code> - Generate frame hashes</li>
+<li><code>buffer</code> - Extract frames from video</li>
+<li><code>clip</code> - Extract frames from video</li>
+</ul>
+<p>For a complete list of commands and their options, run <code>python3 -m video_sampler --help</code>.</p>
+<p>For configuration, you simply add <code>use_gpu_decoder: true</code> to the config file. See <a href="./configs/hash_gpu.yaml">./configs/hash_gpu.yaml</a> for an example.</p>
+<p>Known limitations due to PyNvVideoCodec library:</p>
+<ul>
+<li>Keyframes only mode is not supported with GPU decoder.</li>
+<li>Timestamps are estimated from the FPS, so they may not be 100% accurate.</li>
+<li>Only NVIDIA GPUs are supported.</li>
+</ul>
 <h4 id="streaming-and-rtsp-support">Streaming and RTSP support</h4>
 <p>RTSP support is experimental and may not work for all RTSP servers, but it should work for most of them.
 You can test out the RTSP support by running the following command:</p>
-<p><div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span>rtsp://localhost:8554/some-stream<span class="w"> </span>./sampled-stream/
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span>rtsp://localhost:8554/some-stream<span class="w"> </span>./sampled-stream/
 </code></pre></div>
-<a href="https://github.com/bhaney/rtsp-simple-server">RTSP simple server</a> is a good way to test RTSP streams.</p>
+<p><a href="https://github.com/bhaney/rtsp-simple-server">RTSP simple server</a> is a good way to test RTSP streams.</p>
 <p>Other streams (MJPEG) also work, e.g.</p>
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>video_sampler<span class="w"> </span>config<span class="w"> </span>./configs/hash_base.yaml<span class="w"> </span><span class="s2">&quot;http://honjin1.miemasu.net/nphMotionJpeg?Resolution=640x480&amp;Quality=Standard&quot;</span><span class="w"> </span>./sampled-stream/
 </code></pre></div>
@@ -1897,7 +1963,7 @@ Some results from <code>fft</code> at <code>threshold=20</code>:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 21, 2024</span>
   </span>
 
     
@@ -1907,7 +1973,7 @@ Some results from <code>fft</code> at <code>threshold=20</code>:</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 11, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 21, 2024</span>
   </span>
 
     
