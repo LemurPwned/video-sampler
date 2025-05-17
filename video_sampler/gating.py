@@ -23,6 +23,12 @@ with contextlib.suppress(ImportError):
 
 
 def create_model(model_name: str):
+    if "open_clip" not in globals() or "torch" not in globals():
+        raise ImportError(
+            "open_clip and torch are required for the clip gate. "
+            "Install them to use this feature."
+        )
+
     model, _, preprocess = open_clip.create_model_and_transforms(
         model_name, pretrained="laion2b_s34b_b79k"
     )
