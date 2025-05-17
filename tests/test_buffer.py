@@ -261,3 +261,14 @@ def test_create_invalid_buffer():
 
     with pytest.raises(AssertionError):
         create_buffer({"type": "hash", "hash_size": 3, "size": -1})
+
+
+def test_create_additional_buffers():
+    pt = create_buffer({"type": "passthrough"})
+    assert isinstance(pt, PassThroughBuffer)
+
+    gz = create_buffer({"type": "gzip", "size": 5, "hash_size": 8, "expiry": 6})
+    assert isinstance(gz, GzipBuffer)
+
+    ent = create_buffer({"type": "entropy", "size": 5, "hash_size": 8, "expiry": 6})
+    assert isinstance(ent, EntropyByffer)
