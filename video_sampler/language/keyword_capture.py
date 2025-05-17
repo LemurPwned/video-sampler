@@ -81,18 +81,7 @@ class KeywordExtractor:
     def generate_segments(
         self, subtitle_list: list[tuple[tuple[int, int], str]]
     ) -> Iterable[subtitle_line]:
-        """
-        Captures keyword segments from a list of subtitles.
-
-        Args:
-            subtitle_list (list[tuple[tuple[int, int], str]]): List of subtitles in the format
-                (start_time, end_time, content).
-
-        Yields:
-            subtitle_line: A named tuple representing a keyword segment in the format
-                (start_time, end_time, lemma, content).
-
-        """
+        """Capture segments containing the configured keywords."""
         for (start_time, end_time), content in subtitle_list:
             doc = self.nlp(content.lower())
             for lemma in doc:
@@ -105,8 +94,37 @@ class KeywordExtractor:
                     break
 
 
+class AudioKeywordExtractor(KeywordExtractor):
+    """Extract keywords from an audio file by transcribing it first."""
+
+    def __init__(self, keywords: list[str], model: str = "base") -> None:
+        super().__init__(keywords)
+        try:
+            import whisper
+        except ImportError as e:  # pragma: no cover - optional dependency
+            raise ImportError(
+                "To use this feature install whisper by 'pip install openai-whisper'"
+            ) from e
+        self.whisper = whisper.load_model(model)
+
+    def transcribe(self, audio_path: str) -> list[tuple[tuple[int, int], str]]:
+        result = self.whisper.transcribe(audio_path)
+        subtitle_list: list[tuple[tuple[int, int], str]] = []
+        for seg in result.get("segments", []):
+            subtitle_list.append(
+                ((int(seg["start"] * 1000), int(seg["end"] * 1000)), seg["text"])
+            )
+        return subtitle_list
+
+    def generate_segments_from_audio(self, audio_path: str) -> Iterable[subtitle_line]:
+        subtitle_list = self.transcribe(audio_path)
+        yield from super().generate_segments(subtitle_list)
+
+
 def create_extractor(config: dict):
     if config["type"] == "keyword":
         return KeywordExtractor(**config["args"])
+    if config["type"] == "audio_keyword":
+        return AudioKeywordExtractor(**config["args"])
 
     raise NotImplementedError(f"{config['type']} not implemented yet")

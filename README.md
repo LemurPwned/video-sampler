@@ -219,6 +219,13 @@ video_sampler hash "https://www.youtube.com/watch?v=GbpP3Sxp-1U&list=PLFezMcAw96
   --hash-size 3 --buffer-size 20 --ytdlp --keywords "cat,dog,another keyword,test keyword"
 ```
 
+- segment based on audio transcription
+
+```bash
+video_sampler hash some_video.mp4 ./frames/ \
+  --extractor "audio_keyword" --keywords "alert,bell,voice"
+```
+
 The videos are never directly downloaded, only streamed, so you can use it to sample videos from the internet without downloading them first.
 
 ##### Extra YT-DLP options

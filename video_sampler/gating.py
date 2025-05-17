@@ -23,6 +23,15 @@ with contextlib.suppress(ImportError):
 
 
 def create_model(model_name: str):
+    try:
+        import open_clip
+        import torch
+    except ImportError as e:
+        raise ImportError(
+            "open_clip and torch are required for the clip gate. "
+            "Install them to use this feature."
+        ) from e
+
     model, _, preprocess = open_clip.create_model_and_transforms(
         model_name, pretrained="laion2b_s34b_b79k"
     )
