@@ -23,7 +23,8 @@ class TTLCounter:
 
     def expire_one(self):
         """Expire the first item if its TTL is 0. Expires AT MOST one item."""
-        # peek the first item
+        if not self.inner_counter:
+            return None
         ttl, hash = self.inner_counter[0]
         if ttl <= 0:
             heapq.heappop(self.inner_counter)
