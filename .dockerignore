@@ -21,6 +21,8 @@ __pycache__/
 *$py.class
 .pytest_cache/
 ..mypy_cache/
+.ruff_cache/
+.vscode/
 
 # poetry
 .venv
@@ -30,9 +32,15 @@ __pycache__/
 
 # Virtual environment
 .venv
+.sampler
 venv
 
 .DS_Store
 .AppleDouble
 .LSOverride
 ._*
+
+docs/
+notebooks/
+site/
+assets/

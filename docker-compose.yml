@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    environment:
+      POSTGRES_DB: video_cache
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.mcp
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: video_cache
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PYTHONPATH: /app
+      DEVELOPMENT: "true"
+    volumes:
+      - ./videos:/app/videos
+      - ./video_sampler:/app/video_sampler
+      - ./configs:/app/configs
+    depends_on:
+      - postgres
+    command: python -m video_sampler_mcp
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:

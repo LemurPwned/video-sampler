@@ -391,6 +391,14 @@ def from_config(
     )
 
 
+@app.command(name="mcp-server")
+def mcp_server():
+    """Start the MCP server for video navigation."""
+    from .mcp_server.server import main as mcp_main
+
+    mcp_main()
+
+
 def main_loop():
     app()
 
