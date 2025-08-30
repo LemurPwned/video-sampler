@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system deps
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+
+# Install Python deps
+COPY requirements.txt pyproject.toml ./
+RUN pip install psycopg2-binary mcp yt-dlp
+
+# Copy code
+COPY . .
+
+# Use the script entry point or direct module execution
+CMD ["python", "-m", "video_sampler_mcp"]

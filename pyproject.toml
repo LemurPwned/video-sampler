@@ -37,7 +37,6 @@ dependencies = [
   "pydantic >= 2.6.1",
   "pyaml >= 6.0.1",
   "requests >= 2.31.0",
-  "mcp >= 1.13.0",
 ]
 
 [project.urls]
@@ -45,7 +44,7 @@ Source = "https://github.com/LemurPwned/video-sampler"
 
 [project.scripts]
 video_sampler = "video_sampler.__main__:main_loop"
-video_sampler_mcp = "video_sampler.mcp_server.server:main"
+video_sampler_mcp = "video_sampler.__main__:mcp_server"
 
 [project.optional-dependencies]
 clip = [
@@ -68,6 +67,10 @@ dev = [
 gpu = [
   "pycuda >= 2024.1.2",
   "PyNvVideoCodec >= 1.0.2"
+]
+
+mcp = [
+  "mcp >= 1.13.0",
 ]
 
 all = [
